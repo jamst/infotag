@@ -1,20 +1,7 @@
 class HomeController < ActionController::Base
 
   def index
-    if params[:user_id]
-      # 用户喜好资讯
-      data = UserTag.flow_medias(params[:user_id])
-      # 视频数据
-      video_top_ids = Video.get_top(params[:user_id])
-      merge_videos = data[:videos] - video_top_ids
-      @videos = Video.where(id:merge_videos).sample(5)
-      @video_tops = Video.where(id:video_top_ids)
-      # 资讯
-      info_top_ids = Info.get_top(params[:user_id])
-      merge_infos = data[:infos] - info_top_ids
-      @infos = Info.where(id:merge_infos).sample(5)
-      @info_tops = Info.where(id:info_top_ids)
-    elsif params[:category_id]
+    if params[:category_id] && params[:category_id].to_i != 1
       # 分类资讯
       # page
       category_id = params[:category_id]
@@ -27,6 +14,19 @@ class HomeController < ActionController::Base
       @info_tops = Info.where(id:info_top_ids)
       merge_infos = Info.category_list(category_id) - info_top_ids
       @infos = Info.where(id:merge_infos).sample(5)
+    elsif params[:user_id].present? && $redis.smembers("users_#{params[:user_id]}").present? 
+      # 用户喜好资讯
+      data = UserTag.flow_medias(params[:user_id])
+      # 视频数据
+      video_top_ids = Video.get_top(params[:user_id])
+      merge_videos = data[:videos] - video_top_ids
+      @videos = Video.where(id:merge_videos).sample(5)
+      @video_tops = Video.where(id:video_top_ids)
+      # 资讯
+      info_top_ids = Info.get_top(params[:user_id])
+      merge_infos = data[:infos] - info_top_ids
+      @infos = Info.where(id:merge_infos).sample(5)
+      @info_tops = Info.where(id:info_top_ids)
     else
       # 当天最新资讯
       video_top_ids = Video.get_top(1)
@@ -73,6 +73,15 @@ class HomeController < ActionController::Base
     tag_ids = params[:tag_ids]
     UserTag.user_view_info(user_id,medial_typel,medial_id,tag_ids)
     render json: flow_medias  and return
+  end
+
+  # 分类数据
+  def category_list
+    categories = []
+    Category.all.order(:sort_live).each do |ca|
+      categories << {name:ca.name,value:ca.id}
+    end
+    render json:{categories:categories}
   end
 
 end

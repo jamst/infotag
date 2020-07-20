@@ -25,7 +25,7 @@ class Info < ApplicationRecord
     tags_strs.to_s.split(",").each do |tag_name|
       tag = Tag.find_or_create_by(name:tag_name)
       tag_id = tag.id
-      InfoTag.find_or_create_by(tag_id: tag_id , info_id:info_id)
+      InfosTag.find_or_create_by(tag_id: tag_id , info_id:info_id)
       $redis.sadd("tags_#{tag_id}_infos", info_id)
     end
   end
