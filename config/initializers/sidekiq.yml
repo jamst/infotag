@@ -1,0 +1,20 @@
+# 并发数
+:concurrency: 5
+:pidfile: tmp/pids/sidekiq.pid
+:logfile: log/sidekiq.log
+
+# 队列分类，例如高低优先级等等
+:queues:
+  - [default, 5]
+  - [stat_worker, 5]
+  - [mailers, 5]
+
+development:
+  :concurrency: 5
+staging:
+  :concurrency: 10
+prepare:
+  :concurrency: 10
+# sidekiq的并发数最好和database.yml中的pool-连接池数保持一致
+production:
+  :concurrency: 10

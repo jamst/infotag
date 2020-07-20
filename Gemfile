@@ -34,7 +34,13 @@ gem 'default_where', github: 'jamst/default_where'
 
 gem 'spreadsheet'
 gem 'roo'
+
+gem 'whenever', require: false
 gem 'mongo'
+gem 'mongoid'
+# 队列
+gem 'sidekiq', '~> 4.2'
+gem 'sidekiq-cron', '~> 0.4.5', require: false
 
 # 爬虫
 # gem 'mechanize'
@@ -76,6 +82,12 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry'
   gem 'pry-rails'
+
+  gem 'mina', '~> 0.3.8', require: false
+  gem 'mina-puma', :require => false
+  gem 'mina-sidekiq', '~> 0.4.1', require: false
+  gem 'mina-multistage', '~> 1.0', '>= 1.0.2', require: false
+
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
