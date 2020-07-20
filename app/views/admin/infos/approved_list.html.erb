@@ -1,0 +1,33 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>资讯列表</h2>
+  </div>
+</div>
+<%= render 'approve_search_form'  %>
+
+
+<div class="ui blue segment">
+  <%= link_to "新建", new_admin_info_path , remote: true, class: 'ui primary button' %>
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">ID</th>
+      <th class="center aligned">标题</th>
+      <th class="center aligned">图片缩略</th>
+      <th class="center aligned">所属栏目</th>
+      <th class="center aligned">发布时间</th>
+      <th class="center aligned">信息来源</th>
+      <th class="center aligned">推荐权重</th>
+      <th class="center aligned">用户标签</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'approve_list', collection: @infos, as: :info %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@infos) %>
+  </span>
+  <%= paginate(@infos, :theme => 'admin')%>
+</div>

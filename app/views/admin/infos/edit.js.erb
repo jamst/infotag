@@ -1,0 +1,14 @@
+$('#info_modal').remove();
+$('body').append('<div class="ui modal" id="info_modal"><i class="close icon"></i><h2 class="ui dividing header">修改信息流</h2><%= j(render 'edit') %></div>');
+$('#info_modal').modal('setting', {autofocus: false}).modal('show');
+$('select.dropdown').dropdown();
+$('#calendar1').calendar({type: 'date'});
+
+// TODO表单校验
+$("#commition").click(function () {
+    if ($("#info_title").val() != "") {
+        $("#edit_info_<%= @info.id %>").submit();
+    } else {
+        $("#form_message").text("请完善信息！").show(200);
+    }
+});

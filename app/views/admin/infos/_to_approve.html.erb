@@ -1,0 +1,24 @@
+<%= simple_form_for @info, url: update_approve_admin_infos_path(id:@info.id), method: :post, remote: true do |f| %>
+<div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
+
+
+  <div class="field">
+    <%= f.input :tags_str, label: "标签" %>
+  </div>
+
+  <div class="field">
+    <%= f.input :approve_status, label: '审核状态', as: :select, collection: select_options_from_enum(Info, :approve_status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'} %>
+  </div>
+
+  <div class="field">
+    <%= f.input :weight, label: '权重', as: :select, collection: [["随机","nomal"],["置顶","top"]], include_blank: '选择状态', input_html: {class: 'ui dropdown fluid'} %>
+  </div>
+
+  <div class="field">
+    <div class="actions ">
+      <div class="ui button primary" id="commition">提交</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+
+<% end %>

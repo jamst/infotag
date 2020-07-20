@@ -1,0 +1,42 @@
+<% if @q.present? %>
+  <div class="ui blue segment">
+    <%= simple_form_for @q,  url: admin_videos_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
+      <%= f.input 'medial_spider_id', as: :hidden %>
+      <div class="ui five column grid">
+        <%= f.input "author", placeholder: '发布者' %>
+        <%= f.input "title-like", placeholder: '标题' %>
+        <%= f.input :category_id, as: :select, collection: Category.pluck(:name,:id), include_blank: "选择所属栏目", input_html: {class: 'ui dropdown fluid'}, label: "所属栏目" %>
+        <%= f.input "medial_spider.spider_target_id", as: :select, collection: SpiderTarget.pluck(:name,:id), include_blank: "选择信息来源", input_html: {class: 'ui dropdown fluid'}, label: "信息来源" %>
+        <%= f.input :status, as: :select, collection: select_options_from_enum(Video, :status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'}, label: "状态" %>
+        <%= f.input :approve_status, as: :select, collection: select_options_from_enum(Video, :approve_status), include_blank: "选择审核状态", input_html: {class: 'ui dropdown fluid'}, label: "审核状态" %>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "release_at-gte", placeholder: '发布开始时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "release_at-lte", placeholder: '发布结束时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "created_at-gte", placeholder: '创建开始时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "created_at-lte", placeholder: '创建结束时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <%= f.submit '搜索', class: 'ui primary button' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,3 @@
+class SpiderOriginInfo < ApplicationRecord
+
+end

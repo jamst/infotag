@@ -1,0 +1,33 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>爬取管理</h2>
+  </div>
+</div>
+<%= render 'search_form'  %>
+
+<div class="ui blue segment">
+  <%= link_to "添加任务", new_admin_medial_spider_path , remote: true, class: 'ui primary button' %>
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">ID</th>
+      <th class="center aligned">网站名称</th>
+      <th class="center aligned">网址url</th>
+      <th class="center aligned">网站模块</th>
+      <th class="center aligned">内容类型</th>
+      <th class="center aligned">所属栏目</th>
+      <th class="center aligned">指定时间</th>
+      <th class="center aligned">条目总数</th>
+      <th class="center aligned">状态</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'list', collection: @medial_spiders, as: :medial_spider %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@medial_spiders) %>
+  </span>
+  <%= paginate(@medial_spiders, :theme => 'admin')%>
+</div>

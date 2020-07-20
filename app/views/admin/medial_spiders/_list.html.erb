@@ -1,0 +1,62 @@
+<tr id="medial_spider_<%= medial_spider.id %>">
+  <td class="center aligned">
+    <span><%= medial_spider.id%></span>
+  </td>
+  <td class="center aligned">
+    <%= medial_spider.spider_target&.name %>
+  </td>
+  <td class="center aligned">
+    <%= link_to str_chip(medial_spider.url,20), medial_spider.url , target: '_blank' %>
+  </td>
+  <td class="center aligned">
+    <%= medial_spider.web_site %>
+  </td>
+  <td class="center aligned">
+    <%= medial_spider.i18n_attr_medial_type %>
+  </td>
+  <td class="center aligned">
+    <%= medial_spider.category&.name %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(medial_spider.release_at) %>
+  </td>
+  <td class="center aligned">
+    <%= medial_spider.count_size %>
+  </td>
+  <td class="center aligned">
+    <%if medial_spider.status == "disabled" %>
+      <font color="red"><%= medial_spider.i18n_attr_status %></font>
+    <% else %>
+      <%= medial_spider.i18n_attr_status %>
+    <% end %>
+  </td>
+  <td class="center aligned">
+    <%= link_to edit_admin_medial_spider_path(medial_spider.id), remote: true, class: "ui icon blue basic button" do %>
+      <i class="edit icon"></i>编辑
+    <% end %>
+
+    <% if medial_spider.medial_type == "video" %>
+      <%= link_to admin_videos_path("search_params[medial_spider_id]" => medial_spider.id), class: "ui icon green basic button" do %>
+        <i class="ui icon search"></i>详情
+      <% end %>
+    <% else %>
+      <%= link_to admin_infos_path("search_params[medial_spider_id]" => medial_spider.id), class: "ui icon green basic button" do %>
+        <i class="ui icon search"></i>详情
+      <% end %>
+    <% end %>  
+
+    <% if medial_spider.status == "enabled" %>
+      <%= link_to update_status_admin_medial_spiders_path(id:medial_spider.id,status:"disabled"), remote: true, class: "ui icon orange basic button" do %>
+        <i class="plus icon orange"></i>禁用
+      <% end %>
+    <% else %>
+      <%= link_to update_status_admin_medial_spiders_path(id:medial_spider.id,status:"enabled"), remote: true, class: "ui icon blue basic button" do %>
+        <i class="plus icon blue"></i>启用
+      <% end %>
+    <% end %>
+
+    <%= link_to admin_medial_spider_path(medial_spider.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
+  </td>
+</tr>

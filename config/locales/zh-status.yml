@@ -1,0 +1,39 @@
+zh:
+  ################################# status config #################################
+  activerecord:
+    status:
+      info:  
+        weight:
+          nomal: "随机"
+          top: "置顶"
+        medial_type:
+          info: "资讯"   
+          video: "视频" 
+        approve_status:
+          unapproved: "已拒绝"   
+          wapprove: "待审核"
+          approved: "已通过"
+        status:
+          disabled: "已禁用"     
+          enabled: "已启用"  
+      video:  
+        weight:
+          nomal: "随机"
+          top: "置顶"  
+        medial_type:
+          info: "资讯"   
+          video: "视频"
+        approve_status:
+          unapproved: "已拒绝"   
+          wapprove: "待审核"
+          approved: "已通过"  
+        status:
+          disabled: "已禁用"     
+          enabled: "已启用"  
+      medial_spider:
+        medial_type:
+          info: "资讯"   
+          video: "视频"   
+        status:
+          disabled: "已禁用"     
+          enabled: "已启用"

@@ -1,0 +1,16 @@
+config/database.yml
+config/puma.rb
+config/secrets.yml
+config/mongoid.yml
+/tmp/cache/*
+/tmp/pids/*
+.rvmrc
+/log/*
+.tags
+.tags_sorted_by_file
+public/.DS_Store
+# public/log/android/*
+config/.DS_Store
+.DS_Store
+public/tempfile
+public/tempfile/*

@@ -1,0 +1,42 @@
+<tr id="info_<%= info.id %>">
+  <td class="center aligned">
+    <span><%= info.id%></span>
+  </td>
+  <td class="center aligned">
+    <%= link_to str_chip(info.title,20), info.url , target: '_blank' %>
+  </td>
+  <td class="center aligned">
+    <a href="<%= info.local_image_url %>" target='_blank' ><%= image_tag info.local_image_url, width: '100px', height: '50px' %></a>
+  </td>
+  <td class="center aligned">
+    <%= info.category&.name %>
+  </td>
+  <td class="center aligned">
+    <%= info.medial_spider&.spider_target&.name %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(info.release_at) %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(info.created_at) %>
+  </td>
+  <td class="center aligned">
+     <% if info.approve_status == "unapproved" %>
+      <%= link_to to_approve_admin_infos_path(id:info.id), remote: true, class: "ui icon orange basic button" do %>
+        <i class="edit icon"></i> <%= info.i18n_attr_approve_status%> 
+      <% end %>
+    <% elsif info.approve_status == "approved" %>
+      <%= link_to to_approve_admin_infos_path(id:info.id), remote: true, class: "ui icon green basic button" do %>
+        <i class="edit icon"></i> <%= info.i18n_attr_approve_status%> 
+      <% end %>
+    <% else %>
+      <%= link_to to_approve_admin_infos_path(id:info.id), remote: true, class: "ui icon blue basic button" do %>
+        <i class="edit icon"></i> <%= info.i18n_attr_approve_status%> 
+      <% end %>
+    <% end %>
+
+    <%= link_to admin_info_path(info.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
+  </td>
+</tr>

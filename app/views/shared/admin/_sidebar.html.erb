@@ -1,0 +1,76 @@
+<div class="ui vertical fluid menu" id="verticalMenu">
+  <ul>
+    <li>
+      <a class="item">
+         <i class="unordered list icon"></i>
+        <span class="main_menu">推荐管理</span>
+        <i class="right dropdown icon"></i>
+      </a>
+      <div class="menu content child active">
+        <%= link_to approved_list_admin_infos_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>资讯列表</span>
+        <% end %>
+        <%= link_to approved_list_admin_videos_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>视频列表</span>
+        <% end %>
+      </div>
+    </li>
+    <li>
+      <a class="item">
+        <i class="cloud icon"></i>
+        <span class="main_menu">爬虫管理</span>
+        <i class="right dropdown icon"></i>
+      </a>
+      <div class="menu content child active">
+        <%= link_to admin_medial_spiders_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>爬取管理</span>
+        <% end %>
+        <%= link_to admin_infos_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>资讯详情</span>
+        <% end %>
+        <%= link_to admin_videos_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>视频详情</span>
+        <% end %>
+      </div>
+    </li>
+    <li>
+      <a class="item">
+        <i class="cubes icon"></i>
+        <span class="main_menu">分类管理</span>
+        <i class="right dropdown icon"></i>
+      </a>
+      <div class="menu content child active">
+        <%= link_to admin_employees_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>栏目列表</span>
+        <% end %>
+        <%= link_to admin_employees_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>网站列表</span>
+        <% end %>
+        <%= link_to admin_employees_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>标签列表</span>
+        <% end %>
+      </div>
+    </li>
+    <li>
+      <a class="item">
+        <i class="configure icon"></i>
+        <span class="main_menu">系统管理</span>
+        <i class="right dropdown icon"></i>
+      </a>
+      <div class="menu content child active">
+        <%= link_to admin_employees_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>管理员列表</span>
+        <% end %>
+      </div>
+    </li>
+  </ul>
+</div>

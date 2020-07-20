@@ -1,0 +1,73 @@
+class UserTag < ApplicationRecord
+  belongs_to :user
+  belongs_to :tag
+
+  # 每个人应该有一个默认咨讯分类？
+
+  # 用户标签存储(用户访问记录回调)
+  def self.user_tag_cache(user_id,tag_ids)
+    if tag_ids.present?
+      # tags 可以是单个标签，也可以是数组
+      users_cache_key = "users_#{user_id}"
+      # 用户包含的标签
+      $redis.sadd(users_cache_key, tag_ids)
+      if tag_ids.is_a? Array
+        tag_ids.each do |tag_id|
+          $redis.incr("user_#{user_id}_tag_#{tag_id}")
+        end
+      else
+        tag_ids.split(",").each do |tag_id|
+          $redis.incr("user_#{user_id}_tag_#{tag_id}")
+        end
+      end
+    end
+  end
+
+
+  # 用户访问过的咨询记录（访问过的内容，就不需要再推荐了）
+  def self.user_view_info(user_id,medial_type,medial_id,tag_ids)
+    # medial_type = info/video
+    # todo 优化，用户可能会访问很多资讯，加上过期切分时间，避免内存占用。
+    $redis.sadd("user_#{user_id}_#{medial_type}",medial_id)
+    user_tag_cache(user_id,tag_ids)
+  end
+
+
+  # 流媒体
+  def self.flow_medias(user_id)
+
+    users_cache_key = "users_#{user_id}"
+    # 获取用户当前标签
+    tag_ids = $redis.smembers(users_cache_key)
+    # 获取当前用户标签的权重，选用排序前5个标签做为推荐参考/或者取随机的5个标签做推荐参考
+    tag_ids = tag_ids.present? ? tag_ids.sample(5) : [4]
+
+    result = {}
+    infos = []
+    videos = []
+
+    tag_ids.each do |tag_id|
+      # 标签下资讯记录
+      info_lists = $redis.smembers("tags_#{tag_id}_infos")
+      infos += info_lists
+      # 标签下视频记录
+      video_lists = $redis.smembers("tags_#{tag_id}_videos")
+      videos += video_lists
+    end
+
+    # 用户访问资讯记录
+    user_infos = $redis.smembers("user_#{user_id}_infos")
+    # 用户没有访问过的咨询
+    flow_infos = infos.uniq - user_infos
+    
+    # 用户访问视频记录
+    user_videos = $redis.smembers("user_#{user_id}_videos")
+    # 用户没有访问过的视频
+    flow_videos = videos.uniq - user_videos
+    # 权重,用户标签的权重，文章的权重，已浏览记录
+    result[:infos] = flow_infos.sample(10)
+    result[:videos] = flow_videos.sample(10)
+    return result
+  end
+
+end

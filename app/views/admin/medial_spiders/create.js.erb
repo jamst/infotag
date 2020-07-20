@@ -1,0 +1,12 @@
+<% if @medial_spider.errors.blank? %>
+  $("tbody").prepend('<%= j render('list', medial_spider: @medial_spider) %>');
+  $("#medial_spider_modal").modal('hide');
+<% else %>
+  $(".red.pointing").remove();
+  $(".field").removeClass('error');
+  <% @medial_spider.errors.messages.each do |key, value| %>
+	//parent()方法：返回被选中元素的父元素
+	$("#medial_spider_<%= key %>").parent().addClass('error');
+	$("#medial_spider_<%= key %>").parent().append("<div class='ui basic red pointing prompt label transition visible'><%= value[0] %></div>");
+  <% end %>
+<% end %>
