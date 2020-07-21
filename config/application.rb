@@ -15,6 +15,7 @@ module PreReport
     config.time_zone = 'Beijing'
     config.i18n.default_locale = :zh
     config.autoload_paths += Dir["#{config.root}/lib"]
+    config.action_controller.forgery_protection_origin_check = false
   end
 end
 
