@@ -3,7 +3,7 @@ sdir = ENV['PWD']
 
 plugin :tmp_restart
 
-port 3002
+port 3000
 workers 4
 threads 5, 64
 environment 'prepare'
