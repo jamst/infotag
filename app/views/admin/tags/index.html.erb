@@ -1,0 +1,29 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>标签列表</h2>
+  </div>
+</div>
+<%= render 'search_form'  %>
+
+
+<div class="ui blue segment">
+  <%= link_to "新建", new_admin_tag_path , remote: true, class: 'ui primary button' %>
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">ID</th>
+      <th class="center aligned">标签名称</th>
+      <th class="center aligned">关联标签数</th>
+      <th class="center aligned">创建时间</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'list', collection: @tags, as: :tag %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@tags) %>
+  </span>
+  <%= paginate(@tags, :theme => 'admin')%>
+</div>

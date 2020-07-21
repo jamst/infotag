@@ -44,6 +44,18 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :spider_targets do
+      collection do
+        get  :update_status
+      end
+    end
+
+    resources :tags do
+      collection do
+        get  :update_status
+      end
+    end
+
   end
 
   resources :home do

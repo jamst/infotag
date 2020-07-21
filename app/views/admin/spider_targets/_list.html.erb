@@ -1,0 +1,37 @@
+<tr id="spider_target_<%= spider_target.id %>">
+  <td class="center aligned">
+    <span><%= spider_target.id%></span>
+  </td>
+  <td class="center aligned">
+    <%= spider_target.name %>
+  </td>
+  <td class="center aligned">
+    <%= spider_target.url %>
+  </td>
+  <td class="center aligned">
+    <%= spider_target.logo_url %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(spider_target.created_at) %>
+  </td>
+  </td>
+  <td class="center aligned">
+    <%= link_to edit_admin_spider_target_path(spider_target.id), remote: true, class: "ui icon blue basic button" do %>
+      <i class="edit icon"></i>编辑
+    <% end %>
+
+    <% if spider_target.status == "enabled" %>
+      <%= link_to update_status_admin_spider_targets_path(id:spider_target.id,status:"disabled"), remote: true, class: "ui icon orange basic button" do %>
+        <i class="plus icon orange"></i>禁用
+      <% end %>
+    <% else %>
+      <%= link_to update_status_admin_spider_targets_path(id:spider_target.id,status:"enabled"), remote: true, class: "ui icon blue basic button" do %>
+        <i class="plus icon green"></i>启用
+      <% end %>
+    <% end %>
+
+    <%= link_to admin_spider_target_path(spider_target.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
+  </td>
+</tr>

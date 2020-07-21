@@ -1,0 +1,30 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>网站列表</h2>
+  </div>
+</div>
+<%= render 'search_form'  %>
+
+
+<div class="ui blue segment">
+  <%= link_to "新建", new_admin_spider_target_path , remote: true, class: 'ui primary button' %>
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">ID</th>
+      <th class="center aligned">网站名称</th>
+      <th class="center aligned">网址url</th>
+      <th class="center aligned">网站图片</th>
+      <th class="center aligned">创建时间</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'list', collection: @spider_targets, as: :spider_target %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@spider_targets) %>
+  </span>
+  <%= paginate(@spider_targets, :theme => 'admin')%>
+</div>
