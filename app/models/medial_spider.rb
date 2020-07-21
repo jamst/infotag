@@ -79,8 +79,8 @@ class MedialSpider < ApplicationRecord
     
     links_list.each do |spid|
       category = Category.find_by(name:spid[:category_id])  
-      MedialSpider.find_by(url:spid[:url]).update(category_id:category&.id)
-      #MedialSpider.find_or_create_by(url:spid[:url], category_id:category&.id, medial_type:1, spider_target_id: 4)
+      #MedialSpider.find_by(url:spid[:url]).update(category_id:category&.id)
+      MedialSpider.find_or_create_by(url:spid[:url], category_id:category&.id, medial_type:1, spider_target_id: 4)
     end
   end
 
