@@ -28,7 +28,7 @@
     </tbody>
   </table>
   <span class="blue">
-    <%= page_entries_info(@videos) %>
+    <%= page_entries_info(@videos, :entry_name => 'item') %>
   </span>
   <%= paginate(@videos, :theme => 'admin')%>
 </div>

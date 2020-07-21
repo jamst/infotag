@@ -37,3 +37,7 @@ zh:
         status:
           disabled: "已禁用"     
           enabled: "已启用"
+      category:
+        status:
+          disabled: "已禁用"     
+          enabled: "已启用"    

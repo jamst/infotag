@@ -25,7 +25,8 @@
     </tbody>
   </table>
   <span class="blue">
-    <%= page_entries_info(@infos) %>
+    <%#= page_entries_info(@infos) %>
+    <%= page_entries_info @infos %>
   </span>
   <%= paginate(@infos, :theme => 'admin')%>
 </div>

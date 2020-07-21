@@ -1,6 +1,7 @@
 class Category < ApplicationRecord
   has_many :infos
   has_many :videos
+  enum status: { disabled: -1, enabled: 0 }
 
   def self.init_migration
     Category.create(name:"推荐")

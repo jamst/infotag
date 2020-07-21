@@ -4,7 +4,7 @@ class Admin::VideosController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
-    @videos = Video.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @videos = Video.default_where(@q.attributes(self)).order(id: :desc).page(params[:page]).per(10)
   end
 
   # 已审核列表

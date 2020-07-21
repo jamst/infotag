@@ -38,6 +38,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :categories do
+      collection do
+        get  :update_status
+      end
+    end
+
   end
 
   resources :home do

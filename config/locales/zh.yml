@@ -1,0 +1,10 @@
+zh:
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "没有%{entry_name}"
+          one: "<b>1</b> 条记录"
+          other: "<b>%{count}</b> 条记录"
+      more_pages:
+        display_entries: "<b>%{total}</b> 条记录"

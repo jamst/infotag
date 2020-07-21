@@ -1,0 +1,40 @@
+<%= simple_form_for @video, url: admin_video_path(@video), method: :put, remote: true do |f| %>
+<div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
+
+  <div class="two fields">
+    <%= f.input :title, label: "标题" %>
+    <div class="field">
+      <label>发布日期</label>
+      <div class="ui calendar J_calendar_datetime" id='calendar1'>
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <%= f.input_field :release_at, as: :string %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :url, label: "目标url" %>
+    <%= f.input :image_url, label: "图片url" %>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :weight, label: '权重', as: :select, collection: [["随机","nomal"],["置顶","top"]], include_blank: '选择状态', input_html: {class: 'ui dropdown fluid'} %>
+    <%= f.input :status, label: '状态', as: :select, collection: [["禁用","disabled"],["启用","enabled"]], include_blank: '选择状态', input_html: {class: 'ui dropdown fluid'} %>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :category_id, label: "分类" %>
+    <%= f.input :tags_str, label: "标签" %>
+  </div>
+
+  <div class="field">
+    <div class="actions ">
+      <div class="ui button primary" id="commition">提交</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+
+<% end %>
+
