@@ -54,3 +54,8 @@ CreateTables.new.change
 
 # email to me!
 em = Employee.create(email:"107422244@qq.com",password:"11111111",name:"jamst")
+
+SpiderTarget.init_migration
+Category.init_migration
+MedialSpider.init_video_spider
+MedialSpider.init_info_spider
