@@ -103,8 +103,7 @@ class Info < ApplicationRecord
 
   # 导入数据
   def self.import_db
-    #SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
-    SpiderOriginInfo.all.each do |data|
+    SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
       Info.find_or_create_by(medial_spider_id:data.spider_medial_id,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
     end
