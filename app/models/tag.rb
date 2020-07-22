@@ -9,7 +9,7 @@ class Tag < ApplicationRecord
   before_save :auto_change_type
 
   def auto_change_type
-    self.connection_tags = self.connection_tags.split(',') unless self.connection_tags.is_a?(Array)
+    self.connection_tags = self.connection_tags&.split(',') unless self.connection_tags.is_a?(Array)
   end
   
 end
