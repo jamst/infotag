@@ -1,0 +1,28 @@
+<%= simple_form_for @spider_target, url: admin_spider_target_path(@spider_target), method: :put, remote: true,:multipart => true do |f| %>
+<div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
+
+  <div class="two fields">
+    <%= f.input :name, label: "网站名称" %>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :url, label: "网址URL" %>
+  </div>
+
+
+  <div class="two fields">
+    <div class="field">
+      <label>网站图标</label>
+      <input type="file" name="file" id="logo_url" accept=".jpg,.jpeg,.png,.bmp" >
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="actions ">
+      <div class="ui button primary" id="commition">提交</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+
+<% end %>
+

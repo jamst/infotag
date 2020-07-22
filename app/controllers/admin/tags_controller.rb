@@ -13,6 +13,7 @@ class Admin::TagsController < Admin::BaseController
   end
 
   def edit
+    @tag.connection_tags = @tag.connection_tags&.join(",")
     render :layout => false
   end
 

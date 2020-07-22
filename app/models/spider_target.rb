@@ -1,6 +1,8 @@
 class SpiderTarget < ApplicationRecord
 
   has_one :file_attachment, as: :attachment_entity
+  default_scope -> {where(is_delete: 0)}
+  enum status: { disabled: -1, enabled: 0 }
 
   def self.init_migration
     SpiderTarget.create(name:"多维网")

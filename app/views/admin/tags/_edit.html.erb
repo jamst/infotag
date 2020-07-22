@@ -1,12 +1,12 @@
-<%= simple_form_for @category, url: admin_category_path(@category), method: :put, remote: true do |f| %>
+<%= simple_form_for @tag, url: admin_tag_path(@tag), method: :put, remote: true do |f| %>
 <div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
 
   <div class="two fields">
-    <%= f.input :name, label: "栏目名称" %>
+    <%= f.input :name, label: "标签名称" %>
   </div>
 
   <div class="two fields">
-    <%= f.input :sort_live, label: "排序" %>
+    <%= f.input :connection_tags , label: "关联标签" %>
   </div>
 
   <div class="field">

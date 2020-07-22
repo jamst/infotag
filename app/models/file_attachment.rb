@@ -18,6 +18,24 @@ class FileAttachment < ApplicationRecord
     end
   end
 
+  # 添加内容到缓存
+  def self.web_file_to_mongo(file, obj=nil)
+    grid = Rails.mongo.database.fs
+    begin
+      file_name = file.original_filename
+      store_dir = "aclconf/#{file_name}"
+      grid.upload_from_stream(store_dir, file, content_type: file.content_type)
+      if obj.blank?
+        obj = self.create(name: file_name, content_type: file.content_type, file_size: file.size, path: store_dir)
+      else
+        obj.update(name: file_name, content_type: file.content_type, file_size: file.size, path: store_dir)
+      end
+      return [true, obj]
+    rescue => e
+      return [false, e]
+    end
+  end
+
   # 获取web访问地址
   def get_file_path
     mongo_config = CONFIG.mongo.to_hash

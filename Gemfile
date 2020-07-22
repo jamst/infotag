@@ -35,10 +35,13 @@ gem 'default_where', github: 'jamst/default_where'
 gem 'spreadsheet'
 gem 'roo'
 
+# 定时任务
 gem 'whenever', require: false
+# 日志数据存储
 gem 'mongo'
-gem 'mongoid'
-# 队列
+# gem 'mongoid'
+
+# 队列任务
 gem 'sidekiq', '~> 4.2'
 gem 'sidekiq-cron', '~> 0.4.5', require: false
 

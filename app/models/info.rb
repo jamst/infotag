@@ -57,6 +57,14 @@ class Info < ApplicationRecord
     self.update(local_image_url:result.get_file_path)
     result.update(attachment_entity_type: "Info", attachment_entity_id: self.id)
 
+    FileUtils.rm_rf image_path if image_path
+
+    # Thread.new do
+    #   sleep 2
+    #   #  %x(rm "#{image_path}")
+    #   FileUtils.rm_rf image_path if image_path
+    # end
+
     # 加入分类缓存
     $redis.sadd("category_#{category_id}_infos", self.id)
 

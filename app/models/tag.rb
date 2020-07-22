@@ -3,4 +3,13 @@ class Tag < ApplicationRecord
   has_and_belongs_to_many :videos, through: :tags_videos
   has_many :keywords
   serialize :connection_tags
+  enum status: { disabled: -1, enabled: 0 }
+  default_scope -> {where(is_delete: 0)}
+
+  before_save :auto_change_type
+
+  def auto_change_type
+    self.connection_tags = self.connection_tags.split(',') unless self.connection_tags.is_a?(Array)
+  end
+  
 end

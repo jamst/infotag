@@ -170,9 +170,6 @@ GEM
     minitest (5.14.1)
     mongo (2.12.1)
       bson (>= 4.8.2, < 5.0.0)
-    mongoid (7.1.2)
-      activemodel (>= 5.1, < 6.1)
-      mongo (>= 2.7.0, < 3.0.0)
     multi_xml (0.6.0)
     mysql2 (0.5.3)
     nio4r (2.5.2)
@@ -344,7 +341,6 @@ DEPENDENCIES
   mina-puma
   mina-sidekiq (~> 0.4.1)
   mongo
-  mongoid
   mysql2
   non-stupid-digest-assets
   pry

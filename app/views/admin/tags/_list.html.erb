@@ -6,7 +6,7 @@
     <%= tag.name %>
   </td>
   <td class="center aligned">
-    <%= 1 %>
+    <%= tag.connection_tags&.size %>
   </td>
   <td class="center aligned">
     <%= day_time(tag.created_at) %>

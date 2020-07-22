@@ -23,6 +23,7 @@ class Admin::SpiderTargetsController < Admin::BaseController
 
   def update
     @spider_target.update_attributes(permitted_resource_params)
+    FileAttachment.web_file_to_mongo(params[:file], @spider_target)
   end
 
   def create

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_16_030435) do
+ActiveRecord::Schema.define(version: 2020_07_22_035451) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", comment: "名称"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2020_07_16_030435) do
     t.integer "sort_live", comment: "排序"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "is_delete", default: 0, comment: "是否删除"
   end
 
   create_table "employees", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", comment: "员工表", force: :cascade do |t|
@@ -171,6 +172,7 @@ ActiveRecord::Schema.define(version: 2020_07_16_030435) do
     t.integer "status", default: 1, comment: "状态"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "is_delete", default: 0, comment: "是否删除"
   end
 
   create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -179,6 +181,7 @@ ActiveRecord::Schema.define(version: 2020_07_16_030435) do
     t.text "connection_tags", comment: "关联"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "is_delete", default: 0, comment: "是否删除"
     t.index ["name"], name: "index_tags_on_name"
     t.index ["status"], name: "index_tags_on_status"
   end
