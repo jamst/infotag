@@ -1,6 +1,7 @@
 class Admin::InfosController < Admin::BaseController
 
   before_action :set_info, only: [:destroy,:edit,:show,:update,:update_status,:to_approve,:update_approve]
+  skip_before_action :verify_authenticity_token
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
