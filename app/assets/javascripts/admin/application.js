@@ -122,38 +122,51 @@ $(function(){
       $('#verticalMenu .child').hide();
       $('#verticalMenu a').removeClass('active');
       $('#sideMenu').removeClass('open_menu').addClass('close_menu');
+      
+      $('.close_menu li').hover(function(){
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+      },function(){
+        $(this).removeClass('active');
+      });
+
     }
   });
+
+
+
+  // $('.close_menu li').hover(function(){
+  //   $(this).siblings().removeClass('active');
+  //   $(this).addClass('active');
+  // },function(){
+  //   $(this).removeClass('active');
+  // });
+  
 
   //展开菜单
   $('#verticalMenu a').on('click', function() {
-    if ($(this).next('.child').length > 0 && $('#sideMenu').hasClass('open_menu')) {
-      if ($(this).hasClass('active')) {
-        $('#verticalMenu a').removeClass('active');
-        $('#verticalMenu .child').hide();
-        $(this).removeClass('active');
-        $(this).next('.child').hide();
-      } else {
-        $('#verticalMenu a').removeClass('active');
-        $('#verticalMenu .child').hide();
-        $(this).addClass('active');
-        $(this).next('.child').show();
-      }
-
-    }
+    //if ($(this).next('.child').length > 0 && $('#sideMenu').hasClass('open_menu')) {
+      $(this).next('.child').toggle();
+      //if ($(this).hasClass('active')) {
+        // $('#verticalMenu a').removeClass('active');
+        // $('#verticalMenu .child').hide();
+        // $(this).removeClass('active');
+        //$(this).next('.child').hide();
+      //} else {
+        // $('#verticalMenu a').removeClass('active');
+        // $('#verticalMenu .child').hide();
+        // $(this).addClass('active');
+        //$(this).next('.child').show();
+      //}
+    //}
   });
 
-  $('.close_menu li').hover(function(){
-    $(this).siblings().removeClass('active');
-    $(this).addClass('active');
-  },function(){
-    $(this).removeClass('active');
-  });
+  
   $('.popups').popup();
   $('select.dropdown').dropdown({placeholder: false});
   $("#verticalMenu li").each(function(){
       if($(this).find("div a").length < 1){
-          $(this).remove();
+        $(this).remove();
       }
   });
   $('.button').popup();
