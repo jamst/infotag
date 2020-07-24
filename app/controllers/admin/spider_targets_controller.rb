@@ -1,6 +1,7 @@
 class Admin::SpiderTargetsController < Admin::BaseController
 
   before_action :set_spider_target, only: [:destroy,:edit,:show,:update,:update_status]
+  skip_before_action :verify_authenticity_token
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
@@ -20,10 +21,10 @@ class Admin::SpiderTargetsController < Admin::BaseController
     render :layout => false
   end
 
-
   def update
     @spider_target.update_attributes(permitted_resource_params)
-    FileAttachment.web_file_to_mongo(params[:file], @spider_target)
+    result = FileAttachment.web_file_to_mongo(params[:file])
+    @spider_target.update(logo_url:result.get_file_path)
   end
 
   def create

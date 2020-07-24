@@ -20,6 +20,10 @@ Rails.application.routes.draw do
         post  :update_approve
         get  :approved_list
         get  :to_approve
+        get  :uptoday
+        get  :to_approves
+        post  :update_approves
+        get :be_deletes
       end
     end
 
@@ -29,6 +33,10 @@ Rails.application.routes.draw do
         post  :update_approve
         get  :approved_list
         get  :to_approve
+        get  :uptoday
+        get  :to_approves
+        post  :update_approves
+        get :be_deletes
       end
     end
 

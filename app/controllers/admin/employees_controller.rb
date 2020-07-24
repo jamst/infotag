@@ -4,6 +4,8 @@ class Admin::EmployeesController < Admin::BaseController
   # before_action :authenticate_employee!, :except => [:forget_password, :reset_mail]
   # before_action :left_tab, :only => [:index]
   # before_action :set_employee, only: [:destroy]
+  skip_before_action :verify_authenticity_token
+  
   def desboart
 
   end

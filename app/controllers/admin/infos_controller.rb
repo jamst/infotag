@@ -4,14 +4,14 @@ class Admin::InfosController < Admin::BaseController
   skip_before_action :verify_authenticity_token
 
   def index
-    @q = SearchParams.new(params[:search_params] || {})
-    @infos = Info.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @q = SearchParams.new(params[:search_params] || {approve_status: :wapprove})
+    @infos = Info.default_where(@q.attributes(self)).order(:approve_status,id: :desc).page(params[:page]).per(10)
   end
 
   # 已审核资讯列表
   def approved_list
     @q = SearchParams.new(params[:search_params] || {})
-    @infos = Info.approved.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @infos = Info.approved.default_where(@q.attributes(self)).order(updated_at: :desc).page(params[:page]).per(10)
   end
 
   # 审核状态
@@ -20,6 +20,31 @@ class Admin::InfosController < Admin::BaseController
   end
   def update_approve
     @info.update_attributes(permitted_resource_params)
+  end
+
+
+  # 批量更新
+  def to_approves
+    @inquiry_ids = params[:inquiry_ids]
+    @info =  Info.new
+  end
+  def update_approves
+    Info.where(id:params[:inquiry_ids].to_s.split(",")).each do |info|
+      info.update_attributes(permitted_resource_params)
+    end
+  end
+  
+  # 批量删除
+  def be_deletes
+    Info.where(id:params[:inquiry_ids].to_s.split(",")).each do |info|
+      info.update(is_delete: Time.now.to_i)
+      info.srem_tag_list
+    end
+  end
+
+  # 更新今日推荐
+  def uptoday
+    Info.add_today_list
   end
 
   def new
@@ -62,6 +87,7 @@ class Admin::InfosController < Admin::BaseController
   def destroy
     @info.is_delete = Time.now.to_i
     if @info.save
+      @info.srem_tag_list
       respond_to do |format|
         format.js
       end
@@ -74,7 +100,12 @@ class Admin::InfosController < Admin::BaseController
 
   # 更新状态
   def update_status
-     @info.update(status:params[:status])
+    if params[:status] == "enabled"
+      @info.tag_list
+    else
+      @info.srem_tag_list
+    end
+    @info.update(status:params[:status])
   end
 
 

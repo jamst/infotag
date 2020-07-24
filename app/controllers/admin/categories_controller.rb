@@ -1,6 +1,7 @@
 class Admin::CategoriesController < Admin::BaseController
 
   before_action :set_category, only: [:destroy,:edit,:show,:update,:update_status]
+  skip_before_action :verify_authenticity_token
 
   def index
     @q = SearchParams.new(params[:search_params] || {})

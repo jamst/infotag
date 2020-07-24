@@ -18,7 +18,7 @@ class Info < ApplicationRecord
   after_save :tag_list, if: -> { self.saved_change_to_tags_str? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
 
-  # 标签下有哪些咨讯
+  # 添加info的标签下有哪些咨讯
   def tag_list
     info_id = self.id
     tags_strs = tags_str.present? ? tags_str : (medial_spider.present? && medial_spider.tags_str.present? ? medial_spider.tags_str : "default")
@@ -28,21 +28,42 @@ class Info < ApplicationRecord
       InfosTag.find_or_create_by(tag_id: tag_id , info_id:info_id)
       $redis.sadd("tags_#{tag_id}_infos", info_id)
     end
+    # 加入分类缓存
+    $redis.sadd("category_#{category_id}_infos", self.id)
   end
+
+
+  # 移除info的标签下有哪些咨讯
+  def srem_tag_list
+    info_id = self.id
+    tags_strs = tags_str.present? ? tags_str : (medial_spider.present? && medial_spider.tags_str.present? ? medial_spider.tags_str : "default")
+    tags_strs.to_s.split(",").each do |tag_name|
+      tag = Tag.find_by(name:tag_name)
+      tag_id = tag.id
+      InfosTag.where(tag_id: tag_id , info_id:info_id).delete_all
+      $redis.srem("tags_#{tag_id}_infos", info_id)
+    end
+    # 加入分类缓存
+    $redis.srem("category_#{category_id}_infos", self.id)
+  end
+
 
   # 每天推荐的咨询包
   def self.add_today_list
-    Info.all.order(created_at: :desc).limit(100).each do |info|
-      $redis.sadd("infos_#{Time.now.at_beginning_of_day.to_i}", info.id)
+    infos_today = $redis.smembers("infos_today")
+    $redis.srem("infos_today", infos_today) if infos_today.present?
+
+    Info.nomal.order(created_at: :desc).limit(100).each do |info|
+      $redis.sadd("infos_today", info.id)
     end
   end
   def self.today_list
-    $redis.smembers("infos_#{Time.now.at_beginning_of_day.to_i}").sample(10)
+    $redis.srandmember("infos_today",10)
   end
 
   # 分类获取
   def self.category_list(category_id)
-    $redis.smembers("category_#{category_id}_infos").sample(10)
+    $redis.srandmember("category_#{category_id}_infos",10)
   end
 
   # 缓存图片到本地
@@ -56,18 +77,7 @@ class Info < ApplicationRecord
     result = FileAttachment.add_file_to_mongo(file,file_name)
     self.update(local_image_url:result.get_file_path)
     result.update(attachment_entity_type: "Info", attachment_entity_id: self.id)
-
     FileUtils.rm_rf image_path if image_path
-
-    # Thread.new do
-    #   sleep 2
-    #   #  %x(rm "#{image_path}")
-    #   FileUtils.rm_rf image_path if image_path
-    # end
-
-    # 加入分类缓存
-    $redis.sadd("category_#{category_id}_infos", self.id)
-
   end
 
 

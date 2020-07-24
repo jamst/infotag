@@ -6,10 +6,9 @@
     <%= spider_target.name %>
   </td>
   <td class="center aligned">
-    <%= spider_target.url %>
-  </td>
+    <%= link_to str_chip(spider_target.url,20), spider_target.url , target: '_blank' if spider_target.url.present? %> 
   <td class="center aligned">
-    <%= spider_target.logo_url %>
+    <a href="<%= spider_target.logo_url.to_s %>" target='_blank' ><%= image_tag spider_target.logo_url.to_s, width: '50px', height: '50px' if spider_target.logo_url.present? %></a>
   </td>
   <td class="center aligned">
     <%= day_time(spider_target.created_at) %>

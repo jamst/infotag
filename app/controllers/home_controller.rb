@@ -5,14 +5,14 @@ class HomeController < ActionController::Base
       # 分类资讯
       # page
       category_id = params[:category_id]
-      video_top_ids = Video.get_top(1)
-      @video_tops = Video.where(id:video_top_ids)
-      merge_videos = Video.category_list(category_id) - video_top_ids
+      #video_top_ids = Video.get_top(1)
+      @video_tops = [] #Video.where(id:video_top_ids)
+      merge_videos = Video.category_list(category_id) 
       @videos = Video.where(id:merge_videos).sample(5)
 
-      info_top_ids = Info.get_top(10)
-      @info_tops = Info.where(id:info_top_ids)
-      merge_infos = Info.category_list(category_id) - info_top_ids
+      #info_top_ids = Info.get_top(10)
+      @info_tops = [] #Info.where(id:info_top_ids)
+      merge_infos = Info.category_list(category_id) 
       @infos = Info.where(id:merge_infos).sample(5)
     elsif params[:user_id].present? && $redis.smembers("users_#{params[:user_id]}").present? 
       # 用户喜好资讯
@@ -31,12 +31,12 @@ class HomeController < ActionController::Base
       # 当天最新资讯
       video_top_ids = Video.get_top(1)
       @video_tops = Video.where(id:video_top_ids)
-      merge_videos = Video.today_list - video_top_ids
+      merge_videos = Video.today_list 
       @videos = Video.where(id:merge_videos).sample(5)
 
       info_top_ids = Info.get_top(10)
       @info_tops = Info.where(id:info_top_ids)
-      merge_infos = Info.today_list - info_top_ids
+      merge_infos = Info.today_list 
       @infos = Info.where(id:merge_infos).sample(5)
     end
 
@@ -46,14 +46,14 @@ class HomeController < ActionController::Base
     flow_medias[:infos] = []
     # 推荐置顶
     @video_tops.each do |_|
-      flow_medias[:tops] << {medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:tops] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     @info_tops.each do |_|
       flow_medias[:tops] << {medial_typel: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url }
     end
     # 视频
     @videos.each do |_|
-      flow_medias[:videos] << {medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 资讯
     @infos.each do |_|

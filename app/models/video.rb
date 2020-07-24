@@ -31,21 +31,42 @@ class Video < ApplicationRecord
       # 缓存
       $redis.sadd("tags_#{tag_id}_videos", video_id)
     end
+    # 加入分类缓存
+    $redis.sadd("category_#{category_id}_videos", self.id)
+  end
+
+  # 移除info的标签下有哪些咨讯
+  def srem_tag_list
+    video_id = self.id
+    tags_strs = tags_str.present? ? tags_str : (medial_spider.present? && medial_spider.tags_str.present? ? medial_spider.tags_str : "default")
+    tags_strs.to_s.split(",").each do |tag_name|
+      tag = Tag.find_by(name:tag_name)
+      tag_id = tag.id
+      # 数据库持久化
+      TagsVideo.where(tag_id: tag_id , video_id:video_id).delete_all
+      # 缓存
+      $redis.srem("tags_#{tag_id}_videos", video_id)
+    end
+    # 加入分类缓存
+    $redis.srem("category_#{category_id}_videos", self.id)
   end
 
   # 每天推荐的咨询包
   def self.add_today_list
-    Video.all.order(:play_count,created_at: :desc).limit(100).each do |video|
-      $redis.sadd("videos_#{Time.now.at_beginning_of_day.to_i}", video.id)
+    videos_today = $redis.smembers("videos_today")
+    $redis.srem("videos_today", videos_today) if videos_today.present?
+
+    Video.nomal.order(:play_count,created_at: :desc).limit(100).each do |video|
+      $redis.sadd("videos_today", video.id)
     end
   end
   def self.today_list
-    $redis.smembers("videos_#{Time.now.at_beginning_of_day.to_i}").sample(10)
+    $redis.srandmember("videos_today",10)
   end
   
   # 分类获取
   def self.category_list(category_id)
-    $redis.smembers("category_#{category_id}_videos").sample(10)
+    $redis.srandmember("category_#{category_id}_videos",10)
   end
 
 
@@ -60,10 +81,7 @@ class Video < ApplicationRecord
     result = FileAttachment.add_file_to_mongo(file,file_name)
     self.update(local_image_url:result.get_file_path)
     result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)
-
-    # 加入分类缓存
-    $redis.sadd("category_#{category_id}_videos", self.id)
-
+    FileUtils.rm_rf image_path if image_path
   end
 
 
@@ -117,8 +135,7 @@ class Video < ApplicationRecord
 
   # 导入数据
   def self.import_db
-    #SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
-    SpiderOriginVideo.all.each do |data|
+    SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
       Video.find_or_create_by(medial_spider_id:data.spider_medial_id,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "play_count": data.play_count, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url )
     end

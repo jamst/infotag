@@ -8,13 +8,15 @@
 # bundle exec whenever -s 'environment=staging'
 set :output, { error: 'log/whenever_error.log', standard: 'log/whenever.log' }
 
-# 每天的3点00分同步
-every 1.day, :at => '03:00 am' do
+# 每天的2点00分同步
+# 海外定时任务
+every 1.day, :at => '02:00 am' do
   runner 'Info.import_db'
   runner 'Video.import_db' 
 end
 
-every 1.day, :at => '03:20 am' do
+# 国内定时任务
+every 1.day, :at => '03:30 am' do
   runner 'Info.add_today_list'
   runner 'Video.add_today_list' 
 end

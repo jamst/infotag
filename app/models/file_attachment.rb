@@ -19,21 +19,24 @@ class FileAttachment < ApplicationRecord
   end
 
   # 添加内容到缓存
-  def self.web_file_to_mongo(file, obj=nil)
+  def self.web_file_to_mongo(file)
     grid = Rails.mongo.database.fs
     begin
       file_name = file.original_filename
-      store_dir = "aclconf/#{file_name}"
+      store_dir = "aclconf/#{get_random}_#{file_name}"
       grid.upload_from_stream(store_dir, file, content_type: file.content_type)
-      if obj.blank?
-        obj = self.create(name: file_name, content_type: file.content_type, file_size: file.size, path: store_dir)
-      else
-        obj.update(name: file_name, content_type: file.content_type, file_size: file.size, path: store_dir)
-      end
-      return [true, obj]
+      obj = FileAttachment.create(name: file_name, content_type: file.content_type, file_size: file.size, path: store_dir)
+      obj
     rescue => e
-      return [false, e]
+      e
     end
+  end
+
+  def self.get_random(len=10,chars=[])
+    chars = ("0".."9").to_a if chars.blank?
+    result = []
+    len.times { |i| result << chars[rand(chars.size-1)] }
+    result.join('')
   end
 
   # 获取web访问地址

@@ -6,10 +6,25 @@
 <%= render 'search_form'  %>
 
 <div class="ui blue segment">
+
   <%= link_to "新建", new_admin_info_path , remote: true, class: 'ui primary button' %>
+  <%= link_to "发布今日推荐", uptoday_admin_infos_path , remote: true, class: 'ui green button', data: {confirm: "更新今日推荐?"} %>
+  <div class="ui buttons">
+    <div class="ui blue button" id="approves">批量审核</div>
+  </div>
+  <div class="ui buttons">
+    <div class="ui orange button" id="info_deletes">批量删除</div>
+  </div>
+
   <table class="ui selectable striped celled table">
     <thead>
     <tr >
+      <th class="center aligned" style='width:50px'>
+        <div class="ui checkbox">
+          <input type="checkbox" id="id_box">
+          <label></label>
+        </div>
+      </th>
       <th class="center aligned">ID</th>
       <th class="center aligned">标题</th>
       <th class="center aligned">图片缩略</th>
@@ -25,8 +40,57 @@
     </tbody>
   </table>
   <span class="blue">
-    <%#= page_entries_info(@infos) %>
     <%= page_entries_info @infos %>
   </span>
   <%= paginate(@infos, :theme => 'admin')%>
 </div>
+
+<% content_for :scripts do%>
+  <script type="text/javascript">
+    // 全选
+    $("#id_box").click(function(){
+      if($(this).prop('checked')){
+        $(":checkbox[name='inquiry_id']").prop("checked", true);
+      }else{
+        $(":checkbox[name='inquiry_id']").prop("checked", false);
+      }
+    });
+    // 批量审核
+    $("#approves").click(function(){
+      var inquiry_ids = [];
+      $(":checked[name='inquiry_id']").each(function(){
+        inquiry_ids.push($(this).val());
+      });
+      if(inquiry_ids.length == 0){
+        alert("请选择需要处理的信息。");
+      }else{
+        $.ajax({
+          url : '<%= to_approves_admin_infos_path %>',
+          type : 'get',
+          data : "inquiry_ids=" + inquiry_ids.join(","),
+          dataType : "script"
+        });
+      }
+    });
+
+    // 批量审核
+    $("#info_deletes").click(function(){
+      var inquiry_ids = [];
+      $(":checked[name='inquiry_id']").each(function(){
+        inquiry_ids.push($(this).val());
+      });
+      if(inquiry_ids.length == 0 ){
+        alert("请选择需要处理的信息。");
+      }else if(window.confirm("确定要删除这些信息吗？")){
+        $.ajax({
+          url : '<%= be_deletes_admin_infos_path %>',
+          type : 'get',
+          data : "inquiry_ids=" + inquiry_ids.join(","),
+          dataType : "script"
+        });
+      }
+    });
+
+
+  </script>  
+<% end %>

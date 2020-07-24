@@ -5,8 +5,8 @@ def day_time(t)
 end
 
 def str_chip(url,chip=100)
-  url.size > chip ? "#{url[0..chip]}.." : url
-end
+  url.size > chip ? "#{url[0..chip]}.." : url if url.present?
+end 
 
 def select_options_from_enum(model,attribute,opts=nil)
   options = model.send(attribute.to_s.pluralize) if options.blank? && model.respond_to?(attribute.to_s.pluralize)
