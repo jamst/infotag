@@ -2,11 +2,18 @@
   <div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
 
   <div class="two fields">
-    <%= f.input :name, label: "栏目名称" %>
+    <%= f.input :name, label: "网站名称" %>
   </div>
 
   <div class="two fields">
-    <%= f.input :sort_live, label: "排序" %>
+    <%= f.input :url, label: "网址URL" %>
+  </div>
+
+  <div class="two fields">
+    <div class="field">
+      <label>网站图标</label>
+      <input type="file" name="file" id="logo_url" accept=".jpg,.jpeg,.png,.bmp" >
+    </div>
   </div>
 
   <div class="field">

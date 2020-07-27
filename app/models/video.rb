@@ -78,7 +78,7 @@ class Video < ApplicationRecord
     file_name = "#{get_random}_#{file_name}"
     image_path = "#{Rails.root}/public/medial_images/videos/#{self.id}_#{file_name}"
     file = File.open(image_path, 'wb'){|f| f.write(open(image_url) {|f| f.read})}
-    file = File.open(image_path) 
+    file = File.open(image_path)
     result = FileAttachment.add_file_to_mongo(file,file_name)
     self.update(local_image_url:result.get_file_path)
     result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)

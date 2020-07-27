@@ -23,14 +23,20 @@ class Admin::SpiderTargetsController < Admin::BaseController
 
   def update
     @spider_target.update_attributes(permitted_resource_params)
-    result = FileAttachment.web_file_to_mongo(params[:file])
-    @spider_target.update(logo_url:result.get_file_path)
+    if params[:file].present?
+      result = FileAttachment.web_file_to_mongo(params[:file])
+      @spider_target.update(logo_url:result.get_file_path)
+    end
   end
 
   def create
     @spider_target = SpiderTarget.new
     @spider_target.attributes = permitted_resource_params
     if @spider_target.save
+      if params[:file].present?
+        result = FileAttachment.web_file_to_mongo(params[:file])
+        @spider_target.update(logo_url:result.get_file_path)
+      end
       respond_with(@spider_target) do |format|
         format.html { redirect_to location_after_save }
         format.js   { render :layout => false }
