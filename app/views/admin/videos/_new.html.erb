@@ -25,7 +25,11 @@
   </div>
 
   <div class="two fields">
-    <%= f.input :category_id, label: "分类", as: :select, collection: Category.pluck(:name,:id), include_blank: "选择所属栏目", input_html: {class: 'ui dropdown fluid'}, label: "所属栏目" %>
+    <%= f.input :category_id, label: "所属栏目", as: :select, collection: Category.pluck(:name,:id), include_blank: "选择所属栏目", input_html: {class: 'ui dropdown fluid'}, label: "所属栏目" %>
+    <%= f.input :spider_target_id, label: "信息来源", as: :select, collection: SpiderTarget.pluck(:name,:id), include_blank: "选择信息来源", input_html: {class: 'ui dropdown fluid'}, label: "信息来源" %>
+  </div>
+
+  <div class="two fields">
     <%= f.input :tags_str, label: "标签" %>
   </div>
 

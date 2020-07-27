@@ -2,6 +2,7 @@ class Video < ApplicationRecord
   has_and_belongs_to_many :tags, through: :tags_videos
   belongs_to :category
   belongs_to :medial_spider
+  belongs_to :spider_target
   # 用户标签来源明细记录
   has_many :user_tag_details, as: :from_entity
 
@@ -137,7 +138,7 @@ class Video < ApplicationRecord
   def self.import_db
     SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      Video.find_or_create_by(medial_spider_id:data.spider_medial_id,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "play_count": data.play_count, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url )
+      Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "play_count": data.play_count, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url )
     end
   end
 

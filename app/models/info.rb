@@ -2,6 +2,7 @@ class Info < ApplicationRecord
   has_and_belongs_to_many :tags, through: :infos_tags
   belongs_to :category
   belongs_to :medial_spider
+  belongs_to :spider_target
   # 用户标签来源明细记录
   has_many :user_tag_details, as: :from_entity
 
@@ -48,7 +49,7 @@ class Info < ApplicationRecord
   end
 
 
-  # 每天推荐的咨询包
+  # 每天推荐的咨询包s
   def self.add_today_list
     infos_today = $redis.smembers("infos_today")
     $redis.srem("infos_today", infos_today) if infos_today.present?
@@ -123,7 +124,7 @@ class Info < ApplicationRecord
   def self.import_db
     SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      Info.find_or_create_by(medial_spider_id:data.spider_medial_id,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
+      Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
     end
   end
 

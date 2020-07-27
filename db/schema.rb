@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_22_035451) do
+ActiveRecord::Schema.define(version: 2020_07_25_074556) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", comment: "名称"
@@ -93,9 +93,11 @@ ActiveRecord::Schema.define(version: 2020_07_22_035451) do
     t.integer "approve_status", default: 0, comment: "状态：-1已拒绝,0待审核,1已通过"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "spider_target_id", comment: "信息来源"
     t.index ["category_id"], name: "index_infos_on_category_id"
     t.index ["medial_spider_id"], name: "index_infos_on_medial_spider_id"
     t.index ["release_at"], name: "index_infos_on_release_at"
+    t.index ["spider_target_id"], name: "index_infos_on_spider_target_id"
   end
 
   create_table "infos_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -232,9 +234,11 @@ ActiveRecord::Schema.define(version: 2020_07_22_035451) do
     t.integer "approve_status", default: 0, comment: "状态：-1已拒绝,0待审核,1已通过"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "spider_target_id", comment: "信息来源"
     t.index ["category_id"], name: "index_videos_on_category_id"
     t.index ["medial_spider_id"], name: "index_videos_on_medial_spider_id"
     t.index ["release_at"], name: "index_videos_on_release_at"
+    t.index ["spider_target_id"], name: "index_videos_on_spider_target_id"
   end
 
 end

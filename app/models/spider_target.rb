@@ -1,6 +1,9 @@
 class SpiderTarget < ApplicationRecord
 
   has_one :file_attachment, as: :attachment_entity
+  has_many :medial_spiders
+  has_many :infos
+  has_many :videos
   default_scope -> {where(is_delete: 0)}
   enum status: { disabled: -1, enabled: 0 }
 
