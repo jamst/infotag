@@ -46,18 +46,18 @@ class HomeController < ActionController::Base
     flow_medias[:infos] = []
     # 推荐置顶
     @video_tops.each do |_|
-      flow_medias[:tops] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:tops] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     @info_tops.each do |_|
-      flow_medias[:tops] << {medial_typel: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url }
+      flow_medias[:tops] << {medial_typel: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
     end
     # 视频
     @videos.each do |_|
-      flow_medias[:videos] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 资讯
     @infos.each do |_|
-      flow_medias[:infos] << {medial_typel: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.medial_spider&.spider_target&.name, web_target_logo: _.medial_spider&.spider_target&.logo_url }
+      flow_medias[:infos] << {medial_typel: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
     end
     render json: flow_medias  and return
   end
