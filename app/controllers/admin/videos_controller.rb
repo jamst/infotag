@@ -66,7 +66,7 @@ class Admin::VideosController < Admin::BaseController
   end
 
   def create
-    @video = video.new
+    @video = Video.new
     @video.attributes = permitted_resource_params
     if @video.save
       respond_with(@video) do |format|
