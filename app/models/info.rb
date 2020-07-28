@@ -126,6 +126,9 @@ class Info < ApplicationRecord
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
       Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
     end
+    conn = ActiveRecord::Base.connection
+    conn.execute("truncate table spider_origin_videos")
+    conn.close
   end
 
 end
