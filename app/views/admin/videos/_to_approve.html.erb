@@ -11,7 +11,7 @@
   </div>
 
   <div class="field">
-    <%= f.input :weight, label: '权重', as: :select, collection: [["随机","nomal"],["置顶","top"]], include_blank: '选择状态', input_html: {class: 'ui dropdown fluid'} %>
+    <%= f.input :weight, label: '权重', as: :select, collection: select_options_from_enum(Video, :weight), include_blank: "选择权重", input_html: {class: 'ui dropdown fluid'}, label: "权重" %>
   </div>
 
   <div class="field">

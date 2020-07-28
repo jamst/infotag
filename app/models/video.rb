@@ -9,7 +9,7 @@ class Video < ApplicationRecord
   has_one :file_attachment, as: :attachment_entity
 
   enum status: { disabled: -1, enabled: 0 }
-  enum weight: { nomal: 0, top: 1 }
+  enum weight: { nomal: 0, top: 1, force: 2 }
   enum medial_type: { info: 0, video: 1 }
   enum approve_status: { unapproved: -1, wapprove: 0, approved: 1 }
 
@@ -62,12 +62,12 @@ class Video < ApplicationRecord
     end
   end
   def self.today_list
-    $redis.srandmember("videos_today",10)
+    $redis.srandmember("videos_today",5)
   end
   
   # 分类获取
   def self.category_list(category_id)
-    $redis.srandmember("category_#{category_id}_videos",10)
+    $redis.srandmember("category_#{category_id}_videos",5)
   end
 
 
@@ -98,6 +98,8 @@ class Video < ApplicationRecord
   def top_update
     if weight == "top"
       top_list
+    elsif weight == "force"
+      force_list
     else
       cancer_top_list
     end
@@ -105,6 +107,10 @@ class Video < ApplicationRecord
   # 视频置顶列表
   def top_list
     $redis.sadd("videos_top", self.id)
+  end
+  # 视频强推列表
+  def force_list
+    $redis.sadd("videos_force", self.id)
   end
   # todo定时移除top
   def cancer_top_list

@@ -6,6 +6,7 @@ zh:
         weight:
           nomal: "随机"
           top: "置顶"
+          force: "强推"
         medial_type:
           info: "资讯"   
           video: "视频" 
@@ -20,6 +21,7 @@ zh:
         weight:
           nomal: "随机"
           top: "置顶"  
+          force: "强推"
         medial_type:
           info: "资讯"   
           video: "视频"

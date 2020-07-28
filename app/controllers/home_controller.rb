@@ -7,37 +7,55 @@ class HomeController < ActionController::Base
       category_id = params[:category_id]
       #video_top_ids = Video.get_top(1)
       @video_tops = [] #Video.where(id:video_top_ids)
-      merge_videos = Video.category_list(category_id) 
-      @videos = Video.where(id:merge_videos).sample(5)
+      merge_videos = Video.category_list(category_id)
+      @videos = Video.where(id:merge_videos)
 
-      #info_top_ids = Info.get_top(10)
+      #info_top_ids = Info.get_top(1)
       @info_tops = [] #Info.where(id:info_top_ids)
-      merge_infos = Info.category_list(category_id) 
-      @infos = Info.where(id:merge_infos).sample(5)
+      merge_infos = Info.category_list(category_id)
+      @infos = Info.where(id:merge_infos)
     elsif params[:user_id].present? && $redis.smembers("users_#{params[:user_id]}").present? 
       # 用户喜好资讯
       data = UserTag.flow_medias(params[:user_id])
       # 视频数据
       video_top_ids = Video.get_top(params[:user_id])
-      merge_videos = data[:videos] - video_top_ids
-      @videos = Video.where(id:merge_videos).sample(5)
+      merge_videos = (data[:videos] - video_top_ids).sample(5)
+      video_top_ids = Video.get_top(params[:user_id])
+      @videos = Video.where(id:merge_videos)
       @video_tops = Video.where(id:video_top_ids)
       # 资讯
       info_top_ids = Info.get_top(params[:user_id])
-      merge_infos = data[:infos] - info_top_ids
-      @infos = Info.where(id:merge_infos).sample(5)
+      if params[:page].to_i == 1 || !params[:page].present?
+        info_force_ids = Info.get_force(params[:user_id])
+        if info_force_ids.present?
+          merge_infos = ((data[:infos] - info_top_ids).sample(4) + info_force_ids).sample(5)
+        else
+          merge_infos = (data[:infos] - info_top_ids).sample(5)
+        end
+      else
+        merge_infos = data[:infos] - info_top_ids
+      end
+      @infos = Info.where(id:merge_infos)
       @info_tops = Info.where(id:info_top_ids)
     else
       # 当天最新资讯
       video_top_ids = Video.get_top(1)
       @video_tops = Video.where(id:video_top_ids)
       merge_videos = Video.today_list 
-      @videos = Video.where(id:merge_videos).sample(5)
+      @videos = Video.where(id:merge_videos)
 
-      info_top_ids = Info.get_top(10)
+      info_top_ids = Info.get_top(1)
       @info_tops = Info.where(id:info_top_ids)
-      merge_infos = Info.today_list 
-      @infos = Info.where(id:merge_infos).sample(5)
+      merge_infos = Info.today_list
+    
+      if params[:page].to_i == 1 || !params[:page].present?
+        info_force_ids = Info.get_force(1)
+        if info_force_ids.present?
+          merge_infos = (merge_infos.sample(4) + info_force_ids).sample(5)
+        end
+      end
+
+      @infos = Info.where(id:merge_infos)
     end
 
     flow_medias = {}

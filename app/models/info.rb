@@ -9,7 +9,7 @@ class Info < ApplicationRecord
   has_one :file_attachment, as: :attachment_entity
 
   enum status: { disabled: -1, enabled: 0 }
-  enum weight: { nomal: 0, top: 1 }
+  enum weight: { nomal: 0, top: 1, force: 2 }
   enum medial_type: { info: 0, video: 1 }
   enum approve_status: { unapproved: -1, wapprove: 0, approved: 1 }
 
@@ -59,12 +59,12 @@ class Info < ApplicationRecord
     end
   end
   def self.today_list
-    $redis.srandmember("infos_today",10)
+    $redis.srandmember("infos_today",5)
   end
 
   # 分类获取
   def self.category_list(category_id)
-    $redis.srandmember("category_#{category_id}_infos",10)
+    $redis.srandmember("category_#{category_id}_infos",5)
   end
 
   # 缓存图片到本地
@@ -94,6 +94,8 @@ class Info < ApplicationRecord
   def top_update
     if weight == "top"
       top_list
+    elsif weight == "force"
+      force_list
     else
       cancer_top_list
     end
@@ -101,6 +103,10 @@ class Info < ApplicationRecord
   # 视频置顶列表
   def top_list
     $redis.sadd("infos_top", self.id)
+  end
+  # 视频强推列表
+  def force_list
+    $redis.sadd("infos_force", self.id)
   end
   # todo定时移除top
   def cancer_top_list
@@ -117,6 +123,17 @@ class Info < ApplicationRecord
     # 用户没有访问过的视频
     flow_infos = infos - user_infos
     flow_infos.sample(2)
+  end
+
+  # 获取置顶列表
+  def self.get_force(user_id)
+    # 标签下视频记录
+    infos = $redis.smembers("infos_force")
+    # 用户访问视频记录
+    user_infos = $redis.smembers("user_#{user_id}_infos")
+    # 用户没有访问过的视频
+    flow_infos = infos - user_infos
+    flow_infos.sample(1)
   end
 
 
