@@ -9,10 +9,10 @@ class ImageService
   end
 
 
-  def self.compress(image_path, options = {quality: "70%"})
+  def self.compress(image_path, options = {quality: "80%"})
     to_path = "#{tmp_dir}/compress_#{SecureRandom.uuid.to_s.strip}.png"
     image = MiniMagick::Image.open image_path
-    image.resize "200x100"
+    image.resize "400x255"
     image.combine_options do |b|
       b.strip
       b.quality options[:quality]
