@@ -41,6 +41,9 @@ gem 'whenever', require: false
 gem 'mongo'
 # gem 'mongoid'
 
+# 图片处理
+gem "mini_magick"
+
 # 队列任务
 gem 'sidekiq', '~> 4.2'
 gem 'sidekiq-cron', '~> 0.4.5', require: false
