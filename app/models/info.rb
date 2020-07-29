@@ -71,14 +71,19 @@ class Info < ApplicationRecord
   def image_save
     image_url = self.image_url
     file_name = image_url.split("?").first.to_s.split("/").last
-    file_name = "#{get_random}_#{file_name}"
+    file_name = "#{SecureRandom.uuid.to_s.strip}_#{file_name}"
     image_path = "#{Rails.root}/public/medial_images/infos/#{self.id}_#{file_name}"
+    # 下载图片
     file = File.open(image_path, 'wb'){|f| f.write(open(image_url) {|f| f.read})}
-    file = File.open(image_path) 
+    # 压缩图片
+    compress_path =  ImageService.compress(image_path)
+    # 上传到文件服务器
+    file = File.open(compress_path)
     result = FileAttachment.add_file_to_mongo(file,file_name)
     self.update(local_image_url:result.get_file_path)
     result.update(attachment_entity_type: "Info", attachment_entity_id: self.id)
     FileUtils.rm_rf image_path if image_path
+    FileUtils.rm_rf compress_path if compress_path
   end
 
 
@@ -94,10 +99,13 @@ class Info < ApplicationRecord
   def top_update
     if weight == "top"
       top_list
+      cancer_force_list
     elsif weight == "force"
       force_list
+      cancer_top_list
     else
       cancer_top_list
+      cancer_force_list
     end
   end
   # 视频置顶列表
@@ -111,6 +119,10 @@ class Info < ApplicationRecord
   # todo定时移除top
   def cancer_top_list
     $redis.srem("infos_top", self.id)
+  end
+  # todo定时移除force
+  def cancer_force_list
+    $redis.srem("infos_force", self.id)
   end
 
  
