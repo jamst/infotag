@@ -40,6 +40,10 @@
   </div>
 
   <div class="field">
+    <%= f.input :approve_status, label: '审核状态', as: :select, collection: select_options_from_enum(Video, :approve_status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'} %>
+  </div>
+
+  <div class="field">
     <div class="actions ">
       <div class="ui button primary" id="commition">提交</div>
       <div class="ui cancel button">取消</div>

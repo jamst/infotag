@@ -12,6 +12,11 @@
   </div>
 
   <div class="two fields">
+    <%= f.input :tags_str, label: "标签" %>
+    <%= f.input :need_approve, label: '审核类别', as: :select, collection: select_options_from_enum(MedialSpider, :need_approve), include_blank: "选择审核类别", input_html: {class: 'ui dropdown fluid'} %>
+  </div>
+
+  <div class="two fields">
     <%= f.input :web_site, label: "网站模块" %>
     <div class="field">
       <label>指定时间</label>

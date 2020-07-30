@@ -31,6 +31,7 @@
 
   <div class="two fields">
     <%= f.input :tags_str, label: "标签" %>
+    <%= f.input :approve_status, label: '审核状态', as: :select, collection: select_options_from_enum(Info, :approve_status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'} %>
   </div>
 
   <div class="field">

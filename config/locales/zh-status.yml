@@ -39,6 +39,9 @@ zh:
         status:
           disabled: "已禁用"     
           enabled: "已启用"
+        need_approve:
+          need: "手动审核"  
+          unneed: "自动审核"  
       category:
         status:
           disabled: "已禁用"     

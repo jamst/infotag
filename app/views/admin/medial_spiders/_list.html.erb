@@ -6,7 +6,7 @@
     <%= medial_spider.spider_target&.name %>
   </td>
   <td class="center aligned">
-    <%= link_to str_chip(medial_spider.url,20), medial_spider.url , target: '_blank' %>
+    <%= link_to str_chip(medial_spider.url,30), medial_spider.url , target: '_blank' %>
   </td>
   <td class="center aligned">
     <%= medial_spider.web_site %>
@@ -18,7 +18,7 @@
     <%= medial_spider.category&.name %>
   </td>
   <td class="center aligned">
-    <%= day_time(medial_spider.release_at) %>
+    <%= day_time(medial_spider.created_at) %>
   </td>
   <td class="center aligned">
     <%= medial_spider.count_size %>

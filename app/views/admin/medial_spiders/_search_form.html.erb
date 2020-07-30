@@ -2,10 +2,12 @@
   <div class="ui blue segment">
     <%= simple_form_for @q,  url: admin_medial_spiders_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
       <div class="ui five column grid">
+        <%= f.input "url-like", label: "网址url" %>
         <%= f.input :spider_target_id, as: :select, collection: SpiderTarget.pluck(:name,:id), include_blank: "选择来源网站", input_html: {class: 'ui dropdown fluid'}, label: "来源网站" %>
         <%= f.input :medial_type, as: :select, collection: select_options_from_enum(MedialSpider, :medial_type), include_blank: "选择内容类型", input_html: {class: 'ui dropdown fluid'}, label: "内容类型" %>
         <%= f.input :category_id, as: :select, collection: Category.pluck(:name,:id), include_blank: "选择所属栏目", input_html: {class: 'ui dropdown fluid'}, label: "所属栏目" %>
         <%= f.input :status, as: :select, collection: select_options_from_enum(MedialSpider, :status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'}, label: "状态" %>
+        <%= f.input :need_approve, as: :select, collection: select_options_from_enum(MedialSpider, :need_approve), include_blank: "选择审核类别", input_html: {class: 'ui dropdown fluid'}, label: "审核类别" %>
         <div class="column">
           <%= f.submit '搜索', class: 'ui primary button' %>  
         </div>

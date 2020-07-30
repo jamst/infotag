@@ -49,7 +49,7 @@ class Info < ApplicationRecord
   end
 
 
-  # 每天推荐的咨询包s
+  # 每天推荐的咨询包
   def self.add_today_list
     infos_today = $redis.smembers("infos_today")
     $redis.srem("infos_today", infos_today) if infos_today.present?
@@ -153,10 +153,13 @@ class Info < ApplicationRecord
   def self.import_db
     SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
+      info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
+      if medial_spider.unneed?
+        info.update(approve_status:"approved",tags_str:medial_spider.tags_str)
+      end
     end
     conn = ActiveRecord::Base.connection
-    conn.execute("truncate table spider_origin_videos")
+    conn.execute("truncate table spider_origin_infos")
     conn.close
   end
 
