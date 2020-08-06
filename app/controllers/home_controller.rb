@@ -35,7 +35,7 @@ class HomeController < ActionController::Base
       else
         merge_infos = data[:infos] - info_top_ids
       end
-      @infos = Info.where(id:merge_infos)
+      @infos = Info.where(id:merge_infos).sample(5)
       @info_tops = Info.where(id:info_top_ids)
     else
       # 当天最新资讯
@@ -55,7 +55,7 @@ class HomeController < ActionController::Base
         end
       end
 
-      @infos = Info.where(id:merge_infos)
+      @infos = Info.where(id:merge_infos).sample(5)
     end
 
     flow_medias = {}
