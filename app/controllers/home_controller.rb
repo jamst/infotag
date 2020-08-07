@@ -64,18 +64,18 @@ class HomeController < ActionController::Base
     flow_medias[:infos] = []
     # 推荐置顶
     @video_tops.each do |_|
-      flow_medias[:tops] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:tops] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     @info_tops.each do |_|
-      flow_medias[:tops] << {medial_typel: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
+      flow_medias[:tops] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
     end
     # 视频
     @videos.each do |_|
-      flow_medias[:videos] << {author:_.author,medial_typel: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 资讯
     @infos.each do |_|
-      flow_medias[:infos] << {medial_typel: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tags_str:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
+      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
     end
     render json: flow_medias  and return
   end
@@ -86,10 +86,10 @@ class HomeController < ActionController::Base
     user_id = params[:session_id]
     user_id = params[:user_id]
     user_id = params[:device_uuid]
-    medial_typel = params[:medial_typel]
+    medial_type = params[:medial_type]
     medial_id = params[:medial_id]
     tag_ids = params[:tag_ids]
-    UserTag.user_view_info(user_id,medial_typel,medial_id,tag_ids)
+    UserTag.user_view_info(user_id,medial_type,medial_id,tag_ids)
     render json: flow_medias  and return
   end
 
