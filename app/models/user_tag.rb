@@ -13,11 +13,17 @@ class UserTag < ApplicationRecord
       $redis.sadd(users_cache_key, tag_ids)
       if tag_ids.is_a? Array
         tag_ids.each do |tag_id|
+          # 用户标签命中次数
           $redis.incr("user_#{user_id}_tag_#{tag_id}")
+          # 标签命中次数
+          $redis.incr("tag_incr_#{tag_id}")
         end
       else
         tag_ids.split(",").each do |tag_id|
+          # 用户标签命中次数
           $redis.incr("user_#{user_id}_tag_#{tag_id}")
+          # 标签命中次数
+          $redis.incr("tag_incr_#{tag_id}")
         end
       end
     end

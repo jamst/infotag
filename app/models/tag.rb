@@ -11,5 +11,10 @@ class Tag < ApplicationRecord
   def auto_change_type
     self.connection_tags = self.connection_tags&.split(',') unless self.connection_tags.is_a?(Array)
   end
+
+  # 访问次数
+  def incr_size
+    $redis.get("tag_incr_#{self.id}").to_i
+  end
   
 end

@@ -11,6 +11,9 @@
   <td class="center aligned">
     <%= day_time(tag.created_at) %>
   </td>
+  <td class="center aligned">
+    <%= tag.incr_size %>
+  </td>
   </td>
   <td class="center aligned">
     <%= link_to edit_admin_tag_path(tag.id), remote: true, class: "ui icon blue basic button" do %>
