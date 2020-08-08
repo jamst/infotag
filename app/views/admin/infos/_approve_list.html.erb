@@ -24,6 +24,9 @@
     <%= info.tags_str %>
   </td>
   <td class="center aligned">
+    <%= info.incr_size %>
+  </td>
+  <td class="center aligned">
     <%= link_to edit_admin_info_path(info.id), remote: true, class: "ui icon blue basic button" do %>
       <i class="edit icon"></i>编辑
     <% end %>

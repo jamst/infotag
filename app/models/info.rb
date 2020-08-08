@@ -67,6 +67,11 @@ class Info < ApplicationRecord
     $redis.srandmember("category_#{category_id}_infos",5)
   end
 
+  # 访问次数
+  def incr_size
+    $redis.get("info_incr_#{self.id}").to_i
+  end
+
   # 缓存图片到本地
   def image_save
     image_url = self.image_url

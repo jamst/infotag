@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_25_074556) do
+ActiveRecord::Schema.define(version: 2020_07_30_021521) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", comment: "名称"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 2020_07_25_074556) do
     t.datetime "release_at", comment: "指定过滤时间"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "need_approve", default: 1, comment: "是否需要审核0自动审核unneed，1手动审核need"
     t.index ["category_id"], name: "index_medial_spiders_on_category_id"
     t.index ["spider_target_id"], name: "index_medial_spiders_on_spider_target_id"
   end

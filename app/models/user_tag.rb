@@ -33,6 +33,29 @@ class UserTag < ApplicationRecord
   end
 
 
+  # 用户访问过的咨询记录（访问过的内容，就不需要再推荐了）
+  def self.today_user_view_info(init_time=Time.now.at_beginning_of_day)
+    # medial_type = info/video
+    # todo 优化，用户可能会访问很多资讯，加上过期切分时间，避免内存占用。
+    ::ClickLog.where(created_at: {"$gte": init_time}).each do |log|
+      user_id = log.user_id
+      medial_type = log.medial_type
+      medial_id = log.medial_id
+      tag_ids = log.tag_ids.split(",")
+
+      # 资讯访问统计
+      $redis.incr("#{medial_type}_incr_#{medial_id}")
+      if user_id.present?
+        # 用户资讯访问统计
+        $redis.sadd("user_#{user_id}_#{medial_type}",medial_id)
+        # 用户标签触发计数
+        user_tag_cache(user_id,tag_ids)
+      end
+    end
+
+  end
+
+
   # 流媒体
   def self.flow_medias(user_id)
 
