@@ -165,9 +165,12 @@ class Video < ApplicationRecord
         video.update(approve_status:"approved",tags_str:medial_spider.tags_str)
       end
     end
+    # 情况爬虫数据
     conn = ActiveRecord::Base.connection
     conn.execute("truncate table spider_origin_videos")
     conn.close
+    # 推荐最新资讯
+    Video.add_today_list
   end
 
 end
