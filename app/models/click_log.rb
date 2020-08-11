@@ -26,12 +26,12 @@ class ClickLog < ApplicationRecord
   field :city, type: String # 城市
 
   def tag_list
-    Tag.where(id:tag_ids.split(",")).pluck(:name)
+    Tag.where(id:tag_ids&.split(",")).pluck(:name)
   end
 
   def user_tag_list
     user_tag_ids = $redis.smembers("users_#{user_id}")
-    Tag.where(id:user_tag_ids.split(",")).pluck(:name)
+    Tag.where(id:user_tag_ids&.split(",")).pluck(:name)
   end
 
   def medial
