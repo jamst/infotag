@@ -28,4 +28,8 @@ class Admin::ClickLogsController < Admin::BaseController
     @click_logs = Kaminari.paginate_array(@click_logs.to_ary, total_count: @click_logs.size).page(params["page"]).per(30)
   end
 
+  def uptoday
+    UserTag.today_user_view_info(Time.now.at_beginning_of_day)
+  end
+
 end

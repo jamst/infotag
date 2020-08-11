@@ -65,6 +65,9 @@ Rails.application.routes.draw do
     end
 
     resources :click_logs, only: [:index] do
+      collection do
+        get :uptoday
+      end
     end
 
   end
