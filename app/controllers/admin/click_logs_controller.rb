@@ -1,7 +1,7 @@
 class Admin::ClickLogsController < Admin::BaseController
 
   def index
-    @q = SearchParams.new(params[:search_params] || {})
+    @q = SearchParams.new(params[:search_params] || {created_at: Time.now.at_beginning_of_day})
 
     params_arr = @q.attributes(self)
 
