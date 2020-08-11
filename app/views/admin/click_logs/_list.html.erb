@@ -12,10 +12,10 @@
     <%= link_to str_chip(click_log.medial&.title,20), click_log.medial&.url , target: '_blank' %>
   </td>
   <td class="center aligned">
-    <%= click_log.tag_list %>
+    <%= click_log.tag_list.join(",") %>
   </td>
   <td class="center aligned">
-    <%= click_log.user_tag_list %>
+    <%= click_log.user_tag_list.join(",") %>
   </td>
   <td class="center aligned">
     <%= click_log.vpn_version %>
