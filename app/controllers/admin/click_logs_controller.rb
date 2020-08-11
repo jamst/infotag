@@ -25,7 +25,7 @@ class Admin::ClickLogsController < Admin::BaseController
 
     @click_logs = @click_logs.order_by(created_at: :desc)
 
-    @click_logs = Kaminari.paginate_array(@click_logs.to_ary, total_count: @click_logs.size).page(params_arr["page"]).per(10)
+    @click_logs = Kaminari.paginate_array(@click_logs.to_ary, total_count: @click_logs.size).page(params_arr["page"]).per(30)
   end
 
 end
