@@ -1,0 +1,29 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>日志列表</h2>
+  </div>
+</div>
+<%= render 'search_form'  %>
+
+<div class="ui blue segment">
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">用户ID</th>
+      <th class="center aligned">设备ID</th>
+      <th class="center aligned">资讯类型</th>
+      <th class="center aligned">资讯名称</th>
+      <th class="center aligned">标签</th>
+      <th class="center aligned">用户标签</th>
+      <th class="center aligned">产品平台</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'list', collection: @click_logs, as: :click_log %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@click_logs) %>
+  </span>
+  <%= paginate(@click_logs, :theme => 'admin')%>
+</div>

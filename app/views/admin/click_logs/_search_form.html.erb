@@ -1,0 +1,29 @@
+
+  <div class="ui blue segment">
+    <%= simple_form_for @q,  url: admin_click_logs_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
+      <div class="ui five column grid">
+        <%= f.input :user_id, placeholder: '用户ID' %>
+        <%= f.input :device_uuid, placeholder: '设备ID' %>
+        <%= f.input :medial_type, placeholder: '资讯类型' %>
+        <%= f.input :medial_id, placeholder: '资讯ID' %>
+        <%= f.input :tag_ids, placeholder: '标签' %>
+        <%= f.input :vpn_version, placeholder: '产品平台' %>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "start_at", placeholder: '开始时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "end_at", placeholder: '结束时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <%= f.submit '搜索', class: 'ui primary button' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+

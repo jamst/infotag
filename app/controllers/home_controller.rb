@@ -14,7 +14,7 @@ class HomeController < ActionController::Base
       @info_tops = [] #Info.where(id:info_top_ids)
       merge_infos = Info.category_list(category_id)
       @infos = Info.where(id:merge_infos)
-    elsif params[:user_id].present? && $redis.smembers("users_#{params[:user_id]}").present? 
+    elsif params[:user_id].present? 
       # 用户喜好资讯
       data = UserTag.flow_medias(params[:user_id])
       # 视频数据

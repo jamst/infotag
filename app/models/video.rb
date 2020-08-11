@@ -57,7 +57,7 @@ class Video < ApplicationRecord
     videos_today = $redis.smembers("videos_today")
     $redis.srem("videos_today", videos_today) if videos_today.present?
 
-    Video.nomal.order(:play_count,created_at: :desc).limit(100).each do |video|
+    Video.nomal.approved.order(:play_count,created_at: :desc).limit(100).each do |video|
       $redis.sadd("videos_today", video.id)
     end
   end

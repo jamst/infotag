@@ -40,7 +40,7 @@ class UserTag < ApplicationRecord
 
 
   # 用户访问过的咨询记录（访问过的内容，就不需要再推荐了）
-  def self.today_user_view_info(init_time=Time.now.at_beginning_of_day)
+  def self.today_user_view_info(init_time=Time.now.yesterday.at_beginning_of_day)
     # medial_type = info/video
     # todo 优化，用户可能会访问很多资讯，加上过期切分时间，避免内存占用。
     ::ClickLog.where(created_at: {"$gte": init_time}).each do |log|
@@ -69,7 +69,7 @@ class UserTag < ApplicationRecord
     # 获取用户当前标签
     tag_ids = $redis.smembers(users_cache_key)
     # 获取当前用户标签的权重，选用排序前5个标签做为推荐参考/或者取随机的5个标签做推荐参考
-    tag_ids = tag_ids.present? ? tag_ids.sample(5) : [4]
+    tag_ids = tag_ids.present? ? tag_ids.sample(5) : Tag.ids.sample(5)
 
     result = {}
     infos = []

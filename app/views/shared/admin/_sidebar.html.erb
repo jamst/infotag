@@ -63,7 +63,7 @@
       </div>
     </li>
     <li>
-      <% isin = action_on_list([admin_employees_path]) %>
+      <% isin = action_on_list([admin_employees_path,admin_click_logs_path]) %>
       <a class="item <%= isin ? "active" : "" %> ">
         <i class="configure icon"></i>
         <span class="main_menu">系统管理</span>
@@ -73,6 +73,10 @@
         <%= link_to_with_permissions admin_employees_path, class: 'item', active_class: 'actives' do %>
           <i class="left bullseye icon"></i>
           <span>管理员列表</span>
+        <% end %>
+        <%= link_to_with_permissions admin_click_logs_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>日志列表</span>
         <% end %>
       </div>
     </li>

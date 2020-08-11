@@ -54,7 +54,7 @@ class Info < ApplicationRecord
     infos_today = $redis.smembers("infos_today")
     $redis.srem("infos_today", infos_today) if infos_today.present?
 
-    Info.nomal.order(created_at: :desc).limit(100).each do |info|
+    Info.nomal.approved.order(created_at: :desc).limit(100).each do |info|
       $redis.sadd("infos_today", info.id)
     end
   end
