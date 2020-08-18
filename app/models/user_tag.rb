@@ -82,7 +82,7 @@ class UserTag < ApplicationRecord
 
     # 获取当前用户标签的权重，选用排序前5个标签做为推荐参考
     if top_tag_ids.present? 
-      tag_ids = top_tag_ids
+      tag_ids = top_tag_ids.collect{|tag| tag.split("_")[-2]}
     else
       # 获取用户当前标签取随机的5个标签做推荐参考
       tag_ids = $redis.smembers(users_cache_key)
