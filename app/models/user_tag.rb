@@ -13,19 +13,30 @@ class UserTag < ApplicationRecord
       $redis.sadd(users_cache_key, tag_ids)
       if tag_ids.is_a? Array
         tag_ids.each do |tag_id|
+          # 用户某个标签权重排序
+          $redis.sadd("user_#{user_id}_tag_list","user_#{user_id}_tag_#{tag_id}_count")
           # 用户标签命中次数
-          $redis.incr("user_#{user_id}_tag_#{tag_id}")
+          incr_count = $redis.incr("user_#{user_id}_tag_#{tag_id}")
+          $redis.hset("user_#{user_id}_tag_#{tag_id}_count", "incr_count" , incr_count)
           # 标签命中次数
           $redis.incr("tag_incr_#{tag_id}")
         end
       else
         tag_ids.split(",").each do |tag_id|
+          # 用户某个标签权重排序
+          $redis.sadd("user_#{user_id}_tag_list","user_#{user_id}_tag_#{tag_id}_count")
           # 用户标签命中次数
-          $redis.incr("user_#{user_id}_tag_#{tag_id}")
+          incr_count = $redis.incr("user_#{user_id}_tag_#{tag_id}")
+          $redis.hset("user_#{user_id}_tag_#{tag_id}_count", "incr_count" , incr_count)
           # 标签命中次数
           $redis.incr("tag_incr_#{tag_id}")
         end
       end
+
+      # tag命中取前五存储到top_user_tag_list中
+      sort_user_tag_list = $redis.sort("user_#{user_id}_tag_list", :by => "desc incr_count", :limit => [0, 5])
+      $redis.sadd("top_user_#{user_id}_tag_list",sort_user_tag_list)
+
     end
   end
 
@@ -42,7 +53,7 @@ class UserTag < ApplicationRecord
   # 用户访问过的咨询记录（访问过的内容，就不需要再推荐了）
   def self.today_user_view_info(init_time=Time.now.yesterday.at_beginning_of_day)
     # medial_type = info/video
-    # todo 优化，用户可能会访问很多资讯，加上过期切分时间，避免内存占用。
+    # todo 优化，用户可能会访问很多资讯，加上过期切分时间持久化，避免内存占用。
     ::ClickLog.where(created_at: {"$gte": init_time}).each do |log|
       user_id = log.user_id
       medial_type = log.medial_type
@@ -66,10 +77,17 @@ class UserTag < ApplicationRecord
   def self.flow_medias(user_id)
 
     users_cache_key = "users_#{user_id}"
-    # 获取用户当前标签
-    tag_ids = $redis.smembers(users_cache_key)
-    # 获取当前用户标签的权重，选用排序前5个标签做为推荐参考/或者取随机的5个标签做推荐参考
-    tag_ids = tag_ids.present? ? tag_ids.sample(5) : Tag.ids.sample(5)
+    
+    top_tag_ids = $redis.smembers("top_user_#{user_id}_tag_list")
+
+    # 获取当前用户标签的权重，选用排序前5个标签做为推荐参考
+    if top_tag_ids.present? 
+      tag_ids = top_tag_ids
+    else
+      # 获取用户当前标签取随机的5个标签做推荐参考
+      tag_ids = $redis.smembers(users_cache_key)
+      tag_ids = tag_ids.present? ? tag_ids.sample(5) : Tag.ids.sample(5)
+    end
 
     result = {}
     infos = []
