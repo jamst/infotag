@@ -169,6 +169,8 @@ class Info < ApplicationRecord
     conn.close
     # 推荐最新资讯
     Info.add_today_list
+    # 日志标签读取
+    UserTag.today_user_view_info
   end
 
 end

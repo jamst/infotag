@@ -86,8 +86,8 @@ class Admin::VideosController < Admin::BaseController
 
   def destroy
     @video.is_delete = Time.now.to_i
+    @video.srem_tag_list
     if @video.save
-      @video.srem_tag_list
       respond_to do |format|
         format.js
       end

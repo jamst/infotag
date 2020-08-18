@@ -86,8 +86,8 @@ class Admin::InfosController < Admin::BaseController
 
   def destroy
     @info.is_delete = Time.now.to_i
+    @info.srem_tag_list
     if @info.save
-      @info.srem_tag_list
       respond_to do |format|
         format.js
       end
