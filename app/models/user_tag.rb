@@ -35,7 +35,7 @@ class UserTag < ApplicationRecord
 
       # tag命中取前五存储到top_user_tag_list中
       sort_user_tag_list = $redis.sort("user_#{user_id}_tag_list", :by => "desc incr_count", :limit => [0, 5])
-      $redis.sadd("top_user_#{user_id}_tag_list",sort_user_tag_list)
+      $redis.sadd("top_user_#{user_id}_tag_list",sort_user_tag_list) if sort_user_tag_list.present?
 
     end
   end
