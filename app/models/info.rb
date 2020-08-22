@@ -171,6 +171,11 @@ class Info < ApplicationRecord
     Info.add_today_list
     # 日志标签读取
     UserTag.today_user_view_info
+    # 删除3个月前的数据推荐
+    Info.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |info|
+      info.update(is_delete: Time.now.to_i)
+      info.srem_tag_list
+    end
   end
 
 end

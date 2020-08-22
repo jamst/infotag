@@ -171,6 +171,11 @@ class Video < ApplicationRecord
     conn.close
     # 推荐最新资讯
     Video.add_today_list
+    # 删除3个月前的数据推荐
+    Video.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |video|
+      video.update(is_delete: Time.now.to_i)
+      video.srem_tag_list
+    end
   end
 
 end

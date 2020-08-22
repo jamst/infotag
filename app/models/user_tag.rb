@@ -34,7 +34,7 @@ class UserTag < ApplicationRecord
       end
 
       # tag命中取前五存储到top_user_tag_list中
-      sort_user_tag_list = $redis.sort("user_#{user_id}_tag_list", :by => "desc incr_count", :limit => [0, 5])
+      sort_user_tag_list = $redis.sort("user_#{user_id}_tag_list", :by => "desc incr_count", :limit => [0, 6])
       $redis.sadd("top_user_#{user_id}_tag_list",sort_user_tag_list) if sort_user_tag_list.present?
 
     end
@@ -86,7 +86,7 @@ class UserTag < ApplicationRecord
     else
       # 获取用户当前标签取随机的5个标签做推荐参考
       tag_ids = $redis.smembers(users_cache_key)
-      tag_ids = tag_ids.present? ? tag_ids.sample(5) : Tag.ids.sample(5)
+      tag_ids = tag_ids.present? ? tag_ids.sample(6) : Tag.ids.sample(6)
     end
 
     result = {}
