@@ -18,6 +18,9 @@
     <%= click_log.user_tag_list.join(",") %>
   </td>
   <td class="center aligned">
+    <%= day_time(click_log.created_at) %>
+  </td>
+  <td class="center aligned">
     <%= click_log.vpn_version %>
   </td>
 </tr>
