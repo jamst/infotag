@@ -62,7 +62,7 @@ class Video < ApplicationRecord
     end
   end
   def self.today_list
-    $redis.srandmember("videos_today",5)
+    $redis.srandmember("videos_today",10)
   end
   
   # 分类获取
