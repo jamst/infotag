@@ -42,11 +42,13 @@ class Video < ApplicationRecord
     tags_strs = tags_str.present? ? tags_str : (medial_spider.present? && medial_spider.tags_str.present? ? medial_spider.tags_str : "default")
     tags_strs.to_s.split(",").each do |tag_name|
       tag = Tag.find_by(name:tag_name)
-      tag_id = tag.id
-      # 数据库持久化
-      TagsVideo.where(tag_id: tag_id , video_id:video_id).delete_all
-      # 缓存
-      $redis.srem("tags_#{tag_id}_videos", video_id)
+      if tag.present?
+        tag_id = tag&.id
+        # 数据库持久化
+        TagsVideo.where(tag_id: tag_id , video_id:video_id).delete_all
+        # 缓存
+        $redis.srem("tags_#{tag_id}_videos", video_id)
+      end
     end
     # 加入分类缓存
     $redis.srem("category_#{category_id}_videos", self.id)
@@ -176,8 +178,8 @@ class Video < ApplicationRecord
     Video.add_today_list
     # 删除3个月前的数据推荐
     # Video.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |video|
-    #   video.update(is_delete: Time.now.to_i)
     #   video.srem_tag_list
+    #   video.update(is_delete: Time.now.to_i)
     # end
   end
 

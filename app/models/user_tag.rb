@@ -7,6 +7,8 @@ class UserTag < ApplicationRecord
   # 用户标签存储(用户访问记录回调)
   def self.user_tag_cache(user_id,tag_ids)
     if tag_ids.present?
+      # 用户列表
+      $redis.sadd("users_lists", user_id)
       # tags 可以是单个标签，也可以是数组
       users_cache_key = "users_#{user_id}"
       # 用户包含的标签

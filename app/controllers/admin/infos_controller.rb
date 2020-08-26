@@ -37,8 +37,8 @@ class Admin::InfosController < Admin::BaseController
   # 批量删除
   def be_deletes
     Info.where(id:params[:inquiry_ids].to_s.split(",")).each do |info|
-      info.update(is_delete: Time.now.to_i)
       info.srem_tag_list
+      info.update(is_delete: Time.now.to_i)
     end
   end
 
@@ -85,8 +85,8 @@ class Admin::InfosController < Admin::BaseController
   end
 
   def destroy
-    @info.is_delete = Time.now.to_i
     @info.srem_tag_list
+    @info.is_delete = Time.now.to_i
     if @info.save
       respond_to do |format|
         format.js

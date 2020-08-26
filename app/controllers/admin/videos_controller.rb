@@ -37,8 +37,8 @@ class Admin::VideosController < Admin::BaseController
   # 批量删除
   def be_deletes
     Video.where(id:params[:inquiry_ids].to_s.split(",")).each do |video|
-      video.update(is_delete: Time.now.to_i)
       video.srem_tag_list
+      video.update(is_delete: Time.now.to_i)
     end
   end
 
@@ -85,8 +85,8 @@ class Admin::VideosController < Admin::BaseController
   end
 
   def destroy
-    @video.is_delete = Time.now.to_i
     @video.srem_tag_list
+    @video.is_delete = Time.now.to_i
     if @video.save
       respond_to do |format|
         format.js

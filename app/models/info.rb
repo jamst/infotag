@@ -40,9 +40,11 @@ class Info < ApplicationRecord
     tags_strs = tags_str.present? ? tags_str : (medial_spider.present? && medial_spider.tags_str.present? ? medial_spider.tags_str : "default")
     tags_strs.to_s.split(",").each do |tag_name|
       tag = Tag.find_by(name:tag_name)
-      tag_id = tag.id
-      InfosTag.where(tag_id: tag_id , info_id:info_id).delete_all
-      $redis.srem("tags_#{tag_id}_infos", info_id)
+      if tag.present?
+        tag_id = tag.id
+        InfosTag.where(tag_id: tag_id , info_id:info_id).delete_all
+        $redis.srem("tags_#{tag_id}_infos", info_id)
+      end
     end
     # 加入分类缓存
     $redis.srem("category_#{category_id}_infos", self.id)
@@ -173,8 +175,8 @@ class Info < ApplicationRecord
     UserTag.today_user_view_info
     # 删除3个月前的数据推荐
     # Info.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |info|
-    #   info.update(is_delete: Time.now.to_i)
     #   info.srem_tag_list
+    #   info.update(is_delete: Time.now.to_i)
     # end
   end
 

@@ -47,6 +47,7 @@ class Admin::TagsController < Admin::BaseController
   end
 
   def destroy
+    @tag.srem_tag_list
     @tag.is_delete = Time.now.to_i
     if @tag.save
       respond_to do |format|
