@@ -26,11 +26,12 @@ class HomeController < ActionController::Base
       info_top_ids = Info.get_top(params[:user_id])
       today_infos = Info.today_list
       if params[:page].to_i == 1 || !params[:page].present?
+        # 首页只推荐最新+强推1条
         info_force_ids = Info.get_force(params[:user_id])
         if info_force_ids.present?
-          merge_infos = ((data[:infos] + today_infos - info_top_ids - info_force_ids).uniq.sample(9) + info_force_ids).sample(10)
+          merge_infos = ((today_infos - info_top_ids - info_force_ids).uniq.sample(9) + info_force_ids).sample(10)
         else
-          merge_infos = (data[:infos] + today_infos - info_top_ids).uniq.sample(10)
+          merge_infos = (today_infos - info_top_ids).uniq.sample(10)
         end
       else
         merge_infos = (data[:infos] + today_infos - info_top_ids).uniq.sample(10)

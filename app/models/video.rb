@@ -52,12 +52,12 @@ class Video < ApplicationRecord
     $redis.srem("category_#{category_id}_videos", self.id)
   end
 
-  # 每天推荐的咨询包
+  # 每天/每3个小时推荐的咨询包
   def self.add_today_list
     videos_today = $redis.smembers("videos_today")
     $redis.srem("videos_today", videos_today) if videos_today.present?
 
-    Video.nomal.approved.order(:play_count,created_at: :desc).limit(100).each do |video|
+    Video.nomal.approved.order(:play_count,created_at: :desc).limit(50).each do |video|
       $redis.sadd("videos_today", video.id)
     end
   end
@@ -160,10 +160,13 @@ class Video < ApplicationRecord
   def self.import_db
     SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "play_count": data.play_count, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url )
-      if medial_spider.unneed?
-        video.update(approve_status:"approved",tags_str:medial_spider.tags_str)
+      video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url )
+      video.play_count = data.play_count
+      if medial_spider.unneed? && !video.tags_str.present?
+        video.approve_status = "approved"
+        video.tags_str = medial_spider.tags_str
       end
+      video.save
     end
     # 情况爬虫数据
     conn = ActiveRecord::Base.connection
@@ -172,10 +175,10 @@ class Video < ApplicationRecord
     # 推荐最新资讯
     Video.add_today_list
     # 删除3个月前的数据推荐
-    Video.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |video|
-      video.update(is_delete: Time.now.to_i)
-      video.srem_tag_list
-    end
+    # Video.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |video|
+    #   video.update(is_delete: Time.now.to_i)
+    #   video.srem_tag_list
+    # end
   end
 
 end

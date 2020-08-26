@@ -49,12 +49,12 @@ class Info < ApplicationRecord
   end
 
 
-  # 每天推荐的咨询包
+  # 每天/每3个小时推荐的咨询包
   def self.add_today_list
     infos_today = $redis.smembers("infos_today")
     $redis.srem("infos_today", infos_today) if infos_today.present?
 
-    Info.nomal.approved.order(created_at: :desc).limit(100).each do |info|
+    Info.nomal.approved.order(created_at: :desc).limit(50).each do |info|
       $redis.sadd("infos_today", info.id)
     end
   end
@@ -159,11 +159,11 @@ class Info < ApplicationRecord
     SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
       info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
-      if medial_spider.unneed?
+      if medial_spider.unneed? && !info.tags_str.present?
         info.update(approve_status:"approved",tags_str:medial_spider.tags_str)
       end
     end
-    # 情况爬虫数据
+    # 清空爬虫数据
     conn = ActiveRecord::Base.connection
     conn.execute("truncate table spider_origin_infos")
     conn.close
@@ -172,10 +172,10 @@ class Info < ApplicationRecord
     # 日志标签读取
     UserTag.today_user_view_info
     # 删除3个月前的数据推荐
-    Info.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |info|
-      info.update(is_delete: Time.now.to_i)
-      info.srem_tag_list
-    end
+    # Info.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |info|
+    #   info.update(is_delete: Time.now.to_i)
+    #   info.srem_tag_list
+    # end
   end
 
 end

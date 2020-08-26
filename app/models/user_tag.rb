@@ -80,7 +80,7 @@ class UserTag < ApplicationRecord
     
     top_tag_ids = $redis.smembers("top_user_#{user_id}_tag_list")
 
-    # 获取当前用户标签的权重，选用排序前5个标签做为推荐参考
+    # 获取当前用户标签的权重，选用排序前6个标签做为推荐参考
     if top_tag_ids.present? 
       tag_ids = top_tag_ids.collect{|tag| tag.split("_")[-2]}
     else
