@@ -59,13 +59,25 @@ class Video < ApplicationRecord
     videos_today = $redis.smembers("videos_today")
     $redis.srem("videos_today", videos_today) if videos_today.present?
 
-    Video.nomal.approved.order(:play_count,created_at: :desc).limit(50).each do |video|
-      $redis.sadd("videos_today", video.id)
+    videos_current = $redis.smembers("videos_current")
+    $redis.srem("videos_current", videos_current) if videos_current.present?
+
+    Video.nomal.approved.order(:play_count,created_at: :desc).limit(200).each_with_index do |video,index|
+      if index < 50
+        $redis.sadd("videos_current", video.id)
+        $redis.sadd("videos_today", video.id)
+      else
+        $redis.sadd("videos_today", video.id)
+      end
     end
   end
   def self.today_list
-    $redis.srandmember("videos_today",10)
+    $redis.srandmember("videos_today",15)
   end
+  def self.current_list
+    $redis.srandmember("videos_current",5)
+  end
+
   
   # 分类获取
   def self.category_list(category_id)

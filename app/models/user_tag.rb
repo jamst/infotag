@@ -97,10 +97,10 @@ class UserTag < ApplicationRecord
 
     tag_ids.each do |tag_id|
       # 标签下资讯记录(获取key集合的num个随机元素)
-      info_lists = $redis.srandmember("tags_#{tag_id}_infos",10)
+      info_lists = $redis.srandmember("tags_#{tag_id}_infos",5)
       infos += info_lists
       # 标签下视频记录
-      video_lists = $redis.srandmember("tags_#{tag_id}_videos",10)
+      video_lists = $redis.srandmember("tags_#{tag_id}_videos",5)
       videos += video_lists
     end
 

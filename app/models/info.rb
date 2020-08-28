@@ -56,12 +56,23 @@ class Info < ApplicationRecord
     infos_today = $redis.smembers("infos_today")
     $redis.srem("infos_today", infos_today) if infos_today.present?
 
-    Info.nomal.approved.order(created_at: :desc).limit(50).each do |info|
-      $redis.sadd("infos_today", info.id)
+    infos_current = $redis.smembers("infos_current")
+    $redis.srem("infos_current", infos_current) if infos_current.present?
+
+    Info.nomal.approved.order(created_at: :desc).limit(200).each_with_index do |info,index|
+      if index < 50
+        $redis.sadd("infos_current", info.id)
+        $redis.sadd("infos_today", info.id)
+      else
+        $redis.sadd("infos_today", info.id)
+      end
     end
   end
   def self.today_list
-    $redis.srandmember("infos_today",10)
+    $redis.srandmember("infos_today",15)
+  end
+  def self.current_list
+    $redis.srandmember("infos_current",5)
   end
 
   # 分类获取

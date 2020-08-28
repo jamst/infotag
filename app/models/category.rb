@@ -13,4 +13,16 @@ class Category < ApplicationRecord
     Category.create(name:"娱乐")
   end
 
+  # 清楚分类修改导致不一致问题
+  def self.crean_diff
+    Category.all.each do |ca|
+      Info.where("category_id != ?", ca.id).each do |info|
+        $redis.srem("category_#{ca.id}_infos", info.id)
+      end
+      Video.where("category_id != ?", ca.id).each do |video|
+        $redis.srem("category_#{ca.id}_videos", video.id)
+      end
+    end
+  end
+
 end

@@ -75,9 +75,9 @@ Rails.application.routes.draw do
   resources :home do
     collection do 
       get :category_list
+      get :visit_log
     end
   end
-
 
 
   root to: 'admin/employees#index'
