@@ -2,6 +2,7 @@ class HomeController < ActionController::Base
 
   def index
     page = params[:page].to_i
+    @info_forces = []
     if params[:category_id] && params[:category_id].to_i != 1
       # 分类资讯
       category_id = params[:category_id]
