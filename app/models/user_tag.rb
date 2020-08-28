@@ -79,6 +79,8 @@ class UserTag < ApplicationRecord
   def self.flow_medias(user_id)
 
     users_cache_key = "users_#{user_id}"
+
+    infos_force = $redis.smembers("infos_force")
     
     top_tag_ids = $redis.smembers("top_user_#{user_id}_tag_list")
 
@@ -97,17 +99,17 @@ class UserTag < ApplicationRecord
 
     tag_ids.each do |tag_id|
       # 标签下资讯记录(获取key集合的num个随机元素)
-      info_lists = $redis.srandmember("tags_#{tag_id}_infos",5)
+      info_lists = $redis.srandmember("tags_#{tag_id}_infos",10)
       infos += info_lists
       # 标签下视频记录
-      video_lists = $redis.srandmember("tags_#{tag_id}_videos",5)
+      video_lists = $redis.srandmember("tags_#{tag_id}_videos",10)
       videos += video_lists
     end
 
     # 用户访问资讯记录
     user_infos = $redis.smembers("user_#{user_id}_infos")
     # 用户没有访问过的咨询
-    flow_infos = infos.uniq - user_infos
+    flow_infos = infos.uniq - user_infos - infos_force
     
     # 用户访问视频记录
     user_videos = $redis.smembers("user_#{user_id}_videos")
