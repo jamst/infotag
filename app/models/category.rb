@@ -25,4 +25,17 @@ class Category < ApplicationRecord
     end
   end
 
+  # up_category
+  def self.up_category
+    Category.all.each do |ca|
+      Info.where("category_id = ?", ca.id).each do |info|
+        $redis.sadd("category_#{ca.id}_infos", info.id)
+      end
+      Video.where("category_id = ?", ca.id).each do |video|
+        $redis.sadd("category_#{ca.id}_videos", video.id)
+      end
+    end
+  end
+
+
 end
