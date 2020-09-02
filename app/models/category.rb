@@ -37,5 +37,20 @@ class Category < ApplicationRecord
     end
   end
 
+  # 同步爬取设置分类
+  def self.up_medial_spider
+    MedialSpider.info.each do |medial|
+      Info.where("medial_spider_id = ?", medial.id).each do |info|
+        info.update(category_id:medial.category_id)
+      end
+    end
+
+    MedialSpider.video.each do |medial|
+      Video.where("medial_spider_id = ?", medial.id).each do |video|
+        video.update(category_id:medial.category_id)
+      end
+    end
+  end
+
 
 end

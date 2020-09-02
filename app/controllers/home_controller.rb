@@ -13,6 +13,12 @@ class HomeController < ActionController::Base
       @info_tops = []
       merge_infos = Info.category_list(category_id)
       @infos = Info.where(id:merge_infos)
+
+      if page == 1
+        info_force_ids = Info.get_force(1)
+        @info_forces = Info.where(id:info_force_ids)
+      end
+
     elsif params[:user_id].present? 
       # 用户喜好资讯
       data = UserTag.flow_medias(params[:user_id])
@@ -54,7 +60,7 @@ class HomeController < ActionController::Base
         merge_videos = Video.today_list.sample(10)
       else
         # 首页只推荐最新+强推1条（首页下滑刷新，确保最新50条中随机选5条；一方面确保时间新，一方面减少刷新重复数）
-        info_force_ids = Info.get_force(params[:user_id])
+        info_force_ids = Info.get_force(1)
         @info_forces = Info.where(id:info_force_ids)
         merge_infos = Info.current_list
         merge_videos = Video.current_list 
