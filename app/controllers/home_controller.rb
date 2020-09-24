@@ -107,6 +107,7 @@ class HomeController < ActionController::Base
     Video.is_ads.order(:ads_index).each do |_|
       flow_medias[:videos] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url , author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
+    render json: flow_medias  and return
   end
 
   # 点击日志处理

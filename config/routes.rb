@@ -76,6 +76,7 @@ Rails.application.routes.draw do
     collection do 
       get :category_list
       get :visit_log
+      get :location_source
     end
   end
 
