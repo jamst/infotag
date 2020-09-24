@@ -13,6 +13,9 @@ class Video < ApplicationRecord
   enum medial_type: { info: 0, video: 1 }
   enum approve_status: { unapproved: -1, wapprove: 0, approved: 1 }
 
+  enum is_location_source: { un_location_source: 0, location_source: 1 }
+  enum ads: { un_ads: 0, is_ads: 1 }
+
   default_scope -> {where(is_delete: 0)}
 
   after_create :image_save

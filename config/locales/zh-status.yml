@@ -32,6 +32,12 @@ zh:
         status:
           disabled: "已禁用"     
           enabled: "已启用"  
+        is_location_source:
+          un_location_source: "非本地资源"
+          location_source: "有本地资源"
+        ads:
+          un_ads: "非广告流"
+          is_ads: "广告流"  
       medial_spider:
         medial_type:
           info: "资讯"   
@@ -45,4 +51,4 @@ zh:
       category:
         status:
           disabled: "已禁用"     
-          enabled: "已启用"    
+          enabled: "已启用"

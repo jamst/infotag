@@ -16,24 +16,30 @@ class Category < ApplicationRecord
   # 清楚分类修改导致不一致问题
   def self.crean_diff
     Category.all.each do |ca|
-      Info.where("category_id != ?", ca.id).each do |info|
-        $redis.srem("category_#{ca.id}_infos", info.id)
-      end
-      Video.where("category_id != ?", ca.id).each do |video|
-        $redis.srem("category_#{ca.id}_videos", video.id)
-      end
+      $redis.del("category_#{ca.id}_infos")
+      $redis.del("category_#{ca.id}_videos")
+      
+      # Info.where("category_id != ?", ca.id).each do |info|
+      #   $redis.srem("category_#{ca.id}_infos", info.id)
+      # end
+      # Video.where("category_id != ?", ca.id).each do |video|
+      #   $redis.srem("category_#{ca.id}_videos", video.id)
+      # end
     end
   end
 
   # up_category
   def self.up_category
     Category.all.each do |ca|
-      Info.where("category_id = ?", ca.id).each do |info|
-        $redis.sadd("category_#{ca.id}_infos", info.id)
-      end
-      Video.where("category_id = ?", ca.id).each do |video|
-        $redis.sadd("category_#{ca.id}_videos", video.id)
-      end
+      $redis.sadd("category_#{ca.id}_infos",Info.where("category_id = ?", ca.id).ids)
+      $redis.sadd("category_#{ca.id}_videos",Video.where("category_id = ?", ca.id).ids)
+
+      # Info.where("category_id = ?", ca.id).each do |info|
+      #   $redis.sadd("category_#{ca.id}_infos", info.id)
+      # end
+      # Video.where("category_id = ?", ca.id).each do |video|
+      #   $redis.sadd("category_#{ca.id}_videos", video.id)
+      # end
     end
   end
 

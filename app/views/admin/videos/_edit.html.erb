@@ -39,6 +39,17 @@
     <%= f.input :author, label: "发布者名称" %>
   </div>
 
+  <div class="two fields">
+    <%= f.input :is_location_source, label: '是否本地视频', as: :select, collection: select_options_from_enum(Video, :is_location_source), include_blank: "选择是否本地视频", input_html: {class: 'ui dropdown fluid'} %>
+    <%= f.input :ads, label: '是否广告流', as: :select, collection: select_options_from_enum(Video, :ads), include_blank: "选择是否广告流", input_html: {class: 'ui dropdown fluid'} %>
+  </div>
+
+
+  <div class="two fields">
+    <%= f.input :location_source_url, label: "本地资源url" %>
+    <%= f.input :ads_index, label: "广告排序" %>
+  </div>
+
   <div class="field">
     <%= f.input :approve_status, label: '审核状态', as: :select, collection: select_options_from_enum(Video, :approve_status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'} %>
   </div>

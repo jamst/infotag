@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_30_021521) do
+ActiveRecord::Schema.define(version: 2020_09_24_035623) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", comment: "名称"
@@ -236,6 +236,10 @@ ActiveRecord::Schema.define(version: 2020_07_30_021521) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "spider_target_id", comment: "信息来源"
+    t.integer "is_location_source", default: 0, comment: "0:非本地资源，1:有本地资源"
+    t.string "location_source_url", comment: "本地资源url"
+    t.integer "ads", default: 0, comment: "0:非广告流，1:广告流"
+    t.integer "ads_index", default: 0, comment: "广告排序"
     t.index ["category_id"], name: "index_videos_on_category_id"
     t.index ["medial_spider_id"], name: "index_videos_on_medial_spider_id"
     t.index ["release_at"], name: "index_videos_on_release_at"
