@@ -31,6 +31,7 @@
   </td>
   <td class="center aligned">
     <%= video.i18n_attr_ads %>
+    <%= video.ads_index if video.ads_index != 0 %>
   </td>
   <td class="center aligned">
     <%= day_time(video.release_at) %>
