@@ -1,5 +1,16 @@
 class HomeController < ActionController::Base
 
+  around_action :benchmark_filter
+ 
+  # 方法执行时间测速
+  def benchmark_filter
+   start_time1 = Time.now.to_datetime.strftime('%Q').to_i
+   yield # 这里让出来执行Action动作
+   start_time_bt = (Time.now.to_datetime.strftime('%Q').to_i - start_time1)
+   Rails.logger.tagged("客户端接口请求取值耗时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") }
+   Rails.logger.tagged("客户端接口请求取值耗时超时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") } if start_time_bt > 1000
+  end
+
   def index
     page = params[:page].to_i
     @info_forces = []
