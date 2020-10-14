@@ -31,6 +31,8 @@ class Info < ApplicationRecord
     end
     # 加入分类缓存
     $redis.sadd("category_#{category_id}_infos", self.id)
+    force_list if weight == "force"
+    cancer_top_list if weight == "top"
   end
 
 
@@ -48,6 +50,8 @@ class Info < ApplicationRecord
     end
     # 加入分类缓存
     $redis.srem("category_#{category_id}_infos", self.id)
+    cancer_top_list
+    cancer_force_list
   end
 
 

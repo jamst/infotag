@@ -37,6 +37,8 @@ class Video < ApplicationRecord
     end
     # 加入分类缓存
     $redis.sadd("category_#{category_id}_videos", self.id)
+    force_list if weight == "force"
+    cancer_top_list if weight == "top"
   end
 
   # 移除info的标签下有哪些咨讯
@@ -55,6 +57,8 @@ class Video < ApplicationRecord
     end
     # 加入分类缓存
     $redis.srem("category_#{category_id}_videos", self.id)
+    cancer_top_list
+    cancer_force_list
   end
 
   # 每天/每3个小时推荐的咨询包
