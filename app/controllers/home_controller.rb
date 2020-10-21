@@ -7,8 +7,8 @@ class HomeController < ActionController::Base
    start_time1 = Time.now.to_datetime.strftime('%Q').to_i
    yield # 这里让出来执行Action动作
    start_time_bt = (Time.now.to_datetime.strftime('%Q').to_i - start_time1)
-   Rails.logger.tagged("客户端接口请求取值耗时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") }
-   Rails.logger.tagged("客户端接口请求取值耗时超时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") } if start_time_bt > 1000
+   Rails.logger.tagged("资讯流接口请求取值耗时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") }
+   Rails.logger.tagged("资讯流接口请求取值耗时超时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") } if start_time_bt > 1000
   end
 
   def index
@@ -17,7 +17,9 @@ class HomeController < ActionController::Base
     if params[:category_id] #&& params[:category_id].to_i != 1
       # 分类资讯
       category_id = params[:category_id]
-      @video_tops = [] 
+      video_top_ids = Video.get_location(params[:user_id])
+      @video_tops = Video.where(id:video_top_ids)
+      
       merge_videos = Video.category_list(category_id)
       @videos = Video.where(id:merge_videos)
 
@@ -87,7 +89,7 @@ class HomeController < ActionController::Base
     flow_medias[:infos] = []
     # 推荐置顶
     @video_tops.each do |_|
-      flow_medias[:tops] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:tops] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url ,author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     @info_tops.each do |_|
       flow_medias[:tops] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
@@ -106,6 +108,8 @@ class HomeController < ActionController::Base
     end
     
     flow_medias[:infos] = flow_medias[:infos].sample(10)
+
+    flow_medias[:medias] = (flow_medias[:videos] + flow_medias[:infos]).sample(100)
 
     render json: flow_medias  and return
   end

@@ -21,6 +21,7 @@ class Video < ApplicationRecord
   after_create :image_save
   after_save :tag_list, if: -> { self.saved_change_to_tags_str? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
+  after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
   # 标签下有哪些视频
   # 视频资讯上的字段作为文本存储
@@ -121,6 +122,29 @@ class Video < ApplicationRecord
     result = []
     len.times { |i| result << chars[rand(chars.size-1)] }
     result.join('')
+  end
+
+  #本地资源缓存
+  def location_update
+    if location_source_url.present?
+      $redis.sadd("videos_location", self.id)
+    else
+      $redis.srem("videos_location", self.id)
+    end
+  end
+
+
+  # 获取置顶列表
+  def self.get_location(user_id)
+    # $redis.srandmember("videos_location",3)
+
+    # 标签下视频记录
+    videos = $redis.smembers("videos_location")
+    # 用户访问视频记录
+    user_videos = $redis.smembers("user_#{user_id}_videos")
+    # 用户没有访问过的视频
+    flow_videos = videos - user_videos
+    flow_videos.sample(3)
   end
 
 
