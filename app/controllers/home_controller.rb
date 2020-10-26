@@ -25,6 +25,8 @@ class HomeController < ActionController::Base
       merge_infos = Info.category_list(category_id)
       @infos = Info.where(id:merge_infos)
 
+      @video_tops = []
+
       if page == 1 && params[:category_id].to_i == 1
         info_force_ids = Info.get_force(1)
         @info_forces = Info.where(id:info_force_ids)
