@@ -17,9 +17,7 @@ class HomeController < ActionController::Base
     if params[:category_id] #&& params[:category_id].to_i != 1
       # 分类资讯
       category_id = params[:category_id]
-      video_top_ids = Video.get_location(params[:user_id])
-      @video_tops = Video.where(id:video_top_ids)
-      
+
       merge_videos = Video.category_list(category_id)
       @videos = Video.where(id:merge_videos)
 
@@ -30,6 +28,9 @@ class HomeController < ActionController::Base
       if page == 1 && params[:category_id].to_i == 1
         info_force_ids = Info.get_force(1)
         @info_forces = Info.where(id:info_force_ids)
+
+        video_top_ids = Video.get_location(params[:user_id])
+        @video_tops = Video.where(id:video_top_ids)
       end
 
     elsif params[:user_id].present? 
@@ -76,7 +77,7 @@ class HomeController < ActionController::Base
         info_force_ids = Info.get_force(1)
         @info_forces = Info.where(id:info_force_ids)
         merge_infos = Info.current_list
-        merge_videos = Video.current_list 
+        merge_videos = Video.current_list
       end
       
       @videos = Video.where(id:merge_videos)
