@@ -144,7 +144,7 @@ class Video < ApplicationRecord
     user_videos = $redis.smembers("user_#{user_id}_videos")
     # 用户没有访问过的视频
     flow_videos = videos - user_videos
-    flow_videos.sample(3)
+    flow_videos.sample(5)
   end
 
 
