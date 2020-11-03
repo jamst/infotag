@@ -175,10 +175,17 @@ class Info < ApplicationRecord
   def self.import_db
     SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
+      info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url, "category_list": data.category_list )
       if medial_spider.unneed? && !info.tags_str.present?
-        info.update(approve_status:"approved",tags_str:medial_spider.tags_str)
+        if data.tags_str.present?
+          info.approve_status = "approved"
+          info.tags_str = data.tags_str
+        else
+          info.approve_status = "approved"
+          info.tags_str = medial_spider.tags_str
+        end
       end
+      info.save
     end
     # 清空爬虫数据
     conn = ActiveRecord::Base.connection
