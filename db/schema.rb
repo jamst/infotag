@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_24_035623) do
+ActiveRecord::Schema.define(version: 2020_11_03_022950) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", comment: "名称"
@@ -153,6 +153,8 @@ ActiveRecord::Schema.define(version: 2020_09_24_035623) do
     t.text "mark", comment: "描述"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category_list", comment: "资讯分类"
+    t.string "tags_str", comment: "资讯标签"
   end
 
   create_table "spider_origin_videos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -166,6 +168,8 @@ ActiveRecord::Schema.define(version: 2020_09_24_035623) do
     t.string "image_url", comment: "视频封面图片url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category_list", comment: "视频分类"
+    t.string "tags_str", comment: "视频标签"
   end
 
   create_table "spider_targets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
