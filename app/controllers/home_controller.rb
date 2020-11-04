@@ -151,4 +151,22 @@ class HomeController < ActionController::Base
     render json:{categories:categories}
   end
 
+  # YouTube分享缓存读取
+  def youtube_share
+    key = "share_#{params[:uuid]}"
+    data = $redis.get(key)
+    render json: data  and return
+  end
+
+  # 分享缓存
+  def youtube_catch
+    key = "share_#{params[:uuid]}"
+    title = params[:title]
+    image_base64 = params[:image_base64]
+    link = params[:link]
+    data = {"title":title,"link":link,"image_base64":image_base64}.to_json
+    $redis.set(key,data)
+    render json: data  and return
+  end
+
 end

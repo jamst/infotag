@@ -77,6 +77,8 @@ Rails.application.routes.draw do
       get :category_list
       get :visit_log
       get :location_source
+      get :youtube_catch
+      get :youtube_share
     end
   end
 
