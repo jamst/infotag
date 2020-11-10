@@ -167,12 +167,13 @@ class HomeController < ActionController::Base
       title = params[:title]
       image_base64 = params[:image_base64]
       link = params[:link]
+      uuid = params[:uuid]
       # 是否有本地缓存
       local_id = params[:local_id]||0
       data = {"uuid": uuid ,"title": title,"link": link,"image_base64": image_base64, "local_model": "Video", "medial_source": "youtube", "local_id": local_id, "status":0 }.to_json 
       $redis.set(key,data)
       # 添加审核列表
-      MedialCache.create("title": title,"link": link,"image_base64": image_base64, "local_model": "Video", "medial_source": "youtube", "local_id": local_id, "status":0)
+      MedialCache.create("uuid": uuid ,"title": title,"link": link,"image_base64": image_base64, "local_model": "Video", "medial_source": "youtube", "local_id": local_id, "status":0)
     end
     render json: data  and return
   end

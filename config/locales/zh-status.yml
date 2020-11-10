@@ -51,7 +51,7 @@ zh:
       medial_cache: 
         status:
           unapproved: "待审核"
-          approved: "已启用"    
+          approved: "已审核"    
       category:
         status:
           disabled: "已禁用"     
