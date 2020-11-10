@@ -155,17 +155,25 @@ class HomeController < ActionController::Base
   def youtube_share
     key = "share_#{params[:uuid]}"
     data = $redis.get(key)
+    data = {} if !data.present? || data["status"] != 1
     render json: data  and return
   end
 
   # 分享缓存
   def youtube_catch
     key = "share_#{params[:uuid]}"
-    title = params[:title]
-    image_base64 = params[:image_base64]
-    link = params[:link]
-    data = {"title":title,"link":link,"image_base64":image_base64}.to_json
-    $redis.set(key,data)
+    data = $redis.get(key)
+    unless data.present?
+      title = params[:title]
+      image_base64 = params[:image_base64]
+      link = params[:link]
+      # 是否有本地缓存
+      local_id = params[:local_id]||0
+      data = {"uuid": uuid ,"title": title,"link": link,"image_base64": image_base64, "local_model": "Video", "medial_source": "youtube", "local_id": local_id, "status":0 }.to_json 
+      $redis.set(key,data)
+      # 添加审核列表
+      MedialCache.create("title": title,"link": link,"image_base64": image_base64, "local_model": "Video", "medial_source": "youtube", "local_id": local_id, "status":0)
+    end
     render json: data  and return
   end
 

@@ -1,0 +1,26 @@
+<%= simple_form_for @medial_cache, url: admin_medial_cache_path(@medial_cache), method: :put, remote: true do |f| %>
+<div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
+
+  <div class="two fields">
+    <%= f.input :title, label: "标签" %>
+    <%= f.input :link, label: "网址url" %>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :medial_source, label: "资源来源" %>
+    <%= f.input :local_model, label: "资源类型" %>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :local_id, label: "本地资源id" %>
+    <%= f.input :status, as: :select, collection: select_options_from_enum(MedialCache, :status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'}, label: "状态" %>
+  </div>
+
+  <div class="field">
+    <div class="actions ">
+      <div class="ui button primary" id="commition">提交</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+
+<% end %>

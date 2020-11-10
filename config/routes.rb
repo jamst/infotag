@@ -46,6 +46,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :medial_caches do
+      collection do
+        get  :update_status
+      end
+    end
+
     resources :categories do
       collection do
         get  :update_status

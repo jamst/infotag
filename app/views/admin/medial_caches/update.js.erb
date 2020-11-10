@@ -1,0 +1,14 @@
+<% if @medial_cache.errors.blank? %>
+  $("#medial_cache_<%= @medial_cache.id %>").replaceWith("<%= j(render partial: 'list', locals: { medial_cache: @medial_cache} ) %>");
+  $("#medial_cache_modal").modal('hide');
+<% else %>
+  $(".red.pointing").remove();
+  $(".field").removeClass('error');
+  <% @medial_cache.errors.messages.each do |key, value| %>
+    //parent()方法：返回被选中元素的父元素
+    $("#medial_cache_<%= key %>").parent().addClass('error');
+    $("#medial_cache_<%= key %>").parent().append("<div class='ui basic red pointing prompt label transition visible'><%= value[0] %></div>");
+  <% end %>
+<% end %>
+
+

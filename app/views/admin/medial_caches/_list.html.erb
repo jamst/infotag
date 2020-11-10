@@ -1,0 +1,47 @@
+<tr id="medial_cache_<%= medial_cache.id %>">
+  <td class="center aligned">
+    <span><%= medial_cache.id%></span>
+  </td>
+  <td class="center aligned">
+    <span><%= medial_cache.title%></span>
+  </td>
+  <td class="center aligned">
+    <%= medial_cache.medial_source %>
+  </td>
+  <td class="center aligned">
+    <%= medial_cache.local_model %>
+  </td>
+  <td class="center aligned">
+    <%= medial_cache.link %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(medial_cache.created_at) %>
+  </td>
+  <td class="center aligned">
+    <%if medial_cache.status == "disabled" %>
+      <font color="red"><%= medial_cache.i18n_attr_status %></font>
+    <% else %>
+      <%= medial_cache.i18n_attr_status %>
+    <% end %>
+  </td>
+
+  <td class="center aligned">
+    <%= link_to edit_admin_medial_cache_path(medial_cache.id), remote: true, class: "ui icon blue basic button" do %>
+      <i class="edit icon"></i>编辑
+    <% end %>
+
+    <% if medial_cache.status == "approved" %>
+      <%= link_to update_status_admin_medial_caches_path(id:medial_cache.id,status:"unapproved"), remote: true, class: "ui icon orange basic button" do %>
+        <i class="plus icon orange"></i>禁用
+      <% end %>
+    <% else %>
+      <%= link_to update_status_admin_medial_caches_path(id:medial_cache.id,status:"approved"), remote: true, class: "ui icon blue basic button" do %>
+        <i class="plus icon blue"></i>启用
+      <% end %>
+    <% end %>
+
+    <%= link_to admin_medial_cache_path(medial_cache.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
+  </td>
+</tr>

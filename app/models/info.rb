@@ -14,7 +14,7 @@ class Info < ApplicationRecord
   enum approve_status: { unapproved: -1, wapprove: 0, approved: 1 }
 
   default_scope -> {where(is_delete: 0)}
-
+  
   after_create :image_save
   after_save :tag_list, if: -> { self.saved_change_to_tags_str? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }

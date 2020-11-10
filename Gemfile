@@ -39,7 +39,7 @@ gem 'roo'
 gem 'whenever', require: false
 # 日志数据存储
 gem 'mongo'
-gem 'mongoid'
+#gem 'mongoid'
 
 # 图片处理
 gem "mini_magick"

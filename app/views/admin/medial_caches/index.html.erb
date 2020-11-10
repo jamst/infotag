@@ -1,0 +1,30 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>分享管理</h2>
+  </div>
+</div>
+<%= render 'search_form'  %>
+
+<div class="ui blue segment">
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">ID</th>
+      <th class="center aligned">标题</th>
+      <th class="center aligned">媒体资源</th>
+      <th class="center aligned">资源类型</th>
+      <th class="center aligned">网址链接</th>
+      <th class="center aligned">创建时间</th>
+      <th class="center aligned">状态</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'list', collection: @medial_caches, as: :medial_cache %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@medial_caches) %>
+  </span>
+  <%= paginate(@medial_caches, :theme => 'admin')%>
+</div>

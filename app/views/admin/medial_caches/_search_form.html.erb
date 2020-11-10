@@ -1,0 +1,14 @@
+<% if @q.present? %>
+  <div class="ui blue segment">
+    <%= simple_form_for @q,  url: admin_medial_caches_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
+      <div class="ui five column grid">
+        <%= f.input "title-like", placeholder: "标题" %>
+        <%= f.input "link-like", placeholder: "链接地址" %>
+        <%= f.input :status, as: :select, collection: select_options_from_enum(MedialCache, :status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'}, label: "状态" %>
+        <div class="column">
+          <%= f.submit '搜索', class: 'ui primary button' %>  
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

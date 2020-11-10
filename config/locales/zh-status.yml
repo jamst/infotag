@@ -48,6 +48,10 @@ zh:
         need_approve:
           need: "手动审核"  
           unneed: "自动审核"  
+      medial_cache: 
+        status:
+          unapproved: "待审核"
+          approved: "已启用"    
       category:
         status:
           disabled: "已禁用"     
