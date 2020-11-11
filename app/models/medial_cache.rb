@@ -3,7 +3,7 @@ class MedialCache < ApplicationRecord
   after_save :up_status, if: -> { self.saved_change_to_status? }
 
   # 更改审核状态
-  def up_sttaus
+  def up_status
      key = "share_#{self.uuid}"
      data = $redis.get(key)
      data = JSON.parse(data)
