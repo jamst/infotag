@@ -76,7 +76,7 @@ class Info < ApplicationRecord
     $redis.srandmember("infos_today",15)
   end
   def self.current_list
-    $redis.srandmember("infos_current",5)
+    $redis.srandmember("infos_current",10)
   end
 
   # 分类获取

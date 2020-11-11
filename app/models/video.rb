@@ -83,13 +83,13 @@ class Video < ApplicationRecord
     $redis.srandmember("videos_today",15)
   end
   def self.current_list
-    $redis.srandmember("videos_current",5)
+    $redis.srandmember("videos_current",10)
   end
 
   
   # 分类获取
   def self.category_list(category_id)
-    $redis.srandmember("category_#{category_id}_videos",5)
+    $redis.srandmember("category_#{category_id}_videos",20)
   end
 
   # 访问次数
