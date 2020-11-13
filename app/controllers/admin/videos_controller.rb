@@ -6,13 +6,13 @@ class Admin::VideosController < Admin::BaseController
   def index
     @q = SearchParams.new(params[:search_params] || {approve_status: :wapprove})
     
-    @videos = Video.default_where(@q.attributes(self)).order(id: :desc).page(params[:page]).per(10)
+    @videos = Video.default_where(@q.attributes(self)).order(id: :desc).page(params[:page]).per(100)
   end
 
   # 已审核列表
   def approved_list
     @q = SearchParams.new(params[:search_params] || {})
-    @videos = Video.approved.default_where(@q.attributes(self)).order(updated_at: :desc).page(params[:page]).per(10)
+    @videos = Video.approved.default_where(@q.attributes(self)).order(updated_at: :desc).page(params[:page]).per(100)
   end
 
   # 审核状态

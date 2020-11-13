@@ -5,13 +5,13 @@ class Admin::InfosController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {approve_status: :wapprove})
-    @infos = Info.default_where(@q.attributes(self)).order(:approve_status,id: :desc).page(params[:page]).per(10)
+    @infos = Info.default_where(@q.attributes(self)).order(:approve_status,id: :desc).page(params[:page]).per(100)
   end
 
   # 已审核资讯列表
   def approved_list
     @q = SearchParams.new(params[:search_params] || {})
-    @infos = Info.approved.default_where(@q.attributes(self)).order(updated_at: :desc).page(params[:page]).per(10)
+    @infos = Info.approved.default_where(@q.attributes(self)).order(updated_at: :desc).page(params[:page]).per(100)
   end
 
   # 审核状态
