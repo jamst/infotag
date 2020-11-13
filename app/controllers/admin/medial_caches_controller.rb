@@ -5,7 +5,7 @@ class Admin::MedialCachesController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
-    @medial_caches = MedialCache.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @medial_caches = MedialCache.default_where(@q.attributes(self)).order(created_at: :desc).page(params[:page]).per(10)
   end
 
 

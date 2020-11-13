@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_03_062544) do
+ActiveRecord::Schema.define(version: 2020_11_13_025639) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", comment: "名称"
@@ -119,6 +119,19 @@ ActiveRecord::Schema.define(version: 2020_11_03_062544) do
     t.index ["tag_id"], name: "index_keywords_on_tag_id"
   end
 
+  create_table "medial_caches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "uuid", comment: "uuid"
+    t.string "title", comment: "名称"
+    t.string "link", comment: "链接"
+    t.text "image_base64", comment: "图片内容"
+    t.string "medial_source", default: "youtube", comment: "媒体资源"
+    t.string "local_model", default: "Video", comment: "资源类型"
+    t.string "local_id", default: "0", comment: "本地缓存ID"
+    t.integer "status", default: 0, comment: "是否已审核"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "medial_spiders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "spider_target_id", comment: "网站名称"
     t.string "url", comment: "网址url"
@@ -181,6 +194,37 @@ ActiveRecord::Schema.define(version: 2020_11_03_062544) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "is_delete", default: 0, comment: "是否删除"
+  end
+
+  create_table "strategy_source_details", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.bigint "strategy_source_id", comment: "资源用户"
+    t.string "title", comment: "内容标题"
+    t.string "link", comment: "内容链接"
+    t.string "source_tags", comment: "不合规描述"
+    t.string "source_keyword", comment: "违规关键字"
+    t.string "source_view", comment: "播放热度"
+    t.datetime "release_at", comment: "收录时间"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["release_at"], name: "index_strategy_source_details_on_release_at"
+    t.index ["strategy_source_id"], name: "index_strategy_source_details_on_strategy_source_id"
+    t.index ["title"], name: "index_strategy_source_details_on_title"
+  end
+
+  create_table "strategy_sources", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "medial_source", default: "youtube", comment: "网站名称"
+    t.string "web_user", comment: "用户名称"
+    t.string "trouble_size", comment: "不合规内容数"
+    t.datetime "release_at", comment: "收录时间"
+    t.integer "user_status", default: 1, comment: "用户状态：0白名单，1黑名单"
+    t.string "user_tags", comment: "用户标签"
+    t.string "user_follow", comment: "用户关注数"
+    t.string "user_view", comment: "用户播放热度"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["medial_source"], name: "index_strategy_sources_on_medial_source"
+    t.index ["release_at"], name: "index_strategy_sources_on_release_at"
+    t.index ["web_user"], name: "index_strategy_sources_on_web_user"
   end
 
   create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
