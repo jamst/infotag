@@ -85,4 +85,77 @@ class MedialSpider < ApplicationRecord
     end
   end
 
+
+  # 导入视频：
+  def self.gaoxiao_init
+    videos = %w(https://www.youtube.com/c/SupercarBlondie/videos
+            https://www.youtube.com/c/HALCYONphoto/videos
+            https://www.youtube.com/c/HartnettMedia/videos
+            https://www.youtube.com/c/NIGHTRIDEEE/videos
+            https://www.youtube.com/c/LJWF_official/videos
+            https://www.youtube.com/c/UnripeTV/videos
+            https://www.youtube.com/user/SemenixPcgaming/videos
+            https://www.youtube.com/channel/UCz0ONCn6eRcDJGsUzupc3TA/videos
+            https://www.youtube.com/c/Treble%E8%BF%BD%E7%90%83/videos
+            https://www.youtube.com/channel/UC7jc7c5vuY3sDPnwXmrsM6g/videos
+            https://www.youtube.com/channel/UCYGmb-I0stcAKMJnlbMZcOw/videos
+            https://www.youtube.com/channel/UCyG7zAV_2JlPnxhwDxZN6sA/videos
+            https://www.youtube.com/channel/UCGEbrQPtZqnr_W-7i14kEhg/videos
+            https://www.youtube.com/channel/UCykcNNIwJeJGGuLac6akyPw/videos
+            https://www.youtube.com/channel/UCNFzrnH3napaamJ5w2lR6Rw/videos
+            https://www.youtube.com/channel/UCiXJjvsRQEyT06x3YUwueVw/videos
+            https://www.youtube.com/channel/UCKLcWcLKcXgA6jc_zVeJrTw/videos
+            https://www.youtube.com/channel/UCwUFx_z61wqMV8zTUVDNV1w/videos
+            https://www.youtube.com/channel/UC3UvP6c-zawggshLv85Ylng/videos
+            https://www.youtube.com/c/%E7%8B%90%E7%8B%B8%E7%89%A7%E5%A0%B4foxranch/videos
+            https://www.youtube.com/c/BLACKPINKOFFICIAL/videos
+            https://www.youtube.com/c/sheephoho/videos
+            https://www.youtube.com/channel/UCyrkQBlejP79tqw36uw1Sng/videos
+            https://www.youtube.com/c/%E6%BA%9C%E6%BA%9C%E5%93%A5/videos
+            https://www.youtube.com/c/Yoora/videos
+            https://www.youtube.com/c/NuriaMaxo/videos
+            https://www.youtube.com/c/STUDIOFTM/videos
+            https://www.youtube.com/c/%E8%80%81%E5%AD%99%E8%81%8A%E6%B8%B8%E6%88%8F/videos
+            https://www.youtube.com/channel/UC4P8jsqloj9e6eYCLz0yr7Q/videos
+            https://www.youtube.com/channel/UC27M3BS9uxhJfPjYYys7y8w/videos
+            https://www.youtube.com/c/iamlarrie123/videos
+            https://www.youtube.com/c/SchelleyYuki/videos
+            https://www.youtube.com/channel/UCnafe6M9Itwt08RFI51L6mw
+            https://www.youtube.com/c/%E9%98%BF%E7%A6%8FThomas/videos
+            https://www.youtube.com/channel/UCgChOCWnO8panmHaPN2D0-Q/videos
+            https://www.youtube.com/c/gem0816/videos
+            https://www.youtube.com/channel/UCQnW3NlXRx5X1_6vnvtu6xQ/videos
+            https://www.youtube.com/user/ga20090939/videos
+            https://www.youtube.com/channel/UCSUZuMJ4IWVFjbOlycq2tRA/videos
+            https://www.youtube.com/c/TestingGames/videos
+            https://www.youtube.com/c/%E5%A4%A7%E8%81%AA%E7%9C%8B%E7%94%B5%E5%BD%B1/videos
+            https://www.youtube.com/c/captainmissile/videos
+            https://www.youtube.com/channel/UCAQmUESq4GxO1b_iBCrYlTA/videos
+            https://www.youtube.com/user/documentarycntv/videos
+            https://www.youtube.com/channel/UCE3MUYjVHag9cSrNX4i28ew/videos
+            https://www.youtube.com/c/ArekkzGaming/videos
+            https://www.youtube.com/channel/UC4FLi-iZqxuK3kIqzivoDaw/videos
+            https://www.youtube.com/channel/UCqgoxtfU-5ChmMTL-qo1c1A/videos
+            https://www.youtube.com/c/%E5%87%B0%E5%AE%B6%E8%A9%95%E6%B8%ACifengTech/videos
+            https://www.youtube.com/hunantv/videos
+            https://www.youtube.com/channel/UCHV8lZJsXdW8lOFr2z8WPcg/videos
+            https://www.youtube.com/channel/UCsdLbTwziL6Tg97swkuThSg/videos
+            https://www.youtube.com/user/MrLiz0908/videos
+            https://www.youtube.com/c/BIGdongdong/videos
+            https://www.youtube.com/channel/UCpzx9sMpCwKP_xTwoYZx7lA/videos
+            https://www.youtube.com/c/Jiafeimao/videos
+            https://www.youtube.com/channel/UC7RL3bksyvu7rH7T6KFFkjw/videos
+            https://www.youtube.com/c/Jing94993/videos
+            https://www.youtube.com/channel/UCCObFBf0GKZMRfBH3CCv_ug/videos
+            https://www.youtube.com/channel/UCYQPTeY3HOk0BprrGuCWCaA/videos
+            https://www.youtube.com/c/NetflixAsia
+            https://www.youtube.com/c/HamsterLow/videos
+            https://www.youtube.com/c/%E8%B6%85%E7%B2%92%E6%96%B9/videos
+            )
+    videos.each do |v|        
+      MedialSpider.find_or_create_by(url:v, category_id:7, medial_type:1, spider_target_id: 4, need_approve:0, web_site:"用户主页-视频", tags_str:"学生")
+    end
+  end
+
+
 end
