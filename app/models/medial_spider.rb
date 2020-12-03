@@ -8,6 +8,7 @@ class MedialSpider < ApplicationRecord
   belongs_to :category
   has_many :videos, -> {where(medial_type: "video")}, class_name: 'MedialSpider'
   has_many :infos, -> {where(medial_type: "video")}, class_name: 'MedialSpider'
+  after_update :srem_category, if: -> { self.saved_change_to_category_id? }
 
   # 统计爬取条数
   def count_size
@@ -17,8 +18,26 @@ class MedialSpider < ApplicationRecord
       Info.where(medial_spider_id:self.id).count
     end
   end
-  
 
+  # 更改分类同时联动变更资讯明细类型
+  def srem_category
+    if self.medial_type == "info"
+      infos = Info.where(medial_spider_id:self.id)
+      infos.each do |info|
+        $redis.srem("category_#{info.category_id}_infos", info.id)
+        $redis.sadd("category_#{self.category_id}_infos", info.id)
+      end
+      infos.update_all(category_id:self.category_id)
+    else
+      videos = Video.where(medial_spider_id:self.id)
+      videos.each do |video|
+        $redis.srem("category_#{video.category_id}_videos", video.id)
+        $redis.sadd("category_#{self.category_id}_videos", video.id)
+      end
+      videos.update_all(category_id:self.category_id)
+    end
+  end
+  
   # 初始化资讯设置
   def self.init_info_spider
     links_list=[
