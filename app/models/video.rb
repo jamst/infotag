@@ -147,9 +147,9 @@ class Video < ApplicationRecord
   end
 
   # 设置学校置顶列表
-  def self.get_school_location
+  def self.set_school_location
     # 标签下视频记录
-    videos = Video.where(category_id: 1).where("location_source_url is not null")
+    videos = Video.where(category_id: 7).where("location_source_url is not null")
     videos.each do |video|
       $redis.sadd("school_videos_location",video.id)
     end
