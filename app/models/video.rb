@@ -137,9 +137,29 @@ class Video < ApplicationRecord
   # 获取置顶列表
   def self.get_location(user_id)
     # $redis.srandmember("videos_location",3)
-
     # 标签下视频记录
     videos = $redis.smembers("videos_location")
+    # 用户访问视频记录
+    user_videos = $redis.smembers("user_#{user_id}_videos")
+    # 用户没有访问过的视频
+    flow_videos = videos - user_videos
+    flow_videos.sample(5)
+  end
+
+  # 设置学校置顶列表
+  def self.get_school_location
+    # 标签下视频记录
+    videos = Video.where(category_id: 1).where("location_source_url is not null")
+    videos.each do |video|
+      $redis.sadd("school_videos_location",video.id)
+    end
+  end
+
+
+  # 获取学校置顶列表
+  def self.get_school_location(user_id)
+    # 标签下视频记录
+    videos = $redis.smembers("school_videos_location")
     # 用户访问视频记录
     user_videos = $redis.smembers("user_#{user_id}_videos")
     # 用户没有访问过的视频

@@ -27,11 +27,11 @@ class SchoolController < ActionController::Base
       merge_infos = Info.category_list(category_id)
       @infos = Info.where(id:merge_infos)
 
-      if page == 1 && params[:category_id].to_i == 1
+      if page == 1 
         info_force_ids = Info.get_force(1)
         @info_forces = Info.where(id:info_force_ids)
 
-        video_top_ids = Video.get_location(params[:user_id])
+        video_top_ids = Video.get_school_location(params[:user_id])
         @video_tops = Video.where(id:video_top_ids)
       end
     else
