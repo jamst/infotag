@@ -22,8 +22,7 @@ class Info < ApplicationRecord
 
   # 移动端地址
   def mobile_url
-    gurl = self.url.gsub("//www","//m")
-    gurl
+    self.url
   end
   
 
