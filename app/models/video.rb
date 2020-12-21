@@ -23,6 +23,14 @@ class Video < ApplicationRecord
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
+
+  # 移动端地址
+  def mobile_url
+    gurl = self.url.gsub("//www","//m")
+    gurl
+  end
+  
+
   # 标签下有哪些视频
   # 视频资讯上的字段作为文本存储
   def tag_list
@@ -149,7 +157,7 @@ class Video < ApplicationRecord
   # 设置学校置顶列表
   def self.set_school_location
     # 标签下视频记录
-    videos = Video.where(category_id: 7).where("location_source_url is not null")
+    videos = Video.where(category_id: 7).where("location_source_url is not null and location_source_url != '' ")
     videos.each do |video|
       $redis.sadd("school_videos_location",video.id)
     end

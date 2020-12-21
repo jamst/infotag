@@ -19,6 +19,14 @@ class Info < ApplicationRecord
   after_save :tag_list, if: -> { self.saved_change_to_tags_str? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
 
+
+  # 移动端地址
+  def mobile_url
+    gurl = self.url.gsub("//www","//m")
+    gurl
+  end
+  
+
   # 添加info的标签下有哪些咨讯
   def tag_list
     info_id = self.id
