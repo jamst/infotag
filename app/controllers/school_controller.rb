@@ -83,6 +83,7 @@ class SchoolController < ActionController::Base
 
   # 包含本地视频的资讯流
   def location_source
+    
     # flow_medias[:videos] << {is_location_source: 是否有本地资源, location_source_url: 本地资源地址 , author:作者, medial_type: "video", medial_id:id, title:标题, url:线上播放地址, local_image_url: 首屏图片地址 ,tag_ids: 标签类型, web_target: 网址来源, web_target_logo: 来源网址logo图片地址 ,overlay_time: 播放时长, play_count: 播放量}
     flow_medias = {}
     flow_medias[:videos] = []
