@@ -12,17 +12,14 @@
     <%= employee.mobile %>
   </td>
   <td class="center aligned">
-    <%#= employee.parent&.name %>
-  </td>
-  <td class="center aligned">
-    <%#= link_to edit_admin_hr_employee_path(employee), remote: true, data: {content: '修改', variation: 'inverted'}, class: 'ui blue icon button' do %>
-    <!--   <i class="edit icon"></i> -->
-    <%# end %>
-    <%= link_to add_roles_admin_employees_path(id:employee.id), remote: true, data: {content: '分配角色', variation: 'inverted'}, class: 'ui green icon button' do %>
-      <i class="share icon"></i>
+    <%= link_to edit_admin_employee_path(employee), remote: true, data: {content: '修改', variation: 'inverted'}, class: 'ui blue icon button' do %>
+      <i class="edit icon"></i>修改
     <% end %>
-    <%#= link_to edit_parent_admin_hr_employee_path(employee), remote: true, data: {content: '分配上级', variation: 'inverted'}, class: 'ui olive icon button' do %>
-      <!-- <i class="share icon"></i> -->
-    <% #end %>
+    <%= link_to add_roles_admin_employees_path(id:employee.id), remote: true, data: {content: '分配角色', variation: 'inverted'}, class: 'ui green icon button' do %>
+      <i class="share icon"></i>分配角色
+    <% end %>
+    <%= link_to admin_employee_path(employee.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
   </td>
 </tr>

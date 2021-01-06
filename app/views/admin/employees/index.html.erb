@@ -6,6 +6,8 @@
 <%= render 'search_form'  %>
 
 <div class="ui blue segment">
+  <%= link_to "新建", new_admin_employee_path , remote: true, class: 'ui primary button' %>
+
   <table class="ui selectable striped celled table">
     <thead>
     <tr >
@@ -13,7 +15,6 @@
       <th class="center aligned">邮箱</th>
       <th class="center aligned">姓名</th>
       <th class="center aligned">手机</th>
-      <th class="center aligned">上级</th>
       <th class="center aligned">操作</th>
     </tr>
     </thead>

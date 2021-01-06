@@ -16,21 +16,15 @@ class Admin::EmployeesController < Admin::BaseController
   end
 
   def new
-    @html_title =  "New employee"
     @employee =  Employee.new
-    render :layout => false
   end
 
   def edit
-    @html_title = "Edit employee"
     @employee =  Employee.find(params[:id])
-    render :layout => false
   end
 
   def show
-    @html_title =  "Show employee"
     @employee =  Employee.find(params[:id])
-    render :layout => false
   end
 
   def add_roles
@@ -40,62 +34,23 @@ class Admin::EmployeesController < Admin::BaseController
   def save_roles
     @employee = Employee.find(params[:id])
     @employee.role_ids = params[:employee][:role_ids]
+    @employee.save
   end
 
   def update
     @employee = Employee.find(params[:id])
-
-    respond_to do |format|
-      if @employee.update_attributes(permitted_resource_params)
-        format.json { render :json=>{:success=>true} }
-      else
-        format.json { render :json=>{:success=>false} }
-      end
-    end
+    @employee.update_attributes(permitted_resource_params)
   end
 
   def create
     @employee = Employee.new
     @employee.attributes = permitted_resource_params
-    if @employee.save
-      respond_with(@employee) do |format|
-        format.html { redirect_to location_after_save }
-        format.js   { render :layout => false }
-      end
-    else
-      respond_with(@employee) do |format|
-        format.html do
-          flash.now[:error] = @employee.errors.full_messages.join(", ")
-          render action: 'new'
-        end
-        format.js { render layout: false }
-      end
-    end
+    @employee.save
   end
 
   def destroy
     @employee.employee_status = params[:employee_status] if params[:employee_status]
-    if @employee.save
-      respond_to do |format|
-        format.js
-      end
-    else
-      respond_with(@employee) do |format|
-        format.html { redirect_to location_after_destroy }
-      end
-    end
-  end
-
-  def location_after_destroy(options = {})
-    polymorphic_url([:admin,:employees],options)
-  end
-
-  def location_after_save(options = {})
-    polymorphic_url([:admin,:employees],options)
-  end
-
-  def permitted_resource_params
-    params.require(:employee).permit!
+    @employee.save
   end
 
   #找回密码
@@ -120,6 +75,10 @@ class Admin::EmployeesController < Admin::BaseController
 
   def set_employee
     @employee = Employee.find(params[:id])
+  end
+
+  def permitted_resource_params
+    params.require(:employee).permit!
   end
 
 
