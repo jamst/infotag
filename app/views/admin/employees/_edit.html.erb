@@ -1,0 +1,22 @@
+<%= simple_form_for @employee, url: admin_employee_path(@employee), method: :put, remote: true do |f| %>
+<div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
+
+  <div class="two fields">
+    <%= f.input :name, label: "名称" %>
+    <%= f.input :email, label: "邮箱" %>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :mobile, label: "手机" %>
+    <%= f.input :password, label: "密码" %>
+  </div>
+
+  <div class="field">
+    <div class="actions ">
+      <div class="ui button primary" id="commition">提交</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+
+<% end %>
+
