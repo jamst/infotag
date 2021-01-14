@@ -1,0 +1,29 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>分类列表</h2>
+  </div>
+</div>
+<%= render 'search_form'  %>
+
+
+<div class="ui blue segment">
+  <%= link_to "新建", new_admin_classification_path , remote: true, class: 'ui primary button' %>
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">ID</th>
+      <th class="center aligned">分类名称</th>
+      <th class="center aligned">排序</th>
+      <th class="center aligned">创建时间</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'list', collection: @classifications, as: :classification %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@classifications) %>
+  </span>
+  <%= paginate(@classifications, :theme => 'admin')%>
+</div>

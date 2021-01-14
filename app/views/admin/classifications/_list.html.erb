@@ -1,0 +1,34 @@
+<tr id="classification_<%= classification.id %>">
+  <td class="center aligned">
+    <span><%= classification.id%></span>
+  </td>
+  <td class="center aligned">
+    <%= classification.name %>
+  </td>
+  <td class="center aligned">
+    <%= classification.sort_live %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(classification.created_at) %>
+  </td>
+  </td>
+  <td class="center aligned">
+    <%= link_to edit_admin_classification_path(classification.id), remote: true, class: "ui icon blue basic button" do %>
+      <i class="edit icon"></i>编辑
+    <% end %>
+
+    <% if classification.status == "enabled" %>
+      <%= link_to update_status_admin_classifications_path(id:classification.id,status:"disabled"), remote: true, class: "ui icon orange basic button" do %>
+        <i class="plus icon orange"></i>禁用
+      <% end %>
+    <% else %>
+      <%= link_to update_status_admin_classifications_path(id:classification.id,status:"enabled"), remote: true, class: "ui icon blue basic button" do %>
+        <i class="plus icon green"></i>启用
+      <% end %>
+    <% end %>
+
+    <%= link_to admin_classification_path(classification.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
+  </td>
+</tr>
