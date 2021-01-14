@@ -187,7 +187,13 @@ class Info < ApplicationRecord
   def self.import_db
     SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      info = Info.find_or_create_by(classification_id: medial_spider.classification_id,medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url, "category_list": data.category_list )
+      info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
+      
+      # 这类数据可能会变更所以单独更新，避免重新创建
+      info.encoding_type = data.encoding_type
+      info.category_list = data.category_list
+      info.classification_id = medial_spider.classification_id
+
       if medial_spider.unneed? && !info.tags_str.present?
         if data.tags_str.present?
           info.approve_status = "approved"

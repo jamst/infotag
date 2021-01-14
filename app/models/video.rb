@@ -238,8 +238,14 @@ class Video < ApplicationRecord
   def self.import_db
     SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      video = Video.find_or_create_by(classification_id: medial_spider.classification_id,medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url, "category_list": data.category_list )
+      video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url)
+      
+      # 这类数据可能会变更所以单独更新，避免重新创建
       video.play_count = data.play_count
+      video.encoding_type = data.encoding_type
+      video.category_list = data.category_list
+      video.classification_id = medial_spider.classification_id
+
       if medial_spider.unneed? && !video.tags_str.present?
         if data.tags_str.present?
           video.approve_status = "approved"

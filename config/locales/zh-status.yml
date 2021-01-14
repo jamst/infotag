@@ -17,6 +17,10 @@ zh:
         status:
           disabled: "已禁用"     
           enabled: "已启用"  
+        encoding_type:
+          en_cod: "外语"  
+          cnjt_cod: "简体"  
+          cnft_cod: "繁体"  
       video:  
         weight:
           nomal: "随机"
@@ -38,6 +42,10 @@ zh:
         ads:
           un_ads: "非广告流"
           is_ads: "广告流"  
+        encoding_type:
+          en_cod: "外语"  
+          cnjt_cod: "简体"  
+          cnft_cod: "繁体"  
       medial_spider:
         medial_type:
           info: "资讯"   
