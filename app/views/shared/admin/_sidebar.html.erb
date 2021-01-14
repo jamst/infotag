@@ -45,7 +45,7 @@
       </div>
     </li>
     <li>
-      <% isin = action_on_list([admin_categories_path,admin_spider_targets_path,admin_tags_path]) %>
+      <% isin = action_on_list([admin_categories_path,admin_spider_targets_path,admin_tags_path,admin_classifications_path]) %>
       <a class="item <%= isin ? "active" : "" %> ">
         <i class="cubes icon"></i>
         <span class="main_menu">分类管理</span>
@@ -59,6 +59,10 @@
         <%= link_to_with_permissions admin_spider_targets_path, class: 'item', active_class: 'actives' do %>
           <i class="left bullseye icon"></i>
           <span>网站列表</span>
+        <% end %>
+        <%= link_to_with_permissions admin_classifications_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>分类列表</span>
         <% end %>
         <%= link_to_with_permissions admin_tags_path, class: 'item', active_class: 'actives' do %>
           <i class="left bullseye icon"></i>
