@@ -1,9 +1,9 @@
 class AddEncodingTypeToVideos < ActiveRecord::Migration[5.2]
   def change
-    add_column :videos, :encoding_type, :integer, default: 1, comment: "编码类型：0英文，1简体，2繁体"
-    add_column :infos, :encoding_type, :integer, default: 1, comment: "编码类型：0英文，1简体，2繁体"
-    add_column :spider_origin_videos, :encoding_type, :integer, default: 1, comment: "编码类型：0英文，1简体，2繁体"
-    add_column :spider_origin_infos, :encoding_type, :integer, default: 1, comment: "编码类型：0英文，1简体，2繁体"
+    add_column :videos, :encoding_type, :integer, default: 1, comment: "编码类型：0外语，1简体，2繁体"
+    add_column :infos, :encoding_type, :integer, default: 1, comment: "编码类型：0外语，1简体，2繁体"
+    add_column :spider_origin_videos, :encoding_type, :integer, default: 1, comment: "编码类型：0外语，1简体，2繁体"
+    add_column :spider_origin_infos, :encoding_type, :integer, default: 1, comment: "编码类型：0外语，1简体，2繁体"
 
     add_column :videos, :classification_id, :integer, comment: "分类"
     add_column :infos, :classification_id, :integer, comment: "分类"
