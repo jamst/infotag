@@ -250,8 +250,11 @@ class Video < ApplicationRecord
         if data.tags_str.present?
           video.approve_status = "approved"
           video.tags_str = data.tags_str
+          # 爬虫同步过来的标签叠加指定的标签
+          video.tags_str += medial_spider.tags_str if medial_spider.tags_str.present?
         else
           video.approve_status = "approved"
+          # 频道设置的默认标签
           video.tags_str = medial_spider.tags_str
         end
       end
