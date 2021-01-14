@@ -12,6 +12,7 @@ class Info < ApplicationRecord
   enum weight: { nomal: 0, top: 1, force: 2 }
   enum medial_type: { info: 0, video: 1 }
   enum approve_status: { unapproved: -1, wapprove: 0, approved: 1 }
+  enum encoding_type: { en_cod: 0, cnjt_cod: 1, cnft_cod: 2 }
 
   default_scope -> {where(is_delete: 0)}
   
@@ -36,8 +37,10 @@ class Info < ApplicationRecord
       InfosTag.find_or_create_by(tag_id: tag_id , info_id:info_id)
       $redis.sadd("tags_#{tag_id}_infos", info_id)
     end
-    # 加入分类缓存
+    # 加入栏目缓存
     $redis.sadd("category_#{category_id}_infos", self.id)
+    # 加入分类缓存
+    $redis.sadd("classification_#{classification_id}_infos", self.id)
     force_list if weight == "force"
     cancer_top_list if weight == "top"
   end
@@ -55,8 +58,10 @@ class Info < ApplicationRecord
         $redis.srem("tags_#{tag_id}_infos", info_id)
       end
     end
-    # 加入分类缓存
+    # 移除栏目缓存
     $redis.srem("category_#{category_id}_infos", self.id)
+    # 移除分类缓存
+    $redis.srem("classification_#{classification_id}_infos", self.id)
     cancer_top_list
     cancer_force_list
   end
@@ -182,7 +187,7 @@ class Info < ApplicationRecord
   def self.import_db
     SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url, "category_list": data.category_list )
+      info = Info.find_or_create_by(classification_id: medial_spider.classification_id,medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url, "category_list": data.category_list )
       if medial_spider.unneed? && !info.tags_str.present?
         if data.tags_str.present?
           info.approve_status = "approved"

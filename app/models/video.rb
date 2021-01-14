@@ -12,6 +12,7 @@ class Video < ApplicationRecord
   enum weight: { nomal: 0, top: 1, force: 2 }
   enum medial_type: { info: 0, video: 1 }
   enum approve_status: { unapproved: -1, wapprove: 0, approved: 1 }
+  enum encoding_type: { en_cod: 0, cnjt_cod: 1, cnft_cod: 2 }
 
   enum is_location_source: { un_location_source: 0, location_source: 1 }
   enum ads: { un_ads: 0, is_ads: 1 }
@@ -44,8 +45,10 @@ class Video < ApplicationRecord
       # 缓存
       $redis.sadd("tags_#{tag_id}_videos", video_id)
     end
-    # 加入分类缓存
+    # 加入栏目缓存
     $redis.sadd("category_#{category_id}_videos", self.id)
+    # 加入分类缓存
+    $redis.sadd("classification_#{classification_id}_videos", self.id)
     force_list if weight == "force"
     cancer_top_list if weight == "top"
   end
@@ -64,8 +67,10 @@ class Video < ApplicationRecord
         $redis.srem("tags_#{tag_id}_videos", video_id)
       end
     end
-    # 加入分类缓存
+    # 移除栏目缓存
     $redis.srem("category_#{category_id}_videos", self.id)
+    # 移除分类缓存
+    $redis.srem("classification_#{classification_id}_videos", self.id)
     cancer_top_list
     cancer_force_list
   end
@@ -233,7 +238,7 @@ class Video < ApplicationRecord
   def self.import_db
     SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url, "category_list": data.category_list )
+      video = Video.find_or_create_by(classification_id: medial_spider.classification_id,medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url, "category_list": data.category_list )
       video.play_count = data.play_count
       if medial_spider.unneed? && !video.tags_str.present?
         if data.tags_str.present?

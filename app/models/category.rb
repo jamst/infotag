@@ -13,18 +13,11 @@ class Category < ApplicationRecord
     Category.create(name:"娱乐")
   end
 
-  # 清楚分类修改导致不一致问题
+  # 清除分类修改导致不一致问题
   def self.crean_diff
     Category.all.each do |ca|
       $redis.del("category_#{ca.id}_infos")
       $redis.del("category_#{ca.id}_videos")
-      
-      # Info.where("category_id != ?", ca.id).each do |info|
-      #   $redis.srem("category_#{ca.id}_infos", info.id)
-      # end
-      # Video.where("category_id != ?", ca.id).each do |video|
-      #   $redis.srem("category_#{ca.id}_videos", video.id)
-      # end
     end
   end
 
@@ -33,13 +26,6 @@ class Category < ApplicationRecord
     Category.all.each do |ca|
       $redis.sadd("category_#{ca.id}_infos",Info.where("category_id = ?", ca.id).ids)
       $redis.sadd("category_#{ca.id}_videos",Video.where("category_id = ?", ca.id).ids)
-
-      # Info.where("category_id = ?", ca.id).each do |info|
-      #   $redis.sadd("category_#{ca.id}_infos", info.id)
-      # end
-      # Video.where("category_id = ?", ca.id).each do |video|
-      #   $redis.sadd("category_#{ca.id}_videos", video.id)
-      # end
     end
   end
 

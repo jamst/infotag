@@ -52,6 +52,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :classifications do
+      collection do
+        get  :update_status
+      end
+    end
+
     resources :categories do
       collection do
         get  :update_status
