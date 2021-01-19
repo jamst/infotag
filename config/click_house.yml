@@ -1,0 +1,16 @@
+default: &default
+  url: http://172.18.191.251:8124
+  timeout: 60
+  open_timeout: 3
+
+development:
+  database: infortags_development
+  <<: *default
+
+test:
+  database: infortags_test
+  <<: *default
+  
+production:
+  <<: *default
+  database: infortags_production

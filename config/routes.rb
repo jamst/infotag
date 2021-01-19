@@ -43,6 +43,9 @@ Rails.application.routes.draw do
     resources :medial_spiders do
       collection do
         get  :update_status
+        get  :import_medial_spider
+        post :create_import_medial_spider
+        get  :export_medial_spider
       end
     end
 
@@ -61,6 +64,7 @@ Rails.application.routes.draw do
     resources :categories do
       collection do
         get  :update_status
+        delete :delete_condition
       end
     end
 
@@ -95,6 +99,13 @@ Rails.application.routes.draw do
   end
 
   resources :school do
+    collection do
+      get :category_list
+      get :location_source
+    end
+  end
+
+  resources :category do
     collection do
       get :category_list
       get :location_source

@@ -1,8 +1,10 @@
 class Category < ApplicationRecord
   has_many :infos
   has_many :videos
+  has_many :category_conditions
   enum status: { disabled: -1, enabled: 0 }
   default_scope -> {where(is_delete: 0)}
+  accepts_nested_attributes_for :category_conditions, allow_destroy: true, :reject_if => :all_blank
 
   def self.init_migration
     Category.create(name:"推荐")

@@ -5,55 +5,62 @@ class Classification < ApplicationRecord
   default_scope -> {where(is_delete: 0)}
 
   def self.init_migration
-    Classification.create(name:"社会",sort_live:10)
-    Classification.create(name:"社会-国际",sort_live:11)
-    Classification.create(name:"社会-时事",sort_live:12)
+    Classification.find_or_create_by(name:"社会",sort_live:10)
+    Classification.find_or_create_by(name:"社会-国际",sort_live:11)
+    Classification.find_or_create_by(name:"社会-时事",sort_live:12)
 
-    Classification.create(name:"娱乐",sort_live:20)
-    Classification.create(name:"娱乐-电影",sort_live:21)
-    Classification.create(name:"娱乐-综艺",sort_live:22)
-    Classification.create(name:"娱乐-音乐",sort_live:23)
-    Classification.create(name:"娱乐-星座运势",sort_live:24)
-    Classification.create(name:"娱乐-搞笑",sort_live:25)
+    Classification.find_or_create_by(name:"娱乐",sort_live:20)
+    Classification.find_or_create_by(name:"娱乐-电影",sort_live:21)
+    Classification.find_or_create_by(name:"娱乐-综艺",sort_live:22)
+    Classification.find_or_create_by(name:"娱乐-音乐",sort_live:23)
+    Classification.find_or_create_by(name:"娱乐-星座运势",sort_live:24)
+    Classification.find_or_create_by(name:"娱乐-搞笑",sort_live:25)
+    Classification.find_or_create_by(name:"娱乐-漫画",sort_live:26)
+    Classification.find_or_create_by(name:"娱乐-百科常识",sort_live:27)
 
-    Classification.create(name:"数码",sort_live:30)
-    Classification.create(name:"数码-科技",sort_live:31)
+    Classification.find_or_create_by(name:"数码",sort_live:30)
+    Classification.find_or_create_by(name:"数码-科技",sort_live:31)
 
+    Classification.find_or_create_by(name:"汽车",sort_live:40)
 
-    Classification.create(name:"汽车",sort_live:40)
+    Classification.find_or_create_by(name:"时尚",sort_live:50)
+    Classification.find_or_create_by(name:"时尚-美妆",sort_live:51)
+    Classification.find_or_create_by(name:"时尚-情感",sort_live:52)
+    Classification.find_or_create_by(name:"时尚-穿搭",sort_live:53)
 
+    Classification.find_or_create_by(name:"美女",sort_live:60)
+    Classification.find_or_create_by(name:"美女-舞蹈",sort_live:61)
+    Classification.find_or_create_by(name:"美女-Cos",sort_live:62)
 
-    Classification.create(name:"时尚",sort_live:50)
-    Classification.create(name:"时尚-美妆",sort_live:51)
-    Classification.create(name:"时尚-情感",sort_live:52)
+    Classification.find_or_create_by(name:"色情",sort_live:70)
+    Classification.find_or_create_by(name:"色情-AV",sort_live:70)
+    Classification.find_or_create_by(name:"色情-18+",sort_live:70)
 
-    Classification.create(name:"美女",sort_live:60)
-    Classification.create(name:"美女-舞蹈",sort_live:61)
-    Classification.create(name:"美女-Cos",sort_live:62)
+    Classification.find_or_create_by(name:"游戏",sort_live:80)
+    Classification.find_or_create_by(name:"游戏-漫画",sort_live:81)
 
-    Classification.create(name:"色情",sort_live:70)
+    Classification.find_or_create_by(name:"美食",sort_live:90)
+    Classification.find_or_create_by(name:"美食-生活",sort_live:91)
 
-    Classification.create(name:"游戏",sort_live:80)
-    Classification.create(name:"游戏-漫画",sort_live:81)
+    Classification.find_or_create_by(name:"旅游",sort_live:100)
+    Classification.find_or_create_by(name:"旅游-摄影",sort_live:101)
 
-    Classification.create(name:"美食",sort_live:90)
-    Classification.create(name:"美食-生活",sort_live:91)
+    Classification.find_or_create_by(name:"居家",sort_live:110)
+    Classification.find_or_create_by(name:"居家-宠物",sort_live:111)
+    Classification.find_or_create_by(name:"居家-母婴育儿",sort_live:112)
+    Classification.find_or_create_by(name:"居家-健康养生",sort_live:113)
+    Classification.find_or_create_by(name:"居家-星座运势",sort_live:114)
 
-    Classification.create(name:"旅游",sort_live:100)
-    Classification.create(name:"旅游-摄影",sort_live:101)
+    Classification.find_or_create_by(name:"军事",sort_live:120)
 
-    Classification.create(name:"居家",sort_live:110)
-    Classification.create(name:"居家-宠物",sort_live:111)
-    Classification.create(name:"居家-母婴育儿",sort_live:112)
-    Classification.create(name:"居家-健康养生",sort_live:113)
-    Classification.create(name:"居家-星座运势",sort_live:114)
+    Classification.find_or_create_by(name:"历史",sort_live:130)
+    Classification.find_or_create_by(name:"历史-文化",sort_live:131)
 
-    Classification.create(name:"军事",sort_live:120)
+    Classification.find_or_create_by(name:"财经",sort_live:140)
 
-    Classification.create(name:"历史",sort_live:130)
-    Classification.create(name:"历史-文化",sort_live:131)
-
-    Classification.create(name:"财经",sort_live:140)
+    Classification.find_or_create_by(name:"生活",sort_live:150)
+    Classification.find_or_create_by(name:"生活-生活日常",sort_live:151)
+    Classification.find_or_create_by(name:"生活-Vlog",sort_live:152)
   end
 
   # 清除分类修改导致不一致问题

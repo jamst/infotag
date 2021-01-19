@@ -6,9 +6,61 @@ class MedialSpider < ApplicationRecord
   default_scope -> {where(is_delete: 0)}
   belongs_to :spider_target
   belongs_to :category
+  belongs_to :classification
   has_many :videos, -> {where(medial_type: "video")}, class_name: 'MedialSpider'
   has_many :infos, -> {where(medial_type: "video")}, class_name: 'MedialSpider'
   after_update :srem_category, if: -> { self.saved_change_to_category_id? }
+
+  include FileHandle
+
+  IMPORT_COLUMNS = {
+    'spider_target': 0,
+    'url': 1 ,    
+    'category': 2,
+    'medial_type': 3,
+    'classification': 4,
+    'tags_str': 5, 
+    'need_approve': 6,
+    'web_site': 7 
+  }
+
+  EXPORT_COLUMN = {
+    'spider_target|name': 0,
+    'url': 1 ,    
+    'category|name': 2,
+    'medial_type': 3,
+    'classification|name': 4,
+    'tags_str': 5, 
+    'need_approve': 6,
+    'web_site': 7 
+  }
+
+  # 导入
+  def self.save_from_hash(hash)
+      medial_spiders = []
+      message = "导入成功！"
+      web_site = MedialSpider.find_by(url: hash[:url])
+      # if web_site.present?
+      #   medial_spiders << hash
+      #   message = "#{hash[:url]} 该地址已存在！"
+      # else
+        spider_target = SpiderTarget.find_by(name:hash[:spider_target])
+        spider_target_id = spider_target&.id || 4
+        category_id = Category.find_by(name:hash[:category])&.id
+        need_approve = hash[:need_approve] == "自动审核" ? 0 : 1
+        medial_type = hash[:medial_type] == "视频" ? 1 : 0
+        classification_id = Classification.find_by(name:hash[:classification])&.id
+        medial_spider = MedialSpider.find_or_initialize_by(url: hash[:url])
+        medial_spider.assign_attributes(category_id: category_id,
+                                               medial_type: medial_type,
+                                         spider_target_id: spider_target_id,
+                                              need_approve: need_approve ,
+                                              classification_id: classification_id,
+                                              web_site: hash[:web_site])
+        medial_spider.save
+      # end
+      return medial_spiders , message
+  end
 
   # 统计爬取条数
   def count_size
@@ -19,7 +71,7 @@ class MedialSpider < ApplicationRecord
     end
   end
 
-  # 更改分类同时联动变更资讯明细类型
+  # 更改classification同时联动变更资讯明细类型
   def srem_category
     if self.medial_type == "info"
       infos = Info.where(medial_spider_id:self.id)

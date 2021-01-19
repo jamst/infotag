@@ -1,4 +1,4 @@
-class SchoolController < ActionController::Base
+class CategoryController < ActionController::Base
 
   around_action :benchmark_filter
  
@@ -7,8 +7,8 @@ class SchoolController < ActionController::Base
    start_time1 = Time.now.to_datetime.strftime('%Q').to_i
    yield # 这里让出来执行Action动作
    start_time_bt = (Time.now.to_datetime.strftime('%Q').to_i - start_time1)
-   Rails.logger.tagged("高校资讯流接口请求取值耗时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") }
-   Rails.logger.tagged("高校资讯流接口请求取值耗时超时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") } if start_time_bt > 1000
+   Rails.logger.tagged("分类资讯流接口请求取值耗时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") }
+   Rails.logger.tagged("分类资讯流接口请求取值耗时超时") { Rails.logger.info("#{controller_name}-#{action_name}:#{start_time_bt}ms") } if start_time_bt > 1000
   end
   
   def index
@@ -17,37 +17,22 @@ class SchoolController < ActionController::Base
     @video_tops = []
     @info_tops = []
 
-    if params[:category_id] && params[:category_id].to_i == 7
-      # 推荐分类资讯
-      category_id = params[:category_id]
+    category_id = params[:category_id]
 
-      merge_videos = Video.category_list(category_id)
-      @videos = Video.where(id:merge_videos)
+    merge_videos = Video.classification_list(category_id)
+    @videos = Video.where(id:merge_videos)
 
-      merge_infos = Info.category_list(category_id)
-      @infos = Info.where(id:merge_infos)
+    merge_infos = Info.classification_list(category_id)
+    @infos = Info.where(id:merge_infos)
 
-      if page == 1 
-        info_force_ids = Info.get_force(1)
-        @info_forces = Info.where(id:info_force_ids)
+    if page == 1 && params[:category_id].to_i == 1
+      info_force_ids = Info.get_force(params[:user_id].to_i)
+      @info_forces = Info.where(id:info_force_ids)
 
-        video_top_ids = Video.get_school_location(params[:user_id])
-        @video_tops = Video.where(id:video_top_ids)
-      end
-    else
-      # 用户不登陆当天最新资讯
-      if page > 1
-        # 下拉加载页码，在前200条中随机10条
-        merge_infos = $redis.srandmember("infos_today",50)
-        merge_videos = $redis.srandmember("videos_today",50)
-      else
-        merge_infos = $redis.smembers("videos_current")
-        merge_videos = $redis.smembers("videos_current")
-      end
-      
-      @videos = Video.where(id:merge_videos).where("category_id != 1 and category_id != 7").sample(10)
-      @infos = Info.where(id:merge_infos).where("category_id != 1 and category_id != 7").sample(10)
+      video_top_ids = Video.get_location(params[:user_id].to_i)
+      @video_tops = Video.where(id:video_top_ids)
     end
+
 
     flow_medias = {}
     flow_medias[:tops] = []

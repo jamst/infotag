@@ -52,6 +52,7 @@ gem 'sidekiq-cron', '~> 0.4.5', require: false
 # gem 'mechanize'
 # gem 'spidr'
 gem 'httparty'
+gem 'click_house'
 
 # Login & Authority
 gem 'devise', git: 'https://github.com/plataformatec/devise.git'

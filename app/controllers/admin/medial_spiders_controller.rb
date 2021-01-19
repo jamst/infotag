@@ -22,6 +22,23 @@ class Admin::MedialSpidersController < Admin::BaseController
   end
 
 
+  # 导入爬取设置
+  def import_medial_spider
+    
+  end
+
+  def create_import_medial_spider
+    results = MedialSpider.import_data(params[:file])
+    @import,@message = results[0],results[1]
+    render "import_medial_spider"
+  end
+
+  def export_medial_spider
+    xls_report = MedialSpider.export_data
+    send_data xls_report, :type => 'text/xls', :filename => "#{MedialSpider.table_name}_#{Time.now.to_s(:db)}.xls"
+  end
+
+
   def update
     @medial_spider.update_attributes(permitted_resource_params)
   end

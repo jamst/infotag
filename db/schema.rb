@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_13_025639) do
+ActiveRecord::Schema.define(version: 2021_01_18_025344) do
+
+  create_table "approve_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "event_type", default: "black_user", comment: "审核类型"
+    t.integer "event_id", default: 1, comment: "事件id"
+    t.integer "emp_id", default: 1, comment: "分配审核员"
+    t.integer "approve_emp_id", default: 1, comment: "实际审核员"
+    t.integer "status", default: 0, comment: "用户状态：0待审核，1已审核"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approve_emp_id"], name: "index_approve_events_on_approve_emp_id"
+    t.index ["emp_id"], name: "index_approve_events_on_emp_id"
+    t.index ["event_id"], name: "index_approve_events_on_event_id"
+    t.index ["event_type"], name: "index_approve_events_on_event_type"
+    t.index ["status"], name: "index_approve_events_on_status"
+  end
+
+  create_table "black_words", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "title", comment: "内容标题"
+    t.string "link", comment: "内容链接"
+    t.string "source_tags", comment: "不合规描述"
+    t.string "source_keyword", comment: "违规关键字"
+    t.string "source_view", comment: "播放热度"
+    t.datetime "release_at", comment: "收录时间"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["release_at"], name: "index_black_words_on_release_at"
+    t.index ["title"], name: "index_black_words_on_title"
+  end
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", comment: "名称"
@@ -20,11 +48,45 @@ ActiveRecord::Schema.define(version: 2020_11_13_025639) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "is_delete", default: 0, comment: "是否删除"
+    t.integer "en_cod", default: 0, comment: "外语"
+    t.integer "cnjt_cod", default: 0, comment: "简体"
+    t.integer "cnft_cod", default: 0, comment: "繁体"
+  end
+
+  create_table "category_conditions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.bigint "category_id", comment: "栏目"
+    t.bigint "classification_id", comment: "分类"
+    t.integer "weight", default: 0, comment: "权重：10%,20%,30%,40%,50%,60%,70%,80%,90%,100%"
+    t.string "tags_str", comment: "关键词"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_category_conditions_on_category_id"
+    t.index ["classification_id"], name: "index_category_conditions_on_classification_id"
+  end
+
+  create_table "classifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "name", comment: "名称"
+    t.integer "parent_id", comment: "父节点"
+    t.integer "status", default: 1, comment: "状态"
+    t.integer "sort_live", comment: "排序"
+    t.integer "is_delete", default: 0, comment: "是否删除"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "employees", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", comment: "员工表", force: :cascade do |t|
     t.string "email", default: "", null: false, comment: "email"
     t.string "encrypted_password", default: "", null: false, comment: "密码"
+    t.string "reset_password_token", comment: "重置密码的token"
+    t.datetime "reset_password_sent_at", comment: "重置密码的时间"
+    t.integer "sign_in_count", default: 0, null: false, comment: "登录次数"
+    t.datetime "current_sign_in_at", comment: "当前登录时间"
+    t.datetime "last_sign_in_at", comment: "上路登录时间"
+    t.string "current_sign_in_ip", comment: "当前登录的IP"
+    t.string "last_sign_in_ip", comment: "上次登录的IP"
+    t.integer "failed_attempts", default: 0, null: false, comment: "登录失败次数"
+    t.string "unlock_token", comment: "解锁token"
+    t.datetime "locked_at", comment: "锁住时间"
     t.integer "parent_id", default: 0, comment: "上级ID"
     t.datetime "created_at", null: false, comment: "创建日期"
     t.datetime "updated_at", null: false, comment: "修改日期"
@@ -48,10 +110,12 @@ ActiveRecord::Schema.define(version: 2020_11_13_025639) do
     t.index ["email"], name: "index_employees_on_email", unique: true
   end
 
-  create_table "employees_roles", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", comment: "员工权限表", force: :cascade do |t|
-    t.integer "employee_id", comment: "员工ID"
-    t.integer "role_id", comment: "员工权限"
+  create_table "employees_roles", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.bigint "employee_id"
+    t.bigint "role_id"
     t.index ["employee_id", "role_id"], name: "index_employees_roles_on_employee_id_and_role_id"
+    t.index ["employee_id"], name: "index_employees_roles_on_employee_id"
+    t.index ["role_id"], name: "index_employees_roles_on_role_id"
   end
 
   create_table "file_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -95,7 +159,11 @@ ActiveRecord::Schema.define(version: 2020_11_13_025639) do
     t.datetime "updated_at", null: false
     t.integer "spider_target_id", comment: "信息来源"
     t.string "category_list", comment: "资讯分类"
+    t.integer "encoding_type", default: 1, comment: "编码类型：0外语，1简体，2繁体"
+    t.integer "classification_id", comment: "分类"
     t.index ["category_id"], name: "index_infos_on_category_id"
+    t.index ["classification_id"], name: "index_infos_on_classification_id"
+    t.index ["encoding_type"], name: "index_infos_on_encoding_type"
     t.index ["medial_spider_id"], name: "index_infos_on_medial_spider_id"
     t.index ["release_at"], name: "index_infos_on_release_at"
     t.index ["spider_target_id"], name: "index_infos_on_spider_target_id"
@@ -146,16 +214,33 @@ ActiveRecord::Schema.define(version: 2020_11_13_025639) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "need_approve", default: 1, comment: "是否需要审核0自动审核unneed，1手动审核need"
+    t.integer "classification_id", comment: "分类"
     t.index ["category_id"], name: "index_medial_spiders_on_category_id"
+    t.index ["classification_id"], name: "index_medial_spiders_on_classification_id"
     t.index ["spider_target_id"], name: "index_medial_spiders_on_spider_target_id"
   end
 
-  create_table "roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", comment: "角色表", force: :cascade do |t|
-    t.string "name", comment: "角色名称"
-    t.string "name_cn", comment: "中文名"
-    t.datetime "created_at", comment: "创建日期"
-    t.datetime "updated_at", comment: "修改日期"
+  create_table "permissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "controller", comment: "控制器名称"
+    t.string "action", comment: "方法名称"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "name"
+    t.string "name_cn"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_roles_on_name"
+  end
+
+  create_table "roles_permissions", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.bigint "role_id"
+    t.bigint "permission_id"
+    t.index ["permission_id"], name: "index_roles_permissions_on_permission_id"
+    t.index ["role_id", "permission_id"], name: "index_roles_permissions_on_role_id_and_permission_id"
+    t.index ["role_id"], name: "index_roles_permissions_on_role_id"
   end
 
   create_table "spider_origin_infos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -169,6 +254,9 @@ ActiveRecord::Schema.define(version: 2020_11_13_025639) do
     t.datetime "updated_at", null: false
     t.string "category_list", comment: "资讯分类"
     t.string "tags_str", comment: "资讯标签"
+    t.integer "encoding_type", default: 1, comment: "编码类型：0外语，1简体，2繁体"
+    t.integer "classification_id", comment: "分类"
+    t.index ["encoding_type"], name: "index_spider_origin_infos_on_encoding_type"
   end
 
   create_table "spider_origin_videos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -184,6 +272,9 @@ ActiveRecord::Schema.define(version: 2020_11_13_025639) do
     t.datetime "updated_at", null: false
     t.string "category_list", comment: "视频分类"
     t.string "tags_str", comment: "视频标签"
+    t.integer "encoding_type", default: 1, comment: "编码类型：0外语，1简体，2繁体"
+    t.integer "classification_id", comment: "分类"
+    t.index ["encoding_type"], name: "index_spider_origin_videos_on_encoding_type"
   end
 
   create_table "spider_targets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -290,7 +381,11 @@ ActiveRecord::Schema.define(version: 2020_11_13_025639) do
     t.integer "ads", default: 0, comment: "0:非广告流，1:广告流"
     t.integer "ads_index", default: 0, comment: "广告排序"
     t.string "category_list", comment: "视频分类"
+    t.integer "encoding_type", default: 1, comment: "编码类型：0外语，1简体，2繁体"
+    t.integer "classification_id", comment: "分类"
     t.index ["category_id"], name: "index_videos_on_category_id"
+    t.index ["classification_id"], name: "index_videos_on_classification_id"
+    t.index ["encoding_type"], name: "index_videos_on_encoding_type"
     t.index ["medial_spider_id"], name: "index_videos_on_medial_spider_id"
     t.index ["release_at"], name: "index_videos_on_release_at"
     t.index ["spider_target_id"], name: "index_videos_on_spider_target_id"

@@ -10,39 +10,53 @@ class Admin::CategoriesController < Admin::BaseController
 
   def new
     @category =  Category.new
-    render :layout => false
+    @category_conditions = [CategoryCondition.new]
   end
 
   def edit
-    render :layout => false
+    @category_conditions = @category.category_conditions
+    @category_conditions = [CategoryCondition.new] unless @category_conditions.present?
   end
 
   def show
-    render :layout => false
-  end
 
-
-  def update
-    @category.update_attributes(permitted_resource_params)
   end
 
   def create
-    @category = Category.new
-    @category.attributes = permitted_resource_params
-    if @category.save
-      respond_with(@category) do |format|
-        format.html { redirect_to location_after_save }
-        format.js   { render :layout => false }
-      end
-    else
-      respond_with(@category) do |format|
-        format.html do
-          flash.now[:error] = @category.errors.full_messages.join(", ")
-          render action: 'new'
+    Category.transaction do 
+      @category = Category.new(permitted_resource_params)
+      params[:category][:category_condition].each do |index, spec|
+        if spec[:classification_id].present? 
+          @category.category_conditions.new(spec.permit!)
         end
-        format.js { render layout: false }
+      end
+      @category.save
+    end
+  end
+
+  def update
+    Category.transaction do 
+      @category.update_attributes(permitted_resource_params)
+      params[:category][:category_condition].each do |index, spec|
+        spec.permit!
+        if spec[:id].present?
+          new_spec = CategoryCondition.find(spec[:id])
+          new_spec.attributes = spec
+          new_spec.save
+        elsif spec[:classification_id].present? 
+          new_spec = @category.category_conditions.find_or_create_by(classification_id:spec[:classification_id])
+          new_spec.weight = spec[:weight] if spec[:weight].present?
+          new_spec.tags_str = spec[:tags_str] if spec[:tags_str].present?
+          new_spec.save
+        end
       end
     end
+  end
+
+  def delete_condition
+    @category_condition = CategoryCondition.find params[:condition_id].to_i
+    @category_condition_id = @category_condition.id
+    @category_condition.delete
   end
 
   def destroy
@@ -71,7 +85,7 @@ class Admin::CategoriesController < Admin::BaseController
   end
 
   def permitted_resource_params
-    params.require(:category).permit!
+    params.require(:category).permit!.except(:category_condition)
   end
 
 

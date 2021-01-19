@@ -5,6 +5,7 @@
         <%= f.input "title-like", placeholder: '标题' %>
         <%= f.input "tags_str-like", placeholder: '标签' %>
         <%= f.input :category_id, as: :select, collection: Category.pluck(:name,:id), include_blank: "选择所属栏目", input_html: {class: 'ui dropdown fluid'}, label: "所属栏目" %>
+        <%= f.input :classification_id, as: :select, collection: Classification.order(:name).pluck(:name,:id), include_blank: "选择所属分类", input_html: {class: 'ui dropdown fluid'}, label: "所属分类" %>
         <%= f.input :spider_target_id, as: :select, collection: SpiderTarget.pluck(:name,:id), include_blank: "选择信息来源", input_html: {class: 'ui dropdown fluid'}, label: "信息来源" %>
         <%= f.input :status, as: :select, collection: select_options_from_enum(Info, :status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'}, label: "状态" %>
         <%= f.input :weight, as: :select, collection: select_options_from_enum(Info, :weight), include_blank: "选择权重", input_html: {class: 'ui dropdown fluid'}, label: "权重" %>

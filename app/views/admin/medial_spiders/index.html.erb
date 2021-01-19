@@ -7,6 +7,9 @@
 
 <div class="ui blue segment">
   <%= link_to "添加任务", new_admin_medial_spider_path , remote: true, class: 'ui primary button' %>
+  <a class="ui primary button" href="<%=import_medial_spider_admin_medial_spiders_path%>"><i class="upload icon"></i>导入爬取任务</a> 
+  <a class="ui primary button" href="<%=export_medial_spider_admin_medial_spiders_path%>"><i class="download icon"></i>导出爬取任务</a> 
+
   <table class="ui selectable striped celled table">
     <thead>
     <tr >
@@ -16,6 +19,7 @@
       <th class="center aligned">网站模块</th>
       <th class="center aligned">内容类型</th>
       <th class="center aligned">所属栏目</th>
+      <th class="center aligned">所属分类</th>
       <th class="center aligned">创建时间</th>
       <th class="center aligned">条目总数</th>
       <th class="center aligned">状态</th>

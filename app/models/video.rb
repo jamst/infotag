@@ -7,6 +7,7 @@ class Video < ApplicationRecord
   has_many :user_tag_details, as: :from_entity
 
   has_one :file_attachment, as: :attachment_entity
+  belongs_to :classification
 
   enum status: { disabled: -1, enabled: 0 }
   enum weight: { nomal: 0, top: 1, force: 2 }
@@ -100,10 +101,40 @@ class Video < ApplicationRecord
   end
 
   
-  # 分类获取
+  # 栏目获取
   def self.category_list(category_id)
     $redis.srandmember("category_#{category_id}_videos",20)
   end
+
+  # 分类获取
+  def self.classification_list(category_id)
+    video_ids = []
+    category = Category.find_by category_id
+    category_conditions = category.category_conditions
+    if category_conditions.present?
+      category_conditions.each do |category_condition|
+        # 标签占比
+        video_ids += $redis.srandmember("classification_#{category_condition.classification}_videos",(20.0*category_condition.wigth/100).to_i)
+        # 关键词占比
+        if category_condition.tag_str.present?
+          tag_list = category_condition.tag_str.split(",")
+          tag_size = tag_list.size
+          tag_list.each do |tag|
+            tag = Tag.find_by(name:tag)
+            if tag.present?
+              tag_id = Tag.find_by(name:tag).id
+              video_ids += $redis.srandmember("tag_#{tag_id}_videos",(20.0*category_condition.wigth/100/tag_size).to_i)
+            end
+          end
+        end
+      end
+    else
+      video_ids = $redis.srandmember("category_#{category_id}_videos",20)
+    end
+    # 语言占比过滤
+    video_ids.uniq.sample(20)
+  end
+  
 
   # 访问次数
   def incr_size
