@@ -23,7 +23,7 @@ class Tag < ApplicationRecord
     info_ids = $redis.smembers("tags_#{id}_infos")
     infos = Info.where(id:info_ids)
     infos.each do |info|
-      info.tags_str = (info.tags_strs.to_s.split(",")-[name]).join(",")
+      info.tags_str = (info.tags_str.to_s.split(",")-[name]).join(",")
       info.save
       $redis.srem("tags_#{id}_infos", info.id)
     end
@@ -31,7 +31,7 @@ class Tag < ApplicationRecord
     video_ids = $redis.smembers("tags_#{id}_videos")
     videos = Video.where(id:video_ids)
     videos.each do |video|
-      video.tags_str = (video.tags_strs.to_s.split(",")-[name]).join(",")
+      video.tags_str = (video.tags_str.to_s.split(",")-[name]).join(",")
       video.save
       $redis.srem("tags_#{id}_videos", video.id)
     end
