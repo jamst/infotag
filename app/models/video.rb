@@ -114,7 +114,7 @@ class Video < ApplicationRecord
     if category_conditions.present?
       category_conditions.each do |category_condition|
         # 标签占比
-        video_ids += $redis.srandmember("classification_#{category_condition.classification}_videos",(20.0*category_condition.wigth/100).to_i)
+        video_ids += $redis.srandmember("classification_#{category_condition.classification_id}_videos",(20.0*category_condition.wigth/100).to_i)
         # 关键词占比
         if category_condition.tag_str.present?
           tag_list = category_condition.tag_str.split(",")

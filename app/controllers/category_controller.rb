@@ -25,7 +25,7 @@ class CategoryController < ActionController::Base
     merge_infos = Info.classification_list(category_id)
     @infos = Info.where(id:merge_infos)
 
-    if page == 1 && params[:category_id].to_i == 1
+    if page == 1 && params[:category_id].to_i == 7
       info_force_ids = Info.get_force(params[:user_id].to_i)
       @info_forces = Info.where(id:info_force_ids)
 

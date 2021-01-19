@@ -39,26 +39,20 @@ class MedialSpider < ApplicationRecord
   def self.save_from_hash(hash)
       medial_spiders = []
       message = "导入成功！"
-      web_site = MedialSpider.find_by(url: hash[:url])
-      # if web_site.present?
-      #   medial_spiders << hash
-      #   message = "#{hash[:url]} 该地址已存在！"
-      # else
-        spider_target = SpiderTarget.find_by(name:hash[:spider_target])
-        spider_target_id = spider_target&.id || 4
-        category_id = Category.find_by(name:hash[:category])&.id
-        need_approve = hash[:need_approve] == "自动审核" ? 0 : 1
-        medial_type = hash[:medial_type] == "视频" ? 1 : 0
-        classification_id = Classification.find_by(name:hash[:classification])&.id
-        medial_spider = MedialSpider.find_or_initialize_by(url: hash[:url])
-        medial_spider.assign_attributes(category_id: category_id,
-                                               medial_type: medial_type,
-                                         spider_target_id: spider_target_id,
-                                              need_approve: need_approve ,
-                                              classification_id: classification_id,
-                                              web_site: hash[:web_site])
-        medial_spider.save
-      # end
+      spider_target = SpiderTarget.find_by(name:hash[:spider_target])
+      spider_target_id = spider_target&.id || 4
+      category_id = Category.find_by(name:hash[:category])&.id
+      need_approve = hash[:need_approve] == "自动审核" ? 0 : 1
+      medial_type = hash[:medial_type] == "视频" ? 1 : 0
+      classification_id = Classification.find_by(name:hash[:classification])&.id
+      medial_spider = MedialSpider.find_or_initialize_by(url: hash[:url])
+      medial_spider.assign_attributes(category_id: category_id,
+                                             medial_type: medial_type,
+                                       spider_target_id: spider_target_id,
+                                            need_approve: need_approve ,
+                                            classification_id: classification_id,
+                                            web_site: hash[:web_site])
+      medial_spider.save
       return medial_spiders , message
   end
 
