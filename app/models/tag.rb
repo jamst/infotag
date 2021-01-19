@@ -21,10 +21,20 @@ class Tag < ApplicationRecord
   def srem_tag_list
     # 删除标签下的新闻信息
     info_ids = $redis.smembers("tags_#{id}_infos")
-    $redis.srem("tags_#{id}_infos", info_ids)
+    infos = Info.where(id:info_ids)
+    infos.each do |info|
+      info.tags_str = (info.tags_strs.to_s.split(",")-[name]).join(",")
+      info.save
+      $redis.srem("tags_#{id}_infos", info.id)
+    end
     # 删除标签下的视频信息
     video_ids = $redis.smembers("tags_#{id}_videos")
-    $redis.srem("tags_#{id}_videos", video_ids)
+    videos = Video.where(id:video_ids)
+    videos.each do |video|
+      video.tags_str = (video.tags_strs.to_s.split(",")-[name]).join(",")
+      video.save
+      $redis.srem("tags_#{id}_videos", video.id)
+    end
     # 遍历用户列表删除用户身上标签
     users_lists = $redis.smembers("users_lists")
     users_lists.each do |user_id|
