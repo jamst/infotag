@@ -30,7 +30,7 @@ class Classification < ApplicationRecord
 
     Classification.find_or_create_by(name:"美女",sort_live:60)
     Classification.find_or_create_by(name:"美女-舞蹈",sort_live:61)
-    Classification.find_or_create_by(name:"美女-Cos",sort_live:62)
+    Classification.find_or_create_by(name:"美女-cos",sort_live:62)
 
     Classification.find_or_create_by(name:"色情",sort_live:70)
     Classification.find_or_create_by(name:"色情-AV",sort_live:70)
@@ -60,7 +60,7 @@ class Classification < ApplicationRecord
 
     Classification.find_or_create_by(name:"生活",sort_live:150)
     Classification.find_or_create_by(name:"生活-生活日常",sort_live:151)
-    Classification.find_or_create_by(name:"生活-Vlog",sort_live:152)
+    Classification.find_or_create_by(name:"生活-vlog",sort_live:152)
   end
 
   # 清除分类修改导致不一致问题
