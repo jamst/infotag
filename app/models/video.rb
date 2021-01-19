@@ -107,7 +107,7 @@ class Video < ApplicationRecord
   end
 
   # 分类获取
-  def classification_list(category_id)
+  def self.classification_list(category_id)
     video_ids = []
     category = Category.find_by(id:category_id)
     category_conditions = category.category_conditions
