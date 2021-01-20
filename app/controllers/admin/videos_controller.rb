@@ -44,7 +44,7 @@ class Admin::VideosController < Admin::BaseController
 
   # 导出缓存本地视频
   def export_cache_videos
-    report_data = Video.location_source.where("location_source_url is null").pluck(:id,:url)
+    report_data = Video.location_source.where("location_source_url is null or location_source_url = '' ").pluck(:id,:url)
     send_data Video.to_xlsx("export_cache_videos",nil,report_data), type: 'text/xls', filename: "#{Video.table_name}_#{Time.now.to_s(:db)}.xls"
   end
 
