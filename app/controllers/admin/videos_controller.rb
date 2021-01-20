@@ -63,7 +63,7 @@ class Admin::VideosController < Admin::BaseController
 
 
   def update
-    @page_type = params[page_type]
+    @page_type = params[:page_type]
     @video.update_attributes(permitted_resource_params)
   end
 
