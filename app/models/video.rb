@@ -25,12 +25,12 @@ class Video < ApplicationRecord
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
+  include FileHandle
 
   EXPORT_COLUMN = {
     'id': 0,
     'url': 1 
   }
-
 
   # 移动端地址
   def mobile_url
