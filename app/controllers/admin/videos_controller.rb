@@ -42,6 +42,12 @@ class Admin::VideosController < Admin::BaseController
     end
   end
 
+  # 导出缓存本地视频
+  def export_cache_videos
+    report_data = Video.location_source.where("location_source_url is null").pluck(:id,:url)
+    send_data Video.to_xlsx("export_cache_videos",nil,report_data), type: 'text/xls', filename: "#{Video.table_name}_#{Time.now.to_s(:db)}.xls"
+  end
+
   # 更新今日推荐
   def uptoday
     Video.add_today_list

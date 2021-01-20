@@ -18,7 +18,7 @@ class Info < ApplicationRecord
   default_scope -> {where(is_delete: 0)}
   
   after_create :image_save
-  after_save :tag_list, if: -> { self.saved_change_to_tags_str? }
+  after_save :tag_list, if: -> { self.saved_change_to_tags_str? || self.saved_change_to_classification_id?  || self.saved_change_to_category_id? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
 
 

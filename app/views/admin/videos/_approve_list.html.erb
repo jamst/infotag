@@ -6,7 +6,7 @@
     </div>
   </td>
   <td class="center aligned">
-    <span><%= video.id%></span>
+    <span><% if @page_type.present? %> <font color="orange"><%= video.id%><% else%> <%= video.id%> <%end%></span>
   </td>
   <td class="center aligned">
     <%= link_to str_chip(video.title,20), video.url , target: '_blank' %>

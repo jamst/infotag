@@ -21,9 +21,15 @@ class Video < ApplicationRecord
   default_scope -> {where(is_delete: 0)}
 
   after_create :image_save
-  after_save :tag_list, if: -> { self.saved_change_to_tags_str? }
+  after_save :tag_list, if: -> { self.saved_change_to_tags_str? || self.saved_change_to_classification_id?  || self.saved_change_to_category_id? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
+
+
+  EXPORT_COLUMN = {
+    'id': 0,
+    'url': 1 
+  }
 
 
   # 移动端地址
@@ -32,7 +38,6 @@ class Video < ApplicationRecord
     gurl
   end
   
-
   # 标签下有哪些视频
   # 视频资讯上的字段作为文本存储
   def tag_list
@@ -254,6 +259,12 @@ class Video < ApplicationRecord
     flow_videos.sample(2)
   end
 
+  # 添加本地缓存地址
+  def self.add_location_source_url(ids)
+    Video.where(id:ids).each do |video|
+      video.update(location_source_url:"https://sz6.dayomall.com:51100/videos/#{video.id}.mp4")
+    end
+  end
 
   # 文本导入数据
   def self.import_file

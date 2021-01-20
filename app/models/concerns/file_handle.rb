@@ -56,5 +56,26 @@ module FileHandle
       file.write xls_report
       return xls_report.string
     end
+
+    # 传参生成EXCELL
+    def to_xlsx(name,columns=nil,report_data)
+        file = Spreadsheet::Workbook.new
+        list = file.create_worksheet :name => name
+        if columns.present?
+          list.row(0).concat columns 
+          report_data.each_with_index { |report, i|
+            list.row(i+1).concat report
+          }
+        else
+          report_data.each_with_index { |report, i|
+            list.row(i).concat report
+          }
+        end
+        xls_report = StringIO.new 
+        file.write xls_report 
+        xls_report.set_encoding('UTF-8')
+        xls_report.string 
+    end
+
   end  
 end

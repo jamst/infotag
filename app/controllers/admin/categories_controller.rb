@@ -25,9 +25,11 @@ class Admin::CategoriesController < Admin::BaseController
   def create
     Category.transaction do 
       @category = Category.new(permitted_resource_params)
-      params[:category][:category_condition].each do |index, spec|
-        if spec[:classification_id].present? 
-          @category.category_conditions.new(spec.permit!)
+      if params[:category][:category_condition].present?
+        params[:category][:category_condition].each do |index, spec|
+          if spec[:classification_id].present? 
+            @category.category_conditions.new(spec.permit!)
+          end
         end
       end
       @category.save
@@ -37,19 +39,21 @@ class Admin::CategoriesController < Admin::BaseController
   def update
     Category.transaction do 
       @category.update_attributes(permitted_resource_params)
-      params[:category][:category_condition].each do |index, spec|
-        spec.permit!
-        if spec[:id].present?
-          new_spec = CategoryCondition.find(spec[:id])
-          new_spec.attributes = spec
-          new_spec.save
-        elsif spec[:classification_id].present? 
-          new_spec = @category.category_conditions.find_or_create_by(classification_id:spec[:classification_id])
-          new_spec.weight = spec[:weight] if spec[:weight].present?
-          new_spec.tags_str = spec[:tags_str] if spec[:tags_str].present?
-          new_spec.save
+      if params[:category][:category_condition].present?
+        params[:category][:category_condition].each do |index, spec|
+          spec.permit!
+          if spec[:id].present?
+            new_spec = CategoryCondition.find(spec[:id])
+            new_spec.attributes = spec
+            new_spec.save
+          elsif spec[:classification_id].present? 
+            new_spec = @category.category_conditions.find_or_create_by(classification_id:spec[:classification_id])
+            new_spec.weight = spec[:weight] if spec[:weight].present?
+            new_spec.tags_str = spec[:tags_str] if spec[:tags_str].present?
+            new_spec.save
+          end
         end
-      end
+      end  
     end
   end
 
