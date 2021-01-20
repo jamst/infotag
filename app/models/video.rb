@@ -110,7 +110,7 @@ class Video < ApplicationRecord
   def self.classification_list(category_id)
     video_ids = []
     category = Category.find_by(id:category_id)
-    category_conditions = category.category_conditions
+    category_conditions = category&.category_conditions
     if category_conditions.present?
       category_conditions.each do |category_condition|
         # 标签占比

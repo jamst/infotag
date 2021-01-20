@@ -126,7 +126,7 @@ class HomeController < ActionController::Base
 
   # 分类数据
   def category_list
-    categories = [{name:"推荐",value:1},{name:"热门",value:100}]
+    categories = [{name:"推荐",value:1},{name:"热门",value:8}]
     # Category.all.order(:sort_live).each do |ca|
     #   categories << {name:ca.name,value:ca.id}
     # end

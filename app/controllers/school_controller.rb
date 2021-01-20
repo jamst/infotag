@@ -150,7 +150,7 @@ class SchoolController < ActionController::Base
 
   # 分类数据
   def category_list
-    categories = [{name:"推荐",value:7},{name:"热门",value:200}]
+    categories = [{name:"推荐",value:7},{name:"热门",value:8}]
     render json:{categories:categories}
   end
 
