@@ -1,6 +1,8 @@
 <%= simple_form_for @video, url: admin_video_path(@video), method: :put, remote: true do |f| %>
 <div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
 
+  <input type="hidden" value="<%= @page_type %>" name="page_type" id="page_type">
+
   <div class="two fields">
     <%= f.input :title, label: "标题" %>
     <div class="field">

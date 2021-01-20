@@ -53,6 +53,7 @@ class Admin::VideosController < Admin::BaseController
   end
 
   def edit
+    @page_type = params[:page_type]
     render :layout => false
   end
 
@@ -62,6 +63,7 @@ class Admin::VideosController < Admin::BaseController
 
 
   def update
+    @page_type = params[page_type]
     @video.update_attributes(permitted_resource_params)
   end
 

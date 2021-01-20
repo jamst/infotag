@@ -1,5 +1,11 @@
 <tr id="video_<%= video.id %>">
   <td class="center aligned">
+    <div class="ui checkbox">
+      <input type="checkbox" name="inquiry_id" value="<%= video.id %>">
+      <label></label>
+    </div>
+  </td>
+  <td class="center aligned">
     <span><%= video.id%></span>
   </td>
   <td class="center aligned">
@@ -36,7 +42,7 @@
     <%= video.incr_size %>
   </td>
   <td class="center aligned">
-    <%= link_to edit_admin_video_path(video.id), remote: true, class: "ui icon blue basic button" do %>
+    <%= link_to edit_admin_video_path(id:video.id,page_type:"approve_list"), remote: true, class: "ui icon blue basic button" do %>
       <i class="edit icon"></i>编辑
     <% end %>
 

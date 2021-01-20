@@ -44,7 +44,7 @@
   </td>
   <td class="center aligned">
 
-    <%= link_to edit_admin_video_path(video.id), remote: true, class: "ui icon blue basic button" do %>
+    <%= link_to edit_admin_video_path(id:video.id,page_type:"list"), remote: true, class: "ui icon blue basic button" do %>
       <i class="edit icon"></i>编辑
     <% end %>
     

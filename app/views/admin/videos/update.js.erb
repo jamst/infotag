@@ -1,5 +1,9 @@
 <% if @video.errors.blank? %>
-  $("#video_<%= @video.id %>").replaceWith("<%= j(render partial: 'approve_list', locals: { video: @video} ) %>");
+  <% if @page_type == "list" %>
+    $("#video_<%= @video.id %>").replaceWith("<%= j(render partial: 'list', locals: { video: @video} ) %>");
+  <% else %>
+    $("#video_<%= @video.id %>").replaceWith("<%= j(render partial: 'approve_list', locals: { video: @video} ) %>");
+  <% end %>
   $("#video_modal").modal('hide');
 <% else %>
   $(".red.pointing").remove();
