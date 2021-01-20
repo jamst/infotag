@@ -229,7 +229,7 @@ class Info < ApplicationRecord
           info.approve_status = "approved"
           info.tags_str = data.tags_str
           # 爬虫同步过来的标签叠加指定的标签
-          info.tags_str += medial_spider.tags_str if medial_spider.tags_str.present?
+          info.tags_str += ",#{medial_spider.tags_str}" if medial_spider.tags_str.present?
         else
           info.approve_status = "approved"
           # 频道设置的默认标签
