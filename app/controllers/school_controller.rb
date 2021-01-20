@@ -45,8 +45,10 @@ class SchoolController < ActionController::Base
         merge_videos = $redis.smembers("videos_current")
       end
       
-      @videos = Video.where(id:merge_videos).where("category_id != 1 and category_id != 7").sample(10)
-      @infos = Info.where(id:merge_infos).where("category_id != 1 and category_id != 7").sample(10)
+      # @videos = Video.where(id:merge_videos).where("category_id != 1 and category_id != 7").sample(10)
+      # @infos = Info.where(id:merge_infos).where("category_id != 1 and category_id != 7").sample(10)
+      @videos = Video.where(id:merge_videos).where("category_id = 8").sample(10)
+      @infos = Info.where(id:merge_infos).where("category_id = 8").sample(10)
     end
 
     flow_medias = {}
