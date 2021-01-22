@@ -132,7 +132,9 @@ class Video < ApplicationRecord
     video_ids = []
     category = Category.find_by(id:category_id)
 
-    redis_cache_conditions = eval(category.get_cache_condition)
+    cache_condition = category.get_cache_condition
+
+    redis_cache_conditions = eval(cache_condition)
 
     if redis_cache_conditions[:cache].present?
       redis_cache_conditions[:cache].each do |category_condition|

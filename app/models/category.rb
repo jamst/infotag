@@ -59,6 +59,7 @@ class Category < ApplicationRecord
     end
     redis_cache_conditions[:cache] = cache_conditions
     $redis.set("cache_category_condition_#{id}",redis_cache_conditions.to_json)
+    redis_cache_conditions.to_json
   end
 
 
