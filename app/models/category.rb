@@ -72,29 +72,4 @@ class Category < ApplicationRecord
   end
 
 
-  category = Category.find_by(id:category_id)
-    category_conditions = category&.category_conditions
-    if category_conditions.present?
-      category_conditions.each do |category_condition|
-        # 标签占比
-        video_ids += $redis.srandmember("classification_#{category_condition.classification_id}_videos",(20.0*category_condition.weight/100).to_i)
-        # 关键词占比
-        if category_condition.tags_str.present?
-          tag_list = category_condition.tags_str.split(",")
-          tag_size = tag_list.size
-          tag_list.each do |tag|
-            tag = Tag.find_by(name:tag)
-            if tag.present?
-              tag_id = tag.id
-              video_ids += $redis.srandmember("tags_#{tag_id}_videos",(20.0*category_condition.weight/100/tag_size).to_i)
-            end
-          end
-        end
-      end
-    else
-      video_ids = $redis.srandmember("category_#{category_id}_videos",20)
-    end
-
-
-
 end
