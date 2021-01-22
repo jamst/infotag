@@ -19,6 +19,8 @@
         <%= f.input :spider_target_id, as: :select, collection: SpiderTarget.pluck(:name,:id), include_blank: "选择信息来源", input_html: {class: 'ui dropdown fluid'}, label: "信息来源" %>
         <%= f.input :weight, as: :select, collection: select_options_from_enum(Video, :weight), include_blank: "选择权重", input_html: {class: 'ui dropdown fluid'}, label: "权重" %>
         <%= f.input :status, as: :select, collection: select_options_from_enum(Video, :status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'}, label: "状态" %>
+        <%= f.input :approve_status, as: :select, collection: select_options_from_enum(Video, :approve_status), include_blank: "选择审核状态", input_html: {class: 'ui dropdown fluid'}, label: "审核状态" %>
+        <%= f.input :is_location_source, as: :select, collection: select_options_from_enum(Video, :is_location_source), include_blank: "选择是否本地视频", input_html: {class: 'ui dropdown fluid'}, label: '是否本地视频' %>
         <div class="column">
           <div class="ui left icon input fluid">
             <i class="calendar icon"></i>
@@ -65,7 +67,7 @@
       <th class="center aligned">信息来源</th>
       <th class="center aligned">推荐权重</th>
       <th class="center aligned">标签</th>
-      <th class="center aligned">点击次数</th>
+      <th class="center aligned">是否本地资源</th>
       <th class="center aligned">操作</th>
     </tr>
     </thead>

@@ -42,7 +42,7 @@
     <%= video.tags_str %>
   </td>
   <td class="center aligned">
-    <%= video.incr_size %>
+    <%= video.is_location_source %>
   </td>
   <td class="center aligned">
     <%= link_to edit_admin_video_path(id:video.id,page_type:"approve_list"), remote: true, class: "ui icon blue basic button" do %>
