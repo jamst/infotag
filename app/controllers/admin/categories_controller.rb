@@ -33,6 +33,8 @@ class Admin::CategoriesController < Admin::BaseController
         end
       end
       @category.save
+      # 类型占比缓存
+      @category.cache_condition 
     end
   end
 
@@ -53,7 +55,9 @@ class Admin::CategoriesController < Admin::BaseController
             new_spec.save
           end
         end
-      end  
+      end 
+      # 类型占比缓存
+      @category.cache_condition 
     end
   end
 

@@ -115,6 +115,37 @@ class Video < ApplicationRecord
   def self.classification_list(category_id)
     video_ids = []
     category = Category.find_by(id:category_id)
+
+    redis_cache_conditions = eval(category.get_cache_condition)
+
+    if redis_cache_conditions[:cache].present?
+      redis_cache_conditions[:cache].each do |category_condition|
+        # 标签占比
+        video_ids += $redis.srandmember("classification_#{category_condition[:classification_id]}_videos",(20.0*category_condition[:weight]/100).to_i)
+        # 关键词占比
+        if category_condition[:tags_str].present?
+          tag_list = category_condition[:tags_str].split(",")
+          tag_size = tag_list.size
+          tag_list.each do |tag|
+            tag = Tag.find_by(name:tag)
+            if tag.present?
+              tag_id = tag.id
+              video_ids += $redis.srandmember("tags_#{tag_id}_videos",(20.0*category_condition[:weight]/100/tag_size).to_i)
+            end
+          end
+        end
+      end
+    else
+      video_ids = $redis.srandmember("category_#{category_id}_videos",20)
+    end
+    # 语言占比过滤
+    video_ids.uniq.sample(20)
+  end
+
+
+  def self.classification_list_mysql(category_id)
+    video_ids = []
+    category = Category.find_by(id:category_id)
     category_conditions = category&.category_conditions
     if category_conditions.present?
       category_conditions.each do |category_condition|
@@ -258,6 +289,19 @@ class Video < ApplicationRecord
     flow_videos = videos - user_videos
     flow_videos.sample(2)
   end
+
+
+  # 获取置顶列表
+  def self.get_force(user_id)
+    # 标签下视频记录
+    videos = $redis.smembers("videos_force")
+    # 用户访问视频记录
+    user_videos = $redis.smembers("user_#{user_id}_videos")
+    # 用户没有访问过的视频
+    flow_videos = videos - user_videos
+    flow_videos.sample(2)
+  end
+
 
   # 添加本地缓存地址
   def self.add_location_source_url(ids)

@@ -31,6 +31,10 @@ class HomeController < ActionController::Base
         info_force_ids = Info.get_force(1)
         @info_forces = Info.where(id:info_force_ids)
 
+        @video_forces.each do |_|
+          flow_medias[:videos] << {medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
+        end
+
         video_top_ids = Video.get_location(params[:user_id])
         @video_tops = Video.where(id:video_top_ids)
       end
@@ -82,6 +86,9 @@ class HomeController < ActionController::Base
     # 强推信息
     @info_forces.each do |_|
       flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
+    end
+    @video_forces.each do |_|
+      flow_medias[:videos] << {medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
     end
     # 视频
     @videos.each do |_|
