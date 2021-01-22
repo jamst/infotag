@@ -82,13 +82,13 @@ class Classification < ApplicationRecord
   # 同步爬取设置分类
   def self.up_medial_spider
     MedialSpider.info.each do |medial|
-      Info.where("medial_spider_id = ?", medial.id).each do |info|
+      Info.where("classification_id is null").where("medial_spider_id = ?", medial.id).each do |info|
         info.update(classification_id:medial.classification_id)
       end
     end
 
     MedialSpider.video.each do |medial|
-      Video.where("medial_spider_id = ?", medial.id).each do |video|
+      Video.where("classification_id is null").where("medial_spider_id = ?", medial.id).each do |video|
         video.update(classification_id:medial.classification_id)
       end
     end
