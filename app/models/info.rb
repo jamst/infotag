@@ -238,16 +238,17 @@ class Info < ApplicationRecord
       info.category_list = data.category_list
       info.classification_id = medial_spider.classification_id
 
-      if !info.tags_str.present??
-
-        if data.tags_str.present          info.tags_str = data.tags_str
+      if !info.tags_str.present?
+        if data.tags_str.present?
+          info.tags_str = data.tags_str
           # 爬虫同步过来的标签叠加指定的标签tags_str
-          info.tags_str += ",#{medial_spider.tags_str}" if medial_spider..present?
+          info.tags_str += ",#{medial_spider.tags_str}" if medial_spider.tags_str.present?
         else
           # 频道设置的默认标签
           info.tags_str = medial_spider.tags_str
         end
       end
+
       info.save
 
       if medial_spider.unneed? && @exists == 1
