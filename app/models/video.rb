@@ -21,7 +21,7 @@ class Video < ApplicationRecord
   default_scope -> {where(is_delete: 0)}
 
   after_create :image_save
-  after_save :tag_list, if: -> { self.saved_change_to_tags_str? || self.saved_change_to_classification_id?  || self.saved_change_to_category_id? }
+  after_save :change_cache_list, if: -> { self.saved_change_to_approve_status? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
@@ -36,6 +36,15 @@ class Video < ApplicationRecord
   def mobile_url
     gurl = self.url.gsub("//www","//m")
     gurl
+  end
+
+  # 审核状态下，更新缓存内容。
+  def change_cache_list
+    if approve_status == "approved"
+      tag_list
+    else
+      srem_tag_list
+    end
   end
   
   # 标签下有哪些视频
@@ -327,27 +336,35 @@ class Video < ApplicationRecord
   def self.import_db
     SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url)
-      
+      video = Video.find_by("url": "https://www.youtube.com/watch?v=#{data.url}")
+      unless video.present?
+        # 第一次入库
+        @exists = 1
+        video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url)
+      end
       # 这类数据可能会变更所以单独更新，避免重新创建
       video.play_count = data.play_count
       video.encoding_type = data.encoding_type
       video.category_list = data.category_list
       video.classification_id = medial_spider.classification_id
 
-      if medial_spider.unneed? && !video.tags_str.present?
+      if !video.tags_str.present?
         if data.tags_str.present?
-          video.approve_status = "approved"
           video.tags_str = data.tags_str
           # 爬虫同步过来的标签叠加指定的标签
           video.tags_str += ",#{medial_spider.tags_str}" if medial_spider.tags_str.present?
         else
-          video.approve_status = "approved"
           # 频道设置的默认标签
           video.tags_str = medial_spider.tags_str
         end
       end
       video.save
+
+      if medial_spider.unneed? && @exists == 1
+        # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
+        video.approve_status = "approved"
+      end
+
     end
     # 情况爬虫数据
     conn = ActiveRecord::Base.connection

@@ -18,13 +18,22 @@ class Info < ApplicationRecord
   default_scope -> {where(is_delete: 0)}
   
   after_create :image_save
-  after_save :tag_list, if: -> { self.saved_change_to_tags_str? || self.saved_change_to_classification_id?  || self.saved_change_to_category_id? }
+  after_save :change_cache_list, if: -> { self.saved_change_to_approve_status? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
 
 
   # 移动端地址
   def mobile_url
     self.url
+  end
+
+  # 审核状态下，更新缓存内容。
+  def change_cache_list
+    if approve_status == "approved"
+      tag_list
+    else
+      srem_tag_list
+    end
   end
   
 
@@ -217,26 +226,35 @@ class Info < ApplicationRecord
   def self.import_db
     SpiderOriginInfo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
+      info = Info.find_by("url": data.url)
+      unless info.present?
+        # 第一次入库
+        @exists = 1
+        info = Info.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": data.url, "title": data.title, "release_at": data.release_at, "mark": data.mark, "image_url": data.image_url)
+      end
       
       # 这类数据可能会变更所以单独更新，避免重新创建
       info.encoding_type = data.encoding_type
       info.category_list = data.category_list
       info.classification_id = medial_spider.classification_id
 
-      if medial_spider.unneed? && !info.tags_str.present?
-        if data.tags_str.present?
-          info.approve_status = "approved"
-          info.tags_str = data.tags_str
-          # 爬虫同步过来的标签叠加指定的标签
-          info.tags_str += ",#{medial_spider.tags_str}" if medial_spider.tags_str.present?
+      if !info.tags_str.present??
+
+        if data.tags_str.present          info.tags_str = data.tags_str
+          # 爬虫同步过来的标签叠加指定的标签tags_str
+          info.tags_str += ",#{medial_spider.tags_str}" if medial_spider..present?
         else
-          info.approve_status = "approved"
           # 频道设置的默认标签
           info.tags_str = medial_spider.tags_str
         end
       end
       info.save
+
+      if medial_spider.unneed? && @exists == 1
+        # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
+        info.approve_status = "approved"
+      end
+
     end
     # 清空爬虫数据
     conn = ActiveRecord::Base.connection
@@ -252,5 +270,6 @@ class Info < ApplicationRecord
     #   info.update(is_delete: Time.now.to_i)
     # end
   end
+
 
 end
