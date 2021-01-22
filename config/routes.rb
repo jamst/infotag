@@ -38,6 +38,7 @@ Rails.application.routes.draw do
         post  :update_approves
         get :be_deletes
         get :export_cache_videos
+        get :location_share
       end
     end
 

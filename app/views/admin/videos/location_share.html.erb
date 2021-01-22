@@ -1,0 +1,112 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>视频列表</h2>
+  </div>
+</div>
+
+
+<% if @q.present? %>
+  <div class="ui blue segment">
+    <%= simple_form_for @q,  url: location_share_admin_videos_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
+      <div class="ui five column grid">
+        <%= f.input "author", placeholder: '发布者' %>
+        <%= f.input "ads_index", placeholder: '广告排序' %>
+        <%= f.input "title-like", placeholder: '标题' %>
+        <%= f.input "url-like", placeholder: 'URL' %>
+        <%= f.input "tags_str-like", placeholder: '标签' %>
+        <%= f.input :category_id, as: :select, collection: Category.pluck(:name,:id), include_blank: "选择所属栏目", input_html: {class: 'ui dropdown fluid'}, label: "所属栏目" %>
+        <%= f.input :classification_id, as: :select, collection: Classification.order(:name).pluck(:name,:id), include_blank: "选择所属分类", input_html: {class: 'ui dropdown fluid'}, label: "所属分类" %>
+        <%= f.input :spider_target_id, as: :select, collection: SpiderTarget.pluck(:name,:id), include_blank: "选择信息来源", input_html: {class: 'ui dropdown fluid'}, label: "信息来源" %>
+        <%= f.input :weight, as: :select, collection: select_options_from_enum(Video, :weight), include_blank: "选择权重", input_html: {class: 'ui dropdown fluid'}, label: "权重" %>
+        <%= f.input :status, as: :select, collection: select_options_from_enum(Video, :status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'}, label: "状态" %>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "release_at-gte", placeholder: '发布开始时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "release_at-lte", placeholder: '发布结束时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <%= f.submit '搜索', class: 'ui primary button' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+
+<div class="ui blue segment">
+  <div class="ui buttons">
+    <div class="ui orange button" id="video_deletes">批量删除</div>
+  </div>
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned" style='width:50px'>
+        <div class="ui checkbox">
+          <input type="checkbox" id="id_box">
+          <label></label>
+        </div>
+      </th>
+      <th class="center aligned">广告排序</th>
+      <th class="center aligned">ID</th>
+      <th class="center aligned">标题</th>
+      <th class="center aligned">封面缩略</th>
+      <th class="center aligned">所属栏目</th>
+      <th class="center aligned">所属分类</th>
+      <th class="center aligned">时长/播放量</th>
+      <th class="center aligned">发布者</th>
+      <th class="center aligned">发布时间</th>
+      <th class="center aligned">信息来源</th>
+      <th class="center aligned">推荐权重</th>
+      <th class="center aligned">标签</th>
+      <th class="center aligned">点击次数</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'share_list', collection: @videos, as: :video %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@videos) %>
+  </span>
+  <%= paginate(@videos, :theme => 'admin')%>
+</div>
+
+
+<% content_for :scripts do%>
+  <script type="text/javascript">
+    // 全选
+    $("#id_box").click(function(){
+      if($(this).prop('checked')){
+        $(":checkbox[name='inquiry_id']").prop("checked", true);
+      }else{
+        $(":checkbox[name='inquiry_id']").prop("checked", false);
+      }
+    });
+    
+    // 批量删除
+    $("#video_deletes").click(function(){
+      var inquiry_ids = [];
+      $(":checked[name='inquiry_id']").each(function(){
+        inquiry_ids.push($(this).val());
+      });
+      if(inquiry_ids.length == 0 ){
+        alert("请选择需要处理的信息。");
+      }else if(window.confirm("确定要删除这些信息吗？")){
+        $.ajax({
+          url : '<%= be_deletes_admin_videos_path %>',
+          type : 'get',
+          data : "inquiry_ids=" + inquiry_ids.join(","),
+          dataType : "script"
+        });
+      }
+    });
+  </script>  
+<% end %>

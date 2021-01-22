@@ -1,7 +1,7 @@
 <div class="ui vertical fluid menu" id="verticalMenu">
   <ul>
     <li>
-      <% isin = action_on_list([approved_list_admin_infos_path,approved_list_admin_videos_path]) %>
+      <% isin = action_on_list([approved_list_admin_infos_path,approved_list_admin_videos_path,location_share_admin_videos_path]) %>
       <a class="item <%= isin ? "active" : "" %> ">
          <i class="unordered list icon"></i>
         <span class="main_menu">推荐管理</span>
@@ -15,6 +15,10 @@
         <%= link_to_with_permissions approved_list_admin_videos_path, class: 'item', active_class: 'actives' do %>
           <i class="left bullseye icon"></i>
           <span>视频列表</span>
+        <% end %>
+        <%= link_to_with_permissions location_share_admin_videos_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>落地页资讯</span>
         <% end %>
       </div>
     </li>

@@ -1,0 +1,66 @@
+<tr id="video_<%= video.id %>">
+  <td class="center aligned">
+    <div class="ui checkbox">
+      <input type="checkbox" name="inquiry_id" value="<%= video.id %>">
+      <label></label>
+    </div>
+  </td>
+  <td class="center aligned">
+    <%= video.ads_index%>
+  </td>
+  <td class="center aligned">
+    <span><% if @page_type.present? %> <font color="orange"><%= video.id%><% else%> <%= video.id%> <%end%></span>
+  </td>
+  <td class="center aligned">
+    <%= link_to str_chip(video.title,20), video.url , target: '_blank' %>
+  </td>
+  <td class="center aligned">
+    <a href="<%= video.local_image_url %>" target='_blank' ><%= image_tag video.local_image_url, width: '75px', height: '40px' %></a>
+  </td>
+  <td class="center aligned">
+    <%= video.category&.name %>
+  </td>
+  <td class="center aligned">
+    <%= video.classification&.name %>
+  </td>
+  <td class="center aligned">
+    <%= video.overlay_time %> / <%= video.play_count %>
+  </td>
+  <td class="center aligned">
+    <%= video.author %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(video.release_at) %>
+  </td>
+  <td class="center aligned">
+    <%= video.spider_target&.name %>
+  </td>
+  <td class="center aligned">
+    <%= video.i18n_attr_weight %>
+  </td>
+  <td class="center aligned">
+    <%= video.tags_str %>
+  </td>
+  <td class="center aligned">
+    <%= video.incr_size %>
+  </td>
+  <td class="center aligned">
+    <%= link_to edit_admin_video_path(id:video.id,page_type:"approve_list"), remote: true, class: "ui icon blue basic button" do %>
+      <i class="edit icon"></i>编辑
+    <% end %>
+
+    <% if video.status == "enabled" %>
+      <%= link_to update_status_admin_videos_path(id:video.id,status:"disabled"), remote: true, class: "ui icon orange basic button" do %>
+        <i class="plus icon orange"></i>禁用
+      <% end %>
+    <% else %>
+      <%= link_to update_status_admin_videos_path(id:video.id,status:"enabled"), remote: true, class: "ui icon blue basic button" do %>
+        <i class="plus icon green"></i>启用
+      <% end %>
+    <% end %>
+
+    <%= link_to admin_video_path(video.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
+  </td>
+</tr>

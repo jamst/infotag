@@ -15,6 +15,12 @@ class Admin::VideosController < Admin::BaseController
     @videos = Video.approved.default_where(@q.attributes(self)).order(updated_at: :desc).page(params[:page]).per(100)
   end
 
+  # 落地页内容管理
+  def location_share
+    @q = SearchParams.new(params[:search_params] || {})
+    @videos = Video.is_ads.enabled.order(:ads_index).page(params[:page]).per(100)
+  end
+
   # 审核状态
   def to_approve
     
