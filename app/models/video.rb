@@ -360,12 +360,13 @@ class Video < ApplicationRecord
           video.tags_str = medial_spider.tags_str
         end
       end
-      video.save
 
       if medial_spider.unneed? && @exists == 1
         # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
         video.approve_status = "approved"
       end
+      
+      video.save
 
     end
     # 情况爬虫数据
