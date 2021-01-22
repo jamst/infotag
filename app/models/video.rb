@@ -77,6 +77,13 @@ class Video < ApplicationRecord
     $redis.srem("category_#{category_id}_videos", self.id)
     # 移除分类缓存
     $redis.srem("classification_#{classification_id}_videos", self.id)
+    # 移除本地资源缓存
+    $redis.srem("videos_location", self.id)
+    # 移除top推荐
+    $redis.srem("videos_top", self.id)
+    # 移除强制推荐
+    $redis.srem("videos_force", self.id)
+
     cancer_top_list
     cancer_force_list
   end

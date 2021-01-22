@@ -32,7 +32,7 @@ class HomeController < ActionController::Base
         @info_forces = Info.where(id:info_force_ids)
 
         @video_forces.each do |_|
-          flow_medias[:videos] << {medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
+          flow_medias[:videos] << {medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
         end
 
         video_top_ids = Video.get_location(params[:user_id])
@@ -78,25 +78,25 @@ class HomeController < ActionController::Base
     flow_medias[:infos] = []
     # 推荐置顶
     @video_tops.each do |_|
-      flow_medias[:tops] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url ,author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:tops] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url ,author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     @info_tops.each do |_|
-      flow_medias[:tops] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
+      flow_medias[:tops] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
     end
     # 强推信息
     @info_forces.each do |_|
-      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
+      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
     end
     @video_forces.each do |_|
-      flow_medias[:videos] << {medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
+      flow_medias[:videos] << {medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
     end
     # 视频
     @videos.each do |_|
-      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 资讯
     @infos.each do |_|
-      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
+      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
     end
     
     flow_medias[:infos] = flow_medias[:infos].sample(10)
@@ -113,7 +113,7 @@ class HomeController < ActionController::Base
     flow_medias = {}
     flow_medias[:videos] = []
     Video.is_ads.enabled.order(:ads_index).each do |_|
-      flow_medias[:videos] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url , author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url , author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     render json: flow_medias  and return
   end
@@ -255,22 +255,22 @@ class HomeController < ActionController::Base
     flow_medias[:infos] = []
     # 推荐置顶
     @video_tops.each do |_|
-      flow_medias[:tops] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url ,author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:tops] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url ,author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     @info_tops.each do |_|
-      flow_medias[:tops] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
+      flow_medias[:tops] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
     end
     # 强推信息
     @info_forces.each do |_|
-      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
+      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
     end
     # 视频
     @videos.each do |_|
-      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 资讯
     @infos.each do |_|
-      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
+      flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url }
     end
     
     flow_medias[:infos] = flow_medias[:infos].sample(10)
