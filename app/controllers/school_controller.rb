@@ -15,6 +15,7 @@ class SchoolController < ActionController::Base
   def index
     page = params[:page].to_i
     @info_forces = []
+    @video_forces = []
     @video_tops = []
     @info_tops = []
 
