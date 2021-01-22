@@ -54,7 +54,7 @@ class Category < ApplicationRecord
       condition = {}
       condition[:classification_id] = category_condition.classification_id
       condition[:weight] = category_condition.weight
-      condition[:tags_str] = category_condition.tags_str.to_s
+      condition[:tags_str] = Tag.where(name:category_condition.tags_str.to_s.split(",")).pluck(:id).join(",")
       cache_conditions << condition
     end
     redis_cache_conditions[:cache] = cache_conditions

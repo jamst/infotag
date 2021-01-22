@@ -126,12 +126,8 @@ class Video < ApplicationRecord
         if category_condition[:tags_str].present?
           tag_list = category_condition[:tags_str].split(",")
           tag_size = tag_list.size
-          tag_list.each do |tag|
-            tag = Tag.find_by(name:tag)
-            if tag.present?
-              tag_id = tag.id
-              video_ids += $redis.srandmember("tags_#{tag_id}_videos",(20.0*category_condition[:weight]/100/tag_size).to_i)
-            end
+          tag_list.each do |tag_id|
+            video_ids += $redis.srandmember("tags_#{tag_id}_videos",(20.0*category_condition[:weight]/100/tag_size).to_i)
           end
         end
       end
