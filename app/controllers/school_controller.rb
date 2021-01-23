@@ -54,7 +54,7 @@ class SchoolController < ActionController::Base
       flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
     end
     @video_forces.each do |_|
-      flow_medias[:videos] << {medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.dayomall.com:54600/strategy/aclconf/2236201567_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.dayomall.com:54600/strategy/aclconf/2236201567_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 视频
     @videos.each do |_|
