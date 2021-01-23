@@ -2,7 +2,7 @@
   <div class="ui blue segment">
     <%= simple_form_for @q,  url: approved_list_admin_videos_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
       <div class="ui five column grid">
-        <%= f.input "author", placeholder: '发布者' %>
+        <%= f.input "author-like", placeholder: '发布者' %>
         <%= f.input "title-like", placeholder: '标题' %>
         <%= f.input "url-like", placeholder: 'URL' %>
         <%= f.input "tags_str-like", placeholder: '标签' %>

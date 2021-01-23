@@ -3,7 +3,7 @@
     <%= simple_form_for @q,  url: admin_videos_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
       <%= f.input 'medial_spider_id', as: :hidden %>
       <div class="ui five column grid">
-        <%= f.input "author", placeholder: '发布者' %>
+        <%= f.input "author-like", placeholder: '发布者' %>
         <%= f.input "title-like", placeholder: '标题' %>
         <%= f.input "url-like", placeholder: 'URL' %>
         <%= f.input :category_id, as: :select, collection: Category.pluck(:name,:id), include_blank: "选择所属栏目", input_html: {class: 'ui dropdown fluid'}, label: "所属栏目" %>

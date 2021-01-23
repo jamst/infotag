@@ -9,7 +9,7 @@
   <div class="ui blue segment">
     <%= simple_form_for @q,  url: location_share_admin_videos_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
       <div class="ui five column grid">
-        <%= f.input "author", placeholder: '发布者' %>
+        <%= f.input "author-like", placeholder: '发布者' %>
         <%= f.input "ads_index", placeholder: '广告排序' %>
         <%= f.input "title-like", placeholder: '标题' %>
         <%= f.input "url-like", placeholder: 'URL' %>
