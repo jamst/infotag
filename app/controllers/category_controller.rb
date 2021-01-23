@@ -78,8 +78,8 @@ class CategoryController < ActionController::Base
     # flow_medias[:videos] << {is_location_source: 是否有本地资源, location_source_url: 本地资源地址 , author:作者, medial_type: "video", medial_id:id, title:标题, url:线上播放地址, local_image_url: 首屏图片地址 ,tag_ids: 标签类型, web_target: 网址来源, web_target_logo: 来源网址logo图片地址 ,overlay_time: 播放时长, play_count: 播放量}
     flow_medias = {}
     flow_medias[:videos] = []
-    Video.where(category_id:7).enabled.is_ads.order(:ads_index).each do |_|
-      flow_medias[:videos] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url , author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tag_ids.join(","), web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,overlay_time: _.overlay_time, play_count:_.play_count }
+    Video.enabled.is_ads.order(:ads_index).each do |_|
+      flow_medias[:videos] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url , author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.dayomall.com:54600/strategy/aclconf/2236201567_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
     end
     render json: flow_medias  and return
   end

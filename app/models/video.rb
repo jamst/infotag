@@ -25,6 +25,8 @@ class Video < ApplicationRecord
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
+  LOCATION_SOURCE_DOMAIN = "https://sz6.je2ci9.com" #"https://sz6.dayomall.com:51100"
+
   include FileHandle
 
   EXPORT_COLUMN = {
@@ -320,7 +322,7 @@ class Video < ApplicationRecord
   # 添加本地缓存地址
   def self.add_location_source_url(ids)
     Video.where(id:ids).each do |video|
-      video.update(location_source_url:"https://sz6.dayomall.com:51100/videos/#{video.id}.mp4")
+      video.update(location_source_url:"#{Video::LOCATION_SOURCE_DOMAIN}/videos/#{video.id}.mp4")
     end
   end
 
