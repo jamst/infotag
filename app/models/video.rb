@@ -20,7 +20,7 @@ class Video < ApplicationRecord
 
   default_scope -> {where(is_delete: 0)}
 
-  after_create :image_save
+  after_save :image_save, if: -> { self.saved_change_to_image_url? }
   after_save :change_cache_list, if: -> { self.saved_change_to_approve_status? }
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
@@ -202,9 +202,10 @@ class Video < ApplicationRecord
     # 下载图片
     file = File.open(image_path, 'wb'){|f| f.write(open(image_url) {|f| f.read})}
     # 压缩图片
-    compress_path =  ImageService.compress(image_path)
+    #compress_path =  ImageService.compress(image_path)
     # 上传到文件服务器
-    file = File.open(compress_path)
+    #file = File.open(compress_path)
+    file = File.open(image_path)
     result = FileAttachment.add_file_to_mongo(file,file_name)
     self.update(local_image_url:result.get_file_path)
     result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)
@@ -344,13 +345,14 @@ class Video < ApplicationRecord
       unless video.present?
         # 第一次入库
         @exists = 1
-        video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author, "image_url": data.image_url)
+        video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author)
       end
       # 这类数据可能会变更所以单独更新，避免重新创建
       video.play_count = data.play_count
       video.encoding_type = data.encoding_type
       video.category_list = data.category_list
       video.classification_id = medial_spider.classification_id
+      video.image_url = data.image_url
 
       if !video.tags_str.present?
         if data.tags_str.present?
@@ -378,7 +380,7 @@ class Video < ApplicationRecord
     # 推荐最新资讯
     Video.add_today_list
     # 删除3个月前的数据推荐
-    # Video.where("created_at < ?",(Time.now-3.month).at_beginning_of_day).each do |video|
+    # Video.where("created_at < ?",(Time.now-90.day).at_beginning_of_day).where("location_source_url is null and is_location_source = 0 ").each do |video|
     #   video.srem_tag_list
     #   video.update(is_delete: Time.now.to_i)
     # end
