@@ -210,7 +210,7 @@ class Video < ApplicationRecord
     self.update(local_image_url:result.get_file_path)
     result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)
     FileUtils.rm_rf image_path if image_path
-    FileUtils.rm_rf compress_path if compress_path
+    #FileUtils.rm_rf compress_path if compress_path
   end
 
 
