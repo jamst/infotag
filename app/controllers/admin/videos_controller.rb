@@ -4,7 +4,7 @@ class Admin::VideosController < Admin::BaseController
   skip_before_action :verify_authenticity_token
 
   def index
-    @q = SearchParams.new(params[:search_params] || {approve_status: :wapprove})
+    @q = SearchParams.new(params[:search_params] || {})
     
     @videos = Video.default_where(@q.attributes(self)).order(id: :desc).page(params[:page]).per(100)
   end
