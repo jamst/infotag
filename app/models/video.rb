@@ -349,7 +349,8 @@ class Video < ApplicationRecord
 
   # 导入数据
   def self.import_db
-    SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).each do |data|
+    SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).ids.each do |data|
+      data = SpiderOriginVideo.find_by(id:data)
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
       video = Video.find_by("url": "https://www.youtube.com/watch?v=#{data.url}")
       unless video.present?
