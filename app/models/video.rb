@@ -350,6 +350,7 @@ class Video < ApplicationRecord
   # 导入数据
   def self.import_db
     SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).ids.each do |data|
+      # 因为香港一次查太多视频内容内存会导致mysqll链接失败，所以单个id再次查询避免链接超时。
       data = SpiderOriginVideo.find_by(id:data)
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
       video = Video.find_by("url": "https://www.youtube.com/watch?v=#{data.url}")
