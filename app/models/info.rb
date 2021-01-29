@@ -254,6 +254,8 @@ class Info < ApplicationRecord
         info.approve_status = "approved"
       end
 
+      medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
+
       info.save
 
     end

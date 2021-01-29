@@ -382,6 +382,8 @@ class Video < ApplicationRecord
         video.approve_status = "approved"
       end
       
+      medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
+      
       video.save
 
     end
