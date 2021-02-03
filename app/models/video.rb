@@ -353,39 +353,42 @@ class Video < ApplicationRecord
       # 因为香港一次查太多视频内容内存会导致mysqll链接失败，所以单个id再次查询避免链接超时。
       data = SpiderOriginVideo.find_by(id:data)
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      video = Video.find_by("url": "https://www.youtube.com/watch?v=#{data.url}")
-      unless video.present?
-        # 第一次入库
-        @exists = 1
-        video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author)
-      end
-      # 这类数据可能会变更所以单独更新，避免重新创建
-      video.play_count = data.play_count
-      video.encoding_type = data.encoding_type
-      video.category_list = data.category_list
-      video.classification_id = medial_spider.classification_id
-      video.image_url = data.image_url
-
-      if !video.tags_str.present?
-        if data.tags_str.present?
-          video.tags_str = data.tags_str
-          # 爬虫同步过来的标签叠加指定的标签
-          video.tags_str += ",#{medial_spider.tags_str}" if medial_spider.tags_str.present?
-        else
-          # 频道设置的默认标签
-          video.tags_str = medial_spider.tags_str
+      if medial_spider.present?
+        video = Video.find_by("url": "https://www.youtube.com/watch?v=#{data.url}")
+        unless video.present?
+          # 第一次入库
+          @exists = 1
+          video = Video.find_or_create_by(medial_spider_id:data.spider_medial_id,spider_target_id:medial_spider.spider_target_id ,category_id:medial_spider.category_id,"url": "https://www.youtube.com/watch?v=#{data.url}", "title": data.title, "release_at": data.release_at, "overlay_time": data.overlay_time, "author": data.author)
         end
-      end
+        # 这类数据可能会变更所以单独更新，避免重新创建
+        video.play_count = data.play_count
+        video.encoding_type = data.encoding_type
+        video.category_list = data.category_list
+        video.classification_id = medial_spider.classification_id
+        video.image_url = data.image_url
 
-      if medial_spider.unneed? && @exists == 1
-        # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
-        video.approve_status = "approved"
-      end
-      
-      medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
-      
-      video.save
+        if !video.tags_str.present?
+          if data.tags_str.present?
+            video.tags_str = data.tags_str
+            # 爬虫同步过来的标签叠加指定的标签
+            video.tags_str += ",#{medial_spider.tags_str}" if medial_spider.tags_str.present?
+          else
+            # 频道设置的默认标签
+            video.tags_str = medial_spider.tags_str
+          end
+        end
 
+        if medial_spider.unneed? && @exists == 1
+          # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
+          video.approve_status = "approved"
+        end
+        
+        medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
+        
+        video.save
+      else
+        data.delete
+      end  
     end
     # 情况爬虫数据
     conn = ActiveRecord::Base.connection

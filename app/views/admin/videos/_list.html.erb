@@ -12,7 +12,7 @@
     <%= link_to str_chip(video.title,20), video.url , target: '_blank' %>
   </td>
   <td class="center aligned">
-    <a href="<%= video.local_image_url %>" target='_blank' ><%= image_tag video.local_image_url, width: '75px', height: '40px' %></a>
+    <a href="<%= video.local_image_url %>" target='_blank' ><% if video.local_image_url.present? %><%= image_tag video.local_image_url, width: '75px', height: '40px' %><% end %></a>
   </td>
   <td class="center aligned">
     <%= video.category&.name %>

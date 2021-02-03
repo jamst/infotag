@@ -122,6 +122,24 @@ class Admin::VideosController < Admin::BaseController
     @video.update(status:params[:status])
   end
 
+  # 视频爬取任务触发
+  def app_version_list
+    data = {}
+    report_data = Video.location_source.where("location_source_url is null or location_source_url = '' ").pluck(:id,:url)
+
+    report_data.each do |video|
+      data["#{video.first}"] = video.last
+    end
+
+    begin
+      url = "http://127.0.0.1:5000/video_download"
+      resp = HTTParty.post(url, body:{data: data} , 'Content-Type' => 'application/json;charset=UTF-8')
+      @result = "success"
+    rescue
+      @result = "false"
+    end
+  end
+
 
   private
 

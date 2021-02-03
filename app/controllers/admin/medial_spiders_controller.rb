@@ -9,7 +9,7 @@ class Admin::MedialSpidersController < Admin::BaseController
   end
 
   def new
-    @medial_spider =  MedialSpider.new
+    @medial_spider =  MedialSpider.new(release_at:Time.now.at_beginning_of_year)
     render :layout => false
   end
 

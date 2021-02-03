@@ -8,6 +8,7 @@
 <div class="ui blue segment">
   <%= link_to "新建", new_admin_video_path , remote: true, class: 'ui primary button' %>
   <%= link_to "发布今日推荐", uptoday_admin_videos_path , remote: true, class: 'ui green button', data: {confirm: "更新今日推荐?"} %>
+  <%= link_to "执行待爬取缓存任务", app_version_list_admin_videos_path , remote: true, class: 'ui yellow button', data: {confirm: "执行待爬取缓存视频任务?"} %>
   <div class="ui buttons">
     <div class="ui blue button" id="approves">批量审核</div>
   </div>

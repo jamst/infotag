@@ -39,6 +39,7 @@ Rails.application.routes.draw do
         get :be_deletes
         get :export_cache_videos
         get :location_share
+        get :app_version_list
       end
     end
 
@@ -111,6 +112,13 @@ Rails.application.routes.draw do
     collection do
       get :category_list
       get :location_source
+    end
+  end
+
+
+  resources :video do
+    collection do
+      get :cache_videos
     end
   end
 
