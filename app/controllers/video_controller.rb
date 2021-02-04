@@ -12,13 +12,13 @@ class VideoController < ActionController::Base
   end
 
   # 用户爬取缓存视频后更新地址回调
-  def cache_videos(video_keys)
+  def up_cache_videos
+    # /videos/up_cache_videos
     # 放到异步任务去处理，直接返回结果给请求端
-    video_keys.each do |video_key|
-      videos = Video.where("url like '%?%' ",video_key)
-      videos.each do |video|
-        video.update(location_source_url:"#{Video::LOCATION_SOURCE_DOMAIN}/videos/#{video_key}.mp4")
-      end
+    data = params[:data]
+    data.keys.each do |video_key|
+      video = Video.find_by(id:video_key)
+      video.update(location_source_url:"#{Video::LOCATION_SOURCE_DOMAIN}/videos/#{data[video_key]}.mp4")
     end
   end
 

@@ -118,7 +118,7 @@ Rails.application.routes.draw do
 
   resources :video do
     collection do
-      get :cache_videos
+      post :up_cache_videos
     end
   end
 
