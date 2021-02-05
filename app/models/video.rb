@@ -200,27 +200,33 @@ class Video < ApplicationRecord
     begin
       image_url_read = open(image_url) {|f| f.read}
     rescue Exception => e
-      image_url = image_url.gsub("hq720.jpg","0.jpg")
-      image_url_read = open(image_url) {|f| f.read}
+      begin
+        image_url = image_url.gsub("hq720.jpg","0.jpg")
+        image_url_read = open(image_url) {|f| f.read}
+      rescue Exception => e
+        image_url_read = nil
+      end
     end
+    
+    if image_url_read.present?
+      file_name = image_url.split("?").first.to_s.split("/").last
+      file_name = "#{get_random}_#{file_name}"
+      image_path = "#{Rails.root}/public/medial_images/videos/#{self.id}_#{file_name}"
+      # 下载图片
 
-    file_name = image_url.split("?").first.to_s.split("/").last
-    file_name = "#{get_random}_#{file_name}"
-    image_path = "#{Rails.root}/public/medial_images/videos/#{self.id}_#{file_name}"
-    # 下载图片
+      file = File.open(image_path, 'wb'){|f| f.write(image_url_read)}
 
-    file = File.open(image_path, 'wb'){|f| f.write(image_url_read)}
-
-    # 压缩图片
-    #compress_path =  ImageService.compress(image_path)
-    # 上传到文件服务器
-    #file = File.open(compress_path)
-    file = File.open(image_path)
-    result = FileAttachment.add_file_to_mongo(file,file_name)
-    self.update(local_image_url:result.get_file_path,image_url:image_url)
-    result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)
-    FileUtils.rm_rf image_path if image_path
-    #FileUtils.rm_rf compress_path if compress_path
+      # 压缩图片
+      #compress_path =  ImageService.compress(image_path)
+      # 上传到文件服务器
+      #file = File.open(compress_path)
+      file = File.open(image_path)
+      result = FileAttachment.add_file_to_mongo(file,file_name)
+      self.update(local_image_url:result.get_file_path,image_url:image_url)
+      result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)
+      FileUtils.rm_rf image_path if image_path
+      #FileUtils.rm_rf compress_path if compress_path
+    end
   end
 
 
