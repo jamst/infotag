@@ -124,15 +124,15 @@ class Admin::VideosController < Admin::BaseController
 
   # 视频爬取任务触发
   def app_version_list
-    data = {}
+    data = []
     report_data = Video.location_source.where("location_source_url is null or location_source_url = '' ").pluck(:id,:url)
 
     report_data.each do |video|
-      data["#{video.first}"] = video.last
+      data << {"#{video.first}":video.last}
     end
 
     begin
-      url = "http://47.75.250.206:5000/video_download"
+      url = "http://47.75.250.206:50050/video_download"
       resp = HTTParty.post(url, body:{data: data} , 'Content-Type' => 'application/json;charset=UTF-8')
       @result = "success"
     rescue
