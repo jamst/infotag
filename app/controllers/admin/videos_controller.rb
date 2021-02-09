@@ -133,7 +133,7 @@ class Admin::VideosController < Admin::BaseController
 
     begin
       url = "http://47.75.250.206:50050/video_download"
-      resp = HTTParty.post(url, body:{data: data} , 'Content-Type' => 'application/json;charset=UTF-8')
+      resp = HTTParty.post(url, body:{data: data}.to_json , 'Content-Type' => 'application/json')
       @result = "success"
     rescue
       @result = "false"
