@@ -249,14 +249,14 @@ class Info < ApplicationRecord
         end
       end
 
-      if medial_spider.unneed? && @exists == 1
-        # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
-        info.approve_status = "approved"
-      end
-
       medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
 
       info.save
+
+      if medial_spider.unneed? && @exists == 1
+        # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
+        info.update(approve_status:"approved")
+      end
 
     end
     # 清空爬虫数据

@@ -25,7 +25,7 @@ class Video < ApplicationRecord
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
-  LOCATION_SOURCE_DOMAIN = "https://sz6.je2ci9.com" #"https://sz6.dayomall.com:51100"
+  LOCATION_SOURCE_DOMAIN = "https://ifstatic.iz2ztc.com" #"https://sz6.dayomall.com:51100" # https://sz6.je2ci9.com
 
   include FileHandle
 
@@ -383,15 +383,16 @@ class Video < ApplicationRecord
             video.tags_str = medial_spider.tags_str
           end
         end
-
-        if medial_spider.unneed? && @exists == 1
-          # 第一次入库，且不需要审核:回调：change_cache_list加入到相关的缓存列表中
-          video.approve_status = "approved"
-        end
         
         medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
         
         video.save
+
+        if medial_spider.unneed? && @exists == 1
+          # 第一次入库，且不需要审核: 回调：change_cache_list加入到相关的缓存列表中
+          video.update(approve_status:"approved")
+        end
+
       else
         data.delete
       end  
