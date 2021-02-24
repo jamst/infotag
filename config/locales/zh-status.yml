@@ -56,6 +56,9 @@ zh:
         need_approve:
           need: "手动审核"  
           unneed: "自动审核"  
+        spider_type:
+          channel_spider: "频道爬取"
+          url_spider: "目标爬取"
       medial_cache: 
         status:
           unapproved: "待审核"

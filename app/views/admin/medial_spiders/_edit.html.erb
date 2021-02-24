@@ -30,6 +30,7 @@
   </div>
 
   <div class="two fields">
+    <%= f.input :spider_type, label: '爬取类别', as: :select, collection: select_options_from_enum(MedialSpider, :spider_type), include_blank: "选择爬取类别", input_html: {class: 'ui dropdown fluid'} %>
     <%= f.input :tags_str, label: "标签" %>
   </div>
 

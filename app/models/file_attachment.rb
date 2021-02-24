@@ -43,7 +43,8 @@ class FileAttachment < ApplicationRecord
   def get_file_path
     mongo_config = CONFIG.mongo.to_hash
     # "#{mongo_config[:download_host]}/#{mongo_config[:database]}/#{self.path}"
-    "https://sz6.je2ci9.com/infoflow_pics/#{mongo_config[:database]}/#{self.path}"
+    # "https://sz6.je2ci9.com/infoflow_pics/#{mongo_config[:database]}/#{self.path}"
+    "https://sz6.dayomall.com:54600/#{mongo_config[:database]}/#{self.path}"
   end
 
   # 直接mongodb获取文件流

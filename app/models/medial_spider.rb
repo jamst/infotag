@@ -3,6 +3,7 @@ class MedialSpider < ApplicationRecord
   enum status: { disabled: -1, enabled: 0 }
   enum need_approve: { unneed: 0, need: 1 }
   enum medial_type: { info: 0, video: 1 }
+  enum spider_type: { channel_spider: 0, url_spider: 1 }
   default_scope -> {where(is_delete: 0)}
   belongs_to :spider_target
   belongs_to :category

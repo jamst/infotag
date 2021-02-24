@@ -44,7 +44,7 @@ class SchoolController < ActionController::Base
     flow_medias[:infos] = []
     # 推荐置顶
     @video_tops.each do |_|
-      flow_medias[:tops] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url ,author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.je2ci9.com/infoflow_pics/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:tops] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url ,author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.dayomall.com:54600/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
     end
     @info_tops.each do |_|
       flow_medias[:tops] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
@@ -54,11 +54,11 @@ class SchoolController < ActionController::Base
       flow_medias[:infos] << {medial_type: "info", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:_.spider_target&.name, web_target_logo: _.spider_target&.logo_url,release_at: _.release_at }
     end
     @video_forces.each do |_|
-      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.je2ci9.com/infoflow_pics/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.dayomall.com:54600/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 视频
     @videos.each do |_|
-      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.je2ci9.com/infoflow_pics/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.dayomall.com:54600/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
     end
     # 资讯
     @infos.each do |_|
@@ -149,7 +149,7 @@ class SchoolController < ActionController::Base
     flow_medias = {}
     flow_medias[:videos] = []
     Video.enabled.is_ads.order(:ads_index).each do |_|
-      flow_medias[:videos] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url , author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.je2ci9.com/infoflow_pics/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
+      flow_medias[:videos] << {is_location_source: _.is_location_source, location_source_url: _.location_source_url , author:_.author,medial_type: "video", medial_id:_.id, title:_.title,url:_.url,mobile_url:_.mobile_url,local_image_url:_.local_image_url,tag_ids:_.tags_str, web_target:"Youtube", web_target_logo: "https://sz6.dayomall.com:54600/strategy/aclconf/0127741811_Youtube@2x.png",overlay_time: _.overlay_time, play_count:_.play_count }
     end
     render json: flow_medias  and return
   end
