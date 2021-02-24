@@ -48,6 +48,9 @@ gem "mini_magick"
 gem 'sidekiq', '~> 4.2'
 gem 'sidekiq-cron', '~> 0.4.5', require: false
 
+# aliyun_oss
+gem 'aliyun-sdk'
+
 # 爬虫
 # gem 'mechanize'
 # gem 'spidr'
