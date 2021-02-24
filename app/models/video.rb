@@ -25,7 +25,7 @@ class Video < ApplicationRecord
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
-  LOCATION_SOURCE_DOMAIN = "https://ifstatic.iz2ztc.com" #"https://sz6.dayomall.com:51100" # https://sz6.je2ci9.com
+  LOCATION_SOURCE_DOMAIN =  "https://ifstatic.oss-cn-shenzhen.aliyuncs.com" # "https://ifstatic.iz2ztc.com" #"https://sz6.dayomall.com:51100" # https://sz6.je2ci9.com
 
   include FileHandle
 
@@ -210,7 +210,7 @@ class Video < ApplicationRecord
     
     if image_url_read.present?
       file_name = image_url.split("?").first.to_s.split("/").last
-      file_name = "#{get_random}_#{file_name}"
+      file_name = "#{self.id}_#{get_random}_#{file_name}"
       image_path = "#{Rails.root}/public/medial_images/videos/#{self.id}_#{file_name}"
       # 下载图片
 
@@ -228,6 +228,51 @@ class Video < ApplicationRecord
       #FileUtils.rm_rf compress_path if compress_path
     end
   end
+
+
+
+  def image_save_oss
+
+    image_url = self.image_url
+    
+    begin
+      image_url_read = open(image_url) {|f| f.read}
+    rescue Exception => e
+      begin
+        image_url = image_url.gsub("hq720.jpg","0.jpg")
+        image_url_read = open(image_url) {|f| f.read}
+      rescue Exception => e
+        image_url_read = nil
+      end
+    end
+    
+    if image_url_read.present?
+      file_name = image_url.split("?").first.to_s.split("/").last
+      file_name = "#{self.id}_#{get_random}_#{file_name}"
+      image_path = "#{Rails.root}/public/medial_images/videos/#{self.id}_#{file_name}"
+      # 下载图片
+
+      file = File.open(image_path, 'wb'){|f| f.write(image_url_read)}
+
+      # 压缩图片
+      #compress_path =  ImageService.compress(image_path)
+      # 上传到文件服务器
+      #file = File.open(compress_path)
+      file = File.open(image_path)
+
+      # pics/
+      file_name = "pics/#{file_name}"
+      AliyunOssService.put_object(file,file_name)
+      result = AliyunOssService.get_download_url(file_name)
+
+      #result = FileAttachment.add_file_to_mongo(file,file_name)
+      self.update(local_image_url:result,image_url:image_url)
+      result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)
+      FileUtils.rm_rf image_path if image_path
+      #FileUtils.rm_rf compress_path if compress_path
+    end
+  end
+
 
 
   def get_random(len=10,chars=[])
