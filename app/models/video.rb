@@ -258,11 +258,11 @@ class Video < ApplicationRecord
       #compress_path =  ImageService.compress(image_path)
       # 上传到文件服务器
       #file = File.open(compress_path)
-      file = File.open(image_path)
+      # file = File.open(image_path)
 
       # pics/
       file_name = "pics/#{file_name}"
-      AliyunOssService.put_object(file,file_name)
+      AliyunOssService.put_object(image_path,file_name)
       result = AliyunOssService.get_download_url(file_name)
 
       #result = FileAttachment.add_file_to_mongo(file,file_name)
