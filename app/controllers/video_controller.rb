@@ -14,6 +14,7 @@ class VideoController < ActionController::Base
   # 用户爬取缓存视频后更新地址回调
   def up_cache_videos
     # /videos/up_cache_videos
+    # data:{"id":"view_key"}
     # 放到异步任务去处理，直接返回结果给请求端
     data = params[:data]
     data.keys.each do |video_key|
