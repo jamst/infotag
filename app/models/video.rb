@@ -25,7 +25,7 @@ class Video < ApplicationRecord
   after_update :top_update, if: -> { self.saved_change_to_weight? }
   after_update :location_update, if: -> { self.saved_change_to_location_source_url? }
 
-  LOCATION_SOURCE_DOMAIN =  "https://ifstatic.oss-cn-shenzhen.aliyuncs.com" # "https://ifstatic.iz2ztc.com" #"https://sz6.dayomall.com:51100" # https://sz6.je2ci9.com
+  LOCATION_SOURCE_DOMAIN =  CONFIG.ao_endpoint || "https://ifstatic.oss-cn-shenzhen.aliyuncs.com"  # "https://ifstatic.iz2ztc.com" #"https://sz6.dayomall.com:51100" # https://sz6.je2ci9.com
 
   include FileHandle
 
@@ -248,18 +248,17 @@ class Video < ApplicationRecord
     
     if image_url_read.present?
       file_name = image_url.split("?").first.to_s.split("/").last
-      file_name = "#{self.id}_#{get_random}_#{file_name}"
-      image_path = "#{Rails.root}/public/medial_images/videos/#{self.id}_#{file_name}"
+      view_id = self.url&.split("v=").last
+
+      if view_id.present?
+        file_name = "#{view_id}_#{file_name}" 
+      else
+        file_name = "#{self.id}_#{file_name}"
+      end
+
+      image_path = "#{Rails.root}/public/medial_images/videos/#{file_name}"
       # 下载图片
-
       file = File.open(image_path, 'wb'){|f| f.write(image_url_read)}
-
-      # 压缩图片
-      #compress_path =  ImageService.compress(image_path)
-      # 上传到文件服务器
-      #file = File.open(compress_path)
-      # file = File.open(image_path)
-
       # pics/
       file_name = "pics/#{file_name}"
       AliyunOssService.put_object(image_path,file_name)

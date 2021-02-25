@@ -165,8 +165,9 @@ class Info < ApplicationRecord
   def image_save_oss
     image_url = self.image_url
     file_name = image_url.split("?").first.to_s.split("/").last
-    file_name = "#{self.id}_#{SecureRandom.uuid.to_s.strip}_#{file_name}"
-    image_path = "#{Rails.root}/public/medial_images/infos/#{self.id}_#{file_name}"
+    # 确保file_name是唯一的
+    file_name = "#{self.id}_#{file_name}"
+    image_path = "#{Rails.root}/public/medial_images/infos/#{file_name}"
     # 下载图片
     file = File.open(image_path, 'wb'){|f| f.write(open(image_url) {|f| f.read})}
     # 压缩图片
