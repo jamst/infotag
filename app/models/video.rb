@@ -265,11 +265,8 @@ class Video < ApplicationRecord
       AliyunOssService.put_object(image_path,file_name)
       result = AliyunOssService.get_download_url(file_name)
 
-      #result = FileAttachment.add_file_to_mongo(file,file_name)
       self.update(local_image_url:result,image_url:image_url)
-      result.update(attachment_entity_type: "Video", attachment_entity_id: self.id)
       FileUtils.rm_rf image_path if image_path
-      #FileUtils.rm_rf compress_path if compress_path
     end
   end
 

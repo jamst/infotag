@@ -172,14 +172,11 @@ class Info < ApplicationRecord
     # 压缩图片
     compress_path =  ImageService.compress(image_path)
     # 上传到文件服务器
-    # file = File.open(compress_path)
     # pics/
     file_name = "pics/#{file_name}"
     AliyunOssService.put_object(image_path,file_name)
     result = AliyunOssService.get_download_url(file_name)
-    #result = FileAttachment.add_file_to_mongo(file,file_name)
     self.update(local_image_url:result)
-    result.update(attachment_entity_type: "Info", attachment_entity_id: self.id)
     FileUtils.rm_rf image_path if image_path
     FileUtils.rm_rf compress_path if compress_path
   end
