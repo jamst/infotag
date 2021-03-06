@@ -14,4 +14,12 @@ class SpiderTarget < ApplicationRecord
     SpiderTarget.create(name:"Youtube")
   end
 
+  # 更新图片地址
+  def up_logo_url
+    SpiderTarget.all.each do |target|
+      gsub_url = target.logo_url.gsub("sz6.je2ci9.com/infoflow_pics","sz6.dayomall.com:54600")
+      target.update(logo_url:gsub_url)
+    end
+  end
+  
 end

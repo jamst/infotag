@@ -9,6 +9,9 @@
     <%= classification.sort_live %>
   </td>
   <td class="center aligned">
+    <%= Video.where(classification_id:classification.id).size %>
+  </td>
+  <td class="center aligned">
     <%= day_time(classification.created_at) %>
   </td>
   </td>

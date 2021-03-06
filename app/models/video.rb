@@ -394,6 +394,20 @@ class Video < ApplicationRecord
     end
   end
 
+
+  # 定时监测视频是否被下架,封面不在着视频不在。
+  def self.checkout_video
+    Video.where("created_at >= '?' ",Time.now - 10.days).each do |video|
+      begin
+        image_url_read = open(video.image_url) {|f| f.read}
+      rescue Exception => e
+        video.srem_tag_list
+        video.update(is_delete: Time.now.to_i)
+      end
+    end
+  end
+  
+
   # 导入数据
   def self.import_db
     SpiderOriginVideo.where("created_at >= ? ",Time.now.at_beginning_of_day).ids.each do |data|
@@ -425,7 +439,14 @@ class Video < ApplicationRecord
           end
         end
         
-        medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
+        if medial_spider.spider_type == 1
+          # 7天后自动关闭单条目标爬取，为了更新浏览数量
+          if (Time.now - 7.days).at_beginning_of_day > medial_spider.created_at.at_beginning_of_day
+            medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day,status: -1)
+          end
+        else
+          medial_spider.update(release_at:Time.now.yesterday.at_beginning_of_day)
+        end
         
         video.save
 
