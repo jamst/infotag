@@ -83,6 +83,19 @@ Rails.application.routes.draw do
       end
     end
 
+
+    resources :marks do
+      collection do
+        get  :update_status
+      end
+    end
+
+    resources :recommends do
+      collection do
+        get  :update_status
+      end
+    end
+
     resources :click_logs, only: [:index] do
       collection do
         get :uptoday

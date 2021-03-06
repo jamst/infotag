@@ -1,0 +1,24 @@
+<% if @q.present? %>
+  <div class="ui blue segment">
+    <%= simple_form_for @q,  url: admin_marks_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
+      <div class="ui five column grid">
+        <%= f.input "title", placeholder: '标题' %>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "created_at-gte", placeholder: '发布开始时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "created_at-lte", placeholder: '发布结束时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <%= f.submit '搜索', class: 'ui primary button' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

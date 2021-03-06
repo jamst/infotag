@@ -1,0 +1,12 @@
+<% if @mark.errors.blank? %>
+  $("tbody").prepend('<%= j render('list', mark: @mark) %>');
+  $("#mark_modal").modal('hide');
+<% else %>
+  $(".red.pointing").remove();
+  $(".field").removeClass('error');
+  <% @mark.errors.messages.each do |key, value| %>
+	//parent()方法：返回被选中元素的父元素
+	$("#mark_<%= key %>").parent().addClass('error');
+	$("#mark_<%= key %>").parent().append("<div class='ui basic red pointing prompt label transition visible'><%= value[0] %></div>");
+  <% end %>
+<% end %>

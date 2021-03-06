@@ -1,0 +1,22 @@
+<%= simple_form_for @recommend, url: admin_recommends_path, method: :post, remote: true do |f| %>
+  <div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
+
+  <div class="two fields">
+    <%= f.input :title, label: "标题" %>
+    <%= f.input :url, label: "URL" %>
+  </div>
+
+  <div class="two fields">
+    <%= f.input :recommend_id, label: '分类', as: :select, collection: select_options_from_enum(Recommend, :recommend_id), include_blank: "选择分类", input_html: {class: 'ui dropdown fluid'} %>
+    <%= f.input :mark_id, label: "标注", as: :select, collection: Mark.pluck(:title,:id), include_blank: "选择标注", input_html: {class: 'ui dropdown fluid'}, label: "选择标注" %>
+  </div>
+
+  <div class="field">
+    <div class="actions ">
+      <div class="ui button primary" id="commition">提交</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+
+<% end %>
+

@@ -1,0 +1,27 @@
+<% if @q.present? %>
+  <div class="ui blue segment">
+    <%= simple_form_for @q,  url: admin_recommends_path, method: :get, wrapper: 'semantic_search_form' do |f| %>
+      <div class="ui five column grid">
+        <%= f.input "title", placeholder: '标题' %>
+        <%= f.input :recommend_type, as: :select, collection: select_options_from_enum(Recommend, :recommend_type), include_blank: "选择分类", input_html: {class: 'ui dropdown fluid'}, label: "分类" %>
+        <%= f.input :mark_id, as: :select, collection: Mark.pluck(:name,:id), include_blank: "选择标注", input_html: {class: 'ui dropdown fluid'}, label: "标注" %>
+        <%= f.input :employee_id, as: :select, collection: Employee.pluck(:name,:id), include_blank: "选择发布者", input_html: {class: 'ui dropdown fluid'}, label: "发布者" %>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "created_at-gte", placeholder: '发布开始时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui left icon input fluid">
+            <i class="calendar icon"></i>
+            <%= f.input_field "created_at-lte", placeholder: '发布结束时间', onfocus: "(this.type='date')", onblur: "(this.type='text')" %>
+          </div>
+        </div>
+        <div class="column">
+          <%= f.submit '搜索', class: 'ui primary button' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

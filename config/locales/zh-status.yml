@@ -67,3 +67,14 @@ zh:
         status:
           disabled: "已禁用"     
           enabled: "已启用"
+      recomment:
+        recomment_type:
+          top: "外网头条"     
+          synthesize: "综合推荐"    
+        status:
+          disabled: "已禁用"     
+          enabled: "已启用"  
+      mark:   
+        status:
+          disabled: "已禁用"     
+          enabled: "已启用"        

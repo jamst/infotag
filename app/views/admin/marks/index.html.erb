@@ -1,0 +1,29 @@
+<div class="ui grid">
+  <div class="left floated fourteen wide column">
+    <h2><a href="javascript:history.back()"><i class="blue reply icon"></i></a>标注管理</h2>
+  </div>
+</div>
+<%= render 'search_form'  %>
+
+
+<div class="ui blue segment">
+  <%= link_to "新建", new_admin_recommend_path , remote: true, class: 'ui primary button' %>
+  <table class="ui selectable striped celled table">
+    <thead>
+    <tr >
+      <th class="center aligned">ID</th>
+      <th class="center aligned">标题</th>
+      <th class="center aligned">图片</th>
+      <th class="center aligned">创建时间</th>
+      <th class="center aligned">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= render partial: 'list', collection: @recommends, as: :recommend %>
+    </tbody>
+  </table>
+  <span class="blue">
+    <%= page_entries_info(@recommends) %>
+  </span>
+  <%= paginate(@recommends, :theme => 'admin')%>
+</div>

@@ -49,6 +49,24 @@
       </div>
     </li>
     <li>
+      <% isin = action_on_list([admin_recommends_path,admin_marks_path]) %>
+      <a class="item <%= isin ? "active" : "" %> ">
+        <i class="cloud icon"></i>
+        <span class="main_menu">索引管理</span>
+        <i class="right dropdown icon"></i>
+      </a>
+      <div class="menu content child active" style="<%= isin ? "display: block;" : "" %>">
+        <%= link_to_with_permissions admin_recommends_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>索引列表</span>
+        <% end %>
+        <%= link_to_with_permissions admin_marks_path, class: 'item', active_class: 'actives' do %>
+          <i class="left bullseye icon"></i>
+          <span>标注管理</span>
+        <% end %>
+      </div>
+    </li>
+    <li>
       <% isin = action_on_list([admin_categories_path,admin_spider_targets_path,admin_tags_path,admin_classifications_path]) %>
       <a class="item <%= isin ? "active" : "" %> ">
         <i class="cubes icon"></i>

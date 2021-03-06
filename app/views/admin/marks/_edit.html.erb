@@ -1,0 +1,23 @@
+<%= simple_form_for @mark, url: admin_mark_path(@mark), method: :put, remote: true do |f| %>
+<div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
+
+  <div class="two fields">
+    <%= f.input :title, label: "标题" %>
+  </div>
+
+  <div class="two fields">
+    <div class="field">
+      <label>icon：<%= @mark.url %> </label>
+      <input type="file" name="file" id="logo_url" accept=".jpg,.jpeg,.png,.bmp" >
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="actions ">
+      <div class="ui button primary" id="commition">提交</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+
+<% end %>
+

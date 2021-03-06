@@ -1,0 +1,40 @@
+<tr id="recommend_<%= recommend.id %>">
+  <td class="center aligned">
+    <span><%= recommend.id%></span>
+  </td>
+  <td class="center aligned">
+    <%= recommend.title %>
+  </td>
+  <td class="center aligned">
+    <%= recommend.url %>
+  </td>
+  <td class="center aligned">
+    <%= recommend.mark&.title %>
+  </td>
+  <td class="center aligned">
+    <%= recommend.i18n_attr_recomment_type %>
+  </td>
+  <td class="center aligned">
+    <%= day_time(recommend.created_at) %>
+  </td>
+  </td>
+  <td class="center aligned">
+    <%= link_to edit_admin_recommend_path(recommend.id), remote: true, class: "ui icon blue basic button" do %>
+      <i class="edit icon"></i>编辑
+    <% end %>
+
+    <% if recommend.status == "enabled" %>
+      <%= link_to update_status_admin_recommends_path(id:recommend.id,status:"disabled"), remote: true, class: "ui icon orange basic button" do %>
+        <i class="plus icon orange"></i>禁用
+      <% end %>
+    <% else %>
+      <%= link_to update_status_admin_recommends_path(id:recommend.id,status:"enabled"), remote: true, class: "ui icon blue basic button" do %>
+        <i class="plus icon green"></i>启用
+      <% end %>
+    <% end %>
+
+    <%= link_to admin_recommend_path(recommend.id), method: :delete, remote: true, class: "ui icon red basic button", data: {confirm: "确定删除吗?"} do %>
+      <i class="close icon"></i>删除
+    <% end %>
+  </td>
+</tr>
