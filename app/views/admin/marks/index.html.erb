@@ -7,7 +7,7 @@
 
 
 <div class="ui blue segment">
-  <%= link_to "新建", new_admin_recommend_path , remote: true, class: 'ui primary button' %>
+  <%= link_to "新建", new_admin_mark_path , remote: true, class: 'ui primary button' %>
   <table class="ui selectable striped celled table">
     <thead>
     <tr >
@@ -19,11 +19,11 @@
     </tr>
     </thead>
     <tbody>
-    <%= render partial: 'list', collection: @recommends, as: :recommend %>
+    <%= render partial: 'list', collection: @marks, as: :mark %>
     </tbody>
   </table>
   <span class="blue">
-    <%= page_entries_info(@recommends) %>
+    <%= page_entries_info(@marks) %>
   </span>
-  <%= paginate(@recommends, :theme => 'admin')%>
+  <%= paginate(@marks, :theme => 'admin')%>
 </div>
