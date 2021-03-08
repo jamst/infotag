@@ -69,8 +69,8 @@ zh:
           enabled: "已启用"
       recommend:
         recommend_type:
-          top: "外网头条"     
-          synthesize: "综合推荐"    
+          top: "全球头条"     
+          synthesize: "综合推荐"
         status:
           disabled: "已禁用"     
           enabled: "已启用"  
