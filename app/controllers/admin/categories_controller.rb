@@ -5,7 +5,7 @@ class Admin::CategoriesController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
-    @categories = Category.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @categories = Category.default_where(@q.attributes(self)).page(params[:page]).per(50)
   end
 
   def new

@@ -5,7 +5,7 @@ class Admin::ClassificationsController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
-    @classifications = Classification.default_where(@q.attributes(self)).order(:name).page(params[:page]).per(10)
+    @classifications = Classification.default_where(@q.attributes(self)).order(:name).page(params[:page]).per(50)
   end
 
   def new

@@ -5,7 +5,7 @@ class Admin::TagsController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
-    @tags = Tag.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @tags = Tag.default_where(@q.attributes(self)).page(params[:page]).per(50)
   end
 
   def new

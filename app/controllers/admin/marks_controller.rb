@@ -5,7 +5,7 @@ class Admin::MarksController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
-    @marks = Mark.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @marks = Mark.default_where(@q.attributes(self)).page(params[:page]).per(50)
   end
 
   def new
