@@ -20,3 +20,9 @@ every 1.day, :at => '03:30 am' do
   runner 'Info.add_today_list'
   runner 'Video.add_today_list' 
 end
+
+
+# 删除过期视频
+every 1.day, :at => '05:30 am' do
+  runner 'Video.checkout_video' 
+end
