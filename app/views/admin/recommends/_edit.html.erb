@@ -11,6 +11,10 @@
     <%= f.input :mark_id, label: "标注", as: :select, collection: Mark.pluck(:title,:id), include_blank: "选择标注", input_html: {class: 'ui dropdown fluid'}, label: "选择标注" %>
   </div>
 
+  <div class="two fields">
+    <%= f.input :sort_live, label: "排序" %>
+  </div>
+
   <div class="field">
     <div class="actions ">
       <div class="ui button primary" id="commition">提交</div>

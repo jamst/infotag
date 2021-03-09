@@ -5,7 +5,7 @@ class Admin::RecommendsController < Admin::BaseController
 
   def index
     @q = SearchParams.new(params[:search_params] || {})
-    @recommends = Recommend.default_where(@q.attributes(self)).page(params[:page]).per(10)
+    @recommends = Recommend.default_where(@q.attributes(self)).order(sort_live: :desc).page(params[:page]).per(20)
   end
 
   def new
@@ -20,7 +20,6 @@ class Admin::RecommendsController < Admin::BaseController
   def show
     render :layout => false
   end
-
 
   def update
     Rails.logger.tagged("推荐更新update") { Rails.logger.info("#{current_employee.name}:更改了Recommend：#{@recommend.id}") }

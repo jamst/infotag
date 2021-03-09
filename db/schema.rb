@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_18_025344) do
+ActiveRecord::Schema.define(version: 2021_03_09_014045) do
 
   create_table "approve_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.string "event_type", default: "black_user", comment: "审核类型"
@@ -187,6 +187,15 @@ ActiveRecord::Schema.define(version: 2021_01_18_025344) do
     t.index ["tag_id"], name: "index_keywords_on_tag_id"
   end
 
+  create_table "marks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "title", comment: "名称"
+    t.string "url", comment: "图片地址"
+    t.integer "is_delete", default: 0, comment: "是否删除"
+    t.integer "status", default: 0, comment: "状态：-1禁用,0启用"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "medial_caches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.string "uuid", comment: "uuid"
     t.string "title", comment: "名称"
@@ -215,6 +224,7 @@ ActiveRecord::Schema.define(version: 2021_01_18_025344) do
     t.datetime "updated_at", null: false
     t.integer "need_approve", default: 1, comment: "是否需要审核0自动审核unneed，1手动审核need"
     t.integer "classification_id", comment: "分类"
+    t.integer "spider_type", default: 0, comment: "0频道爬取，1视频爬取"
     t.index ["category_id"], name: "index_medial_spiders_on_category_id"
     t.index ["classification_id"], name: "index_medial_spiders_on_classification_id"
     t.index ["spider_target_id"], name: "index_medial_spiders_on_spider_target_id"
@@ -225,6 +235,21 @@ ActiveRecord::Schema.define(version: 2021_01_18_025344) do
     t.string "action", comment: "方法名称"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "recommends", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "title", comment: "标题"
+    t.string "url", comment: "目标url"
+    t.bigint "employee_id", default: 1, comment: "上传对象"
+    t.integer "recommend_type", default: 0, comment: "分类：0外网头条，1综合推荐"
+    t.bigint "mark_id", comment: "标注"
+    t.integer "is_delete", default: 0, comment: "是否删除"
+    t.integer "status", default: 0, comment: "状态：-1禁用,0启用"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "sort_live", comment: "排序"
+    t.index ["employee_id"], name: "index_recommends_on_employee_id"
+    t.index ["mark_id"], name: "index_recommends_on_mark_id"
   end
 
   create_table "roles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|

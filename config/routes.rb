@@ -136,6 +136,13 @@ Rails.application.routes.draw do
   end
 
 
+  resources :recommends do
+    collection do
+      post :detail
+    end
+  end
+
+
   root to: 'admin/employees#index'
   devise_for :employees, path: "admin", path_names: { sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', sign_up: 'cmon_let_me_in' }, controllers: { sessions: "admin/sessions", passwords: "admin/passwords"}
 
