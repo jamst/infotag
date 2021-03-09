@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_09_014045) do
+ActiveRecord::Schema.define(version: 2021_03_09_070152) do
 
   create_table "approve_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.string "event_type", default: "black_user", comment: "审核类型"
@@ -299,6 +299,7 @@ ActiveRecord::Schema.define(version: 2021_03_09_014045) do
     t.string "tags_str", comment: "视频标签"
     t.integer "encoding_type", default: 1, comment: "编码类型：0外语，1简体，2繁体"
     t.integer "classification_id", comment: "分类"
+    t.text "strategy_word", comment: "匹配策略黑词"
     t.index ["encoding_type"], name: "index_spider_origin_videos_on_encoding_type"
   end
 
@@ -408,6 +409,7 @@ ActiveRecord::Schema.define(version: 2021_03_09_014045) do
     t.string "category_list", comment: "视频分类"
     t.integer "encoding_type", default: 1, comment: "编码类型：0外语，1简体，2繁体"
     t.integer "classification_id", comment: "分类"
+    t.text "strategy_word", comment: "匹配策略黑词"
     t.index ["category_id"], name: "index_videos_on_category_id"
     t.index ["classification_id"], name: "index_videos_on_classification_id"
     t.index ["encoding_type"], name: "index_videos_on_encoding_type"

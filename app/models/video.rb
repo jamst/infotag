@@ -427,6 +427,7 @@ class Video < ApplicationRecord
         video.category_list = data.category_list
         video.classification_id = medial_spider.classification_id
         video.image_url = data.image_url
+        video.strategy_word = data.strategy_word
 
         if !video.tags_str.present?
           if data.tags_str.present?
@@ -450,8 +451,9 @@ class Video < ApplicationRecord
         
         video.save
 
-        if medial_spider.unneed? && @exists == 1
-          # 第一次入库，且不需要审核: 回调：change_cache_list加入到相关的缓存列表中
+        if medial_spider.unneed? && @exists == 1 && !data.strategy_word.present?
+          # 第一次入库，且不需要审核,且不是不命中黑词库
+          # 回调：change_cache_list加入到相关的缓存列表中
           video.update(approve_status:"approved")
         end
 

@@ -20,6 +20,7 @@ class CategoryController < ActionController::Base
 
     category_id = params[:category_id]
 
+    # 按照分类的比例获取
     merge_videos = Video.classification_list(category_id)
     @videos = Video.where(id:merge_videos)
 
