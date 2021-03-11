@@ -109,7 +109,7 @@ class Info < ApplicationRecord
   # 分类获取
   def self.classification_list(category_id)
     info_ids = []
-    category = Category.find_by category_id
+    category = Category.find_by(id:category_id)
     category_conditions = category.category_conditions
     if category_conditions.present?
       category_conditions.each do |category_condition|
