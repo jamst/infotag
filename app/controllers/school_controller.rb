@@ -19,7 +19,7 @@ class SchoolController < ActionController::Base
     @video_tops = []
     @info_tops = []
 
-    category_id = params[:category_id]
+    category_id = params[:category_id] || 7
 
     merge_videos = Video.classification_list(category_id)
     @videos = Video.where(id:merge_videos)
