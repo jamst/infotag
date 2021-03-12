@@ -24,7 +24,7 @@
     <%= video.overlay_time %> / <%= video.play_count %>
   </td>
   <td class="center aligned">
-    <%= video.author %>
+    <%= link_to video.author, admin_medial_spiders_path("search_params[url]" => video.medial_spider&.url) , target: '_blank' %>
   </td>
   <td class="center aligned">
     <%= day_time(video.release_at) %>
