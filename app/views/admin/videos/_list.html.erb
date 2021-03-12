@@ -9,7 +9,7 @@
     <span><% if @page_type.present? %> <font color="orange"><%= video.id%><% else%> <%= video.id%> <%end%></span>
   </td>
   <td class="center aligned">
-    <%= link_to str_chip(video.title,20), video.url , target: '_blank' %>
+    <%= link_to admin_medial_spiders_path("search_params[url]" => video.medial_spiders.url), video.url , target: '_blank' %>
   </td>
   <td class="center aligned">
     <a href="<%= video.local_image_url %>" target='_blank' ><% if video.local_image_url.present? %><%= image_tag video.local_image_url, width: '75px', height: '40px' %><% end %></a>
@@ -24,7 +24,7 @@
     <%= video.overlay_time %> / <%= video.play_count %>
   </td>
   <td class="center aligned">
-    <%= video.author %>
+    <%= link_to str_chip(video.title,20), video.author , target: '_blank' %> 
   </td>
   <td class="center aligned">
     <%= video.spider_target&.name %>

@@ -11,6 +11,7 @@ class MedialSpider < ApplicationRecord
   has_many :videos, -> {where(medial_type: "video")}, class_name: 'MedialSpider'
   has_many :infos, -> {where(medial_type: "video")}, class_name: 'MedialSpider'
   after_update :srem_category, if: -> { self.saved_change_to_category_id? }
+  after_update :srem_classification, if: -> { self.saved_change_to_classification_id? }
 
   include FileHandle
 
@@ -67,6 +68,25 @@ class MedialSpider < ApplicationRecord
   end
 
   # 更改classification同时联动变更资讯明细类型
+
+  def srem_classification
+    if self.medial_type == "info"
+      infos = Info.where(medial_spider_id:self.id)
+      infos.each do |info|
+        $redis.srem("classification_#{info.classification_id}_infos", info.id)
+        $redis.sadd("classification_#{self.classification_id}_infos", info.id)
+      end
+      infos.update_all(classification_id:self.classification_id)
+    else
+      videos = Video.where(medial_spider_id:self.id)
+      videos.each do |video|
+        $redis.srem("classification_#{video.classification_id}_videos", video.id)
+        $redis.sadd("classification_#{self.classification_id}_videos", video.id)
+      end
+      videos.update_all(classification_id:self.classification_id)
+    end
+  end
+  
   def srem_category
     if self.medial_type == "info"
       infos = Info.where(medial_spider_id:self.id)
