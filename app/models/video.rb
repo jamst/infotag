@@ -414,7 +414,8 @@ class Video < ApplicationRecord
       # 因为香港一次查太多视频内容内存会导致mysqll链接失败，所以单个id再次查询避免链接超时。
       data = SpiderOriginVideo.find_by(id:data)
       medial_spider = MedialSpider.find_by(id:data.spider_medial_id)
-      if medial_spider.present?
+      if medial_spider.present? && (medial_spider.play_count.to_i <= data.play_count.to_i)
+        # 注意这里的连接地址格式会不会变化
         video = Video.find_by("url": "https://www.youtube.com/watch?v=#{data.url}")
         unless video.present?
           # 第一次入库
@@ -456,9 +457,6 @@ class Video < ApplicationRecord
           # 回调：change_cache_list加入到相关的缓存列表中
           video.update(approve_status:"approved")
         end
-
-      else
-        data.delete
       end  
     end
     # 情况爬虫数据

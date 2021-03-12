@@ -30,6 +30,9 @@
     <%= medial_spider.count_size %>
   </td>
   <td class="center aligned">
+    <%= medial_spider.play_count %>
+  </td>
+  <td class="center aligned">
     <%if medial_spider.status == "disabled" %>
       <font color="red"><%= medial_spider.i18n_attr_status %></font>
     <% else %>
