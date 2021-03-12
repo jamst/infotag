@@ -114,7 +114,7 @@ class Info < ApplicationRecord
     if category_conditions.present?
       category_conditions.each do |category_condition|
         # 标签占比
-        info_ids += $redis.srandmember("classification_#{category_condition.classification_id}_infos",(20.0*category_condition.wigth/100).to_i)
+        info_ids += $redis.srandmember("classification_#{category_condition.classification_id}_infos",(20.0*category_condition.weight/100).to_i)
         # 关键词占比
         if category_condition.tag_str.present?
           tag_list = category_condition.tag_str.split(",")
@@ -123,7 +123,7 @@ class Info < ApplicationRecord
             tag = Tag.find_by(name:tag)
             if tag.present?
               tag_id = Tag.find_by(name:tag).id
-              info_ids += $redis.srandmember("tag_#{tag_id}_infos",(20.0*category_condition.wigth/100/tag_size).to_i)
+              info_ids += $redis.srandmember("tag_#{tag_id}_infos",(20.0*category_condition.weight/100/tag_size).to_i)
             end
           end
         end
