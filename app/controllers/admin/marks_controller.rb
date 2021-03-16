@@ -54,7 +54,6 @@ class Admin::MarksController < Admin::BaseController
   end
 
   def destroy
-    @mark.srem_mark_list
     @mark.is_delete = Time.now.to_i
     if @mark.save
       respond_to do |format|
