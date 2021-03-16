@@ -4,7 +4,7 @@ class Recommend < ApplicationRecord
   default_scope -> {where(is_delete: 0)}
   enum status: { disabled: -1, enabled: 0 }
   after_create :init_sort_live
-  after_update :cache_recommend , if: -> { self.saved_change_to_sort_live? }
+  after_update :cache_recommend 
 
   RECOMMEND_TYPE = {"top":{"name":"top","value":"全球头条","image_url":"red"},"synthesize":{"name":"synthesize","value":"综合推荐","image_url":"black"}}
   
