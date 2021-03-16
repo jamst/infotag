@@ -1,5 +1,6 @@
 class Recommend < ApplicationRecord
   belongs_to :mark
+  belongs_to :employee
   enum recommend_type: { top: 0, synthesize: 1 }
   default_scope -> {where(is_delete: 0)}
   enum status: { disabled: -1, enabled: 0 }

@@ -20,6 +20,8 @@
   <td class="center aligned">
     <%= day_time(recommend.created_at) %>
   </td>
+  <td class="center aligned">
+    <%= recommend.employee&.name %>
   </td>
   <td class="center aligned">
     <%= link_to edit_admin_recommend_path(recommend.id), remote: true, class: "ui icon blue basic button" do %>

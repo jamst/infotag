@@ -3,4 +3,5 @@ class Employee < ApplicationRecord
          :recoverable, :rememberable#, :trackable, :validatable
   
   has_and_belongs_to_many :roles, :join_table => :employees_roles
+  has_many :recommends
 end
