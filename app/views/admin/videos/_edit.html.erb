@@ -54,6 +54,7 @@
 
   <div class="field">
     <%= f.input :approve_status, label: '审核状态', as: :select, collection: select_options_from_enum(Video, :approve_status), include_blank: "选择状态", input_html: {class: 'ui dropdown fluid'} %>
+    <%= f.input :strategy_word, label: "黑词" %>
   </div>
 
   <div class="field">
