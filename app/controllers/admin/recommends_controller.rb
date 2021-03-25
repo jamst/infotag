@@ -49,7 +49,6 @@ class Admin::RecommendsController < Admin::BaseController
 
   def destroy
     Rails.logger.tagged("推荐删除destroy") { Rails.logger.info("#{current_employee.name}:更改了Recommend：#{@recommend.id}") }
-    @recommend.srem_recommend_list
     @recommend.is_delete = Time.now.to_i
     if @recommend.save
       respond_to do |format|
