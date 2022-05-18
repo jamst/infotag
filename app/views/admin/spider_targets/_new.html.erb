@@ -1,4 +1,4 @@
-<%= simple_form_for @spider_target, url: admin_spider_targets_path, method: :post, remote: true do |f| %>
+<%= simple_form_for @spider_target, url: admin_spider_targets_path, method: :post, remote: true, multipart: true do |f| %>
   <div id="form_message" class="two fields red" style="margin-left: 15px;display:none;"></div>
 
   <div class="two fields">
